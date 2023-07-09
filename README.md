@@ -5,6 +5,10 @@ both [Epic Fight](https://www.curseforge.com/minecraft/mc-mods/epic-fight-mod) a
 sleepless nights trying to make these two mods play nice together because I think the marriage of the two would
 be a fantastic concept for myself and hopefully a few others.
 
+## Required Mod Versions
+- [Epic Fight](https://www.curseforge.com/minecraft/mc-mods/epic-fight-mod/files/4018756) (1.18.2)
+- [Paragliders](https://www.curseforge.com/minecraft/mc-mods/paragliders/files/4478246) (1.18.2)
+
 ## How Do You Make It Work?
 More than likely this mod won't work straight out of the gate. 
 1. Paraglider's default stamina system must be disabled in the serverconfig folder.
