@@ -26,13 +26,6 @@ public final class EpicParaglidersClientEventHandler {
     private EpicParaglidersClientEventHandler() {}
 
     @SubscribeEvent
-    public static void logout(PlayerEvent event) {
-        if (UpdatedClientPlayerMovement.instance != null && event.getPlayer() == null) {
-            UpdatedClientPlayerMovement.instance = null;
-        }
-    }
-
-    @SubscribeEvent
     public static void afterGameOverlayRenderer(RenderGameOverlayEvent.Post event) {
         ModCfg.paraglidingConsumesStamina();
         UpdatedClientPlayerMovement clientPlayerMovement = UpdatedClientPlayerMovement.instance;

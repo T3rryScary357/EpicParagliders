@@ -4,12 +4,12 @@ import net.cravencraft.epicparagliders.capabilities.UpdatedPlayerMovement;
 import net.minecraft.network.FriendlyByteBuf;
 import tictim.paraglider.capabilities.PlayerMovement;
 
-public record SyncActionMsg (int actionStaminaCost) {
-    public static SyncActionMsg read(FriendlyByteBuf buffer) {
-        return new SyncActionMsg(buffer.readInt());
+public record SyncServerActionMsg (int actionStaminaCost) {
+    public static SyncServerActionMsg read(FriendlyByteBuf buffer){
+        return new SyncServerActionMsg(buffer.readInt());
     }
 
-    public SyncActionMsg(UpdatedPlayerMovement playerMovement) {
+    public SyncServerActionMsg(UpdatedPlayerMovement playerMovement){
         this(playerMovement.actionStaminaCost);
     }
 
@@ -17,7 +17,7 @@ public record SyncActionMsg (int actionStaminaCost) {
         playerMovement.actionStaminaCost = actionStaminaCost;
     }
 
-    public void write(FriendlyByteBuf buffer) {
+    public void write(FriendlyByteBuf buffer){
         buffer.writeInt(actionStaminaCost);
     }
 }

@@ -9,7 +9,9 @@ import yesman.epicfight.client.ClientEngine;
 public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
 
     public static UpdatedClientPlayerMovement instance;
-    private ClientPlayerMovement clientPlayerMovement;
+
+    //TODO: Can we just have these in the parent class without issues?
+    public ClientPlayerMovement clientPlayerMovement;
     private int totalStaminaCost;
 
     public UpdatedClientPlayerMovement(ClientPlayerMovement clientPlayerMovement) {
@@ -20,7 +22,7 @@ public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
 
     @Override
     public void update() {
-        EpicParaglidersMod.LOGGER.info("Client state change & recovery delay: " + clientPlayerMovement.getState() + " | " + clientPlayerMovement.getRecoveryDelay());
+//        EpicParaglidersMod.LOGGER.info("Client side stamina cost: " + this.actionStaminaCost);
         if (this.actionStaminaCost > 0) {
             this.totalStaminaCost += this.actionStaminaCost;
         }
@@ -29,9 +31,10 @@ public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
         if (ClientEngine.instance.getPlayerPatch().getEntityState().inaction()) {
             if (ClientEngine.instance.getPlayerPatch().getEntityState().attacking() && !this.isAttacking) {
 //				this.player.getOffhandItem(); // TODO: add support for offhand weapons
-                EpicParaglidersMod.LOGGER.info("Total stamina cost of the previous attack: " + totalStaminaCost);
                 this.totalStaminaCost = 0;
                 this.actionStaminaCost = (int)clientPlayerMovement.player.getCurrentItemAttackStrengthDelay();
+                EpicParaglidersMod.LOGGER.info("Action stamina cost at root: " + (int)clientPlayerMovement.player.getCurrentItemAttackStrengthDelay());
+                EpicParaglidersMod.LOGGER.info("Attack stamina cost: " + actionStaminaCost);
                 this.isAttacking = true;
             }
             else if (!ClientEngine.instance.getPlayerPatch().getEntityState().attacking() && this.isAttacking){
