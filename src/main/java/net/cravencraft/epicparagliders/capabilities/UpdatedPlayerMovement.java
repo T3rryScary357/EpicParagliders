@@ -10,6 +10,7 @@ public abstract class UpdatedPlayerMovement {
 
     public PlayerMovement playerMovement;
     public int actionStaminaCost;
+    public boolean setNewSkill;
     public boolean isAttacking;
 
     public UpdatedPlayerMovement(PlayerMovement playerMovement) {

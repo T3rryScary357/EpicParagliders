@@ -45,6 +45,7 @@ public class ModNet {
             }
 
             UpdatedServerPlayerMovement.instance.actionStaminaCost = msg.actionStaminaCost();
+            UpdatedServerPlayerMovement.instance.setNewSkill = msg.setNewSkill();
         });
     }
 

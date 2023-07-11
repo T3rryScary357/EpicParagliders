@@ -23,6 +23,7 @@ public class UpdatedServerPlayerMovement extends UpdatedPlayerMovement {
 
     //TODO: Need to make getters & setters for these, then make private.
     public boolean actionStaminaNeedsSync;
+    public int currentSkills;
 
     public UpdatedServerPlayerMovement(ServerPlayerMovement serverPlayerMovement) {
         super(serverPlayerMovement);
@@ -32,6 +33,13 @@ public class UpdatedServerPlayerMovement extends UpdatedPlayerMovement {
 
     @Override
     public void update() {
+////        EpicParaglidersMod.LOGGER.info("NUMBER OF SKILLS: " + this.currentSkills);
+//        if (this.serverPlayerPatch == null) {
+////            initServerPlayerPatch();
+//        }
+//        else {
+////            checkSkills();
+//        }
         initServerPlayerPatch();
         if(!serverPlayerMovement.player.isCreative()&&serverPlayerMovement.isDepleted()){
             serverPlayerMovement.player.addEffect(new MobEffectInstance(MobEffect.byId(18))); // Adds weakness
@@ -41,17 +49,35 @@ public class UpdatedServerPlayerMovement extends UpdatedPlayerMovement {
         updateStamina();
     }
 
+    private void checkSkills() {
+        if (this.serverPlayerPatch.getSkillCapability().skillContainers.length != this.currentSkills) {
+            EpicParaglidersMod.LOGGER.info("THERE IS AN EXTRA SKILL");
+            this.currentSkills = this.serverPlayerPatch.getSkillCapability().skillContainers.length;
+        }
+
+    }
+
+    //TODO: Separate this method into two methods and move the if statement into the update method.
     private void initServerPlayerPatch() {
         if (this.serverPlayerPatch == null && this.serverPlayerMovement.player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).isPresent()) {
             EpicParaglidersMod.LOGGER.info("INITIALIZING SERVER PLAYER PATCH");
             this.serverPlayerPatch = (ServerPlayerPatch) this.serverPlayerMovement.player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).orElse(null);
             ReRegisterSkills.setNewSkills(this);
-        }
-        else if (this.serverPlayerPatch != null) {
-            //TODO: Need to find a way to do this more efficiently.
-            //      Currently, iterating through the skill list every single tick.
             ReRegisterSkills.reRegisterToPlayer(this);
         }
+        else if (this.setNewSkill) {
+            EpicParaglidersMod.LOGGER.info("SETTING NEW SKILL");
+            ReRegisterSkills.reRegisterToPlayer(this);
+        }
+//        else if (this.serverPlayerPatch != null) {
+//            //TODO: Need to find a way to do this more efficiently.
+//            //      Currently, iterating through the skill list every single tick.
+//            ReRegisterSkills.reRegisterToPlayer(this);
+//        }
+    }
+
+    public void initServerPlayerPatch(ServerPlayerPatch serverPlayerPatch) {
+        this.serverPlayerPatch = serverPlayerPatch;
     }
 
     private void syncActionStamina() {

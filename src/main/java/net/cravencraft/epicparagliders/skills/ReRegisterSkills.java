@@ -1,8 +1,10 @@
 package net.cravencraft.epicparagliders.skills;
 
 import com.google.common.collect.Maps;
+import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.UpdatedServerPlayerMovement;
 import net.minecraft.resources.ResourceLocation;
+import yesman.epicfight.config.ConfigManager;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.main.EpicFightMod;
 import yesman.epicfight.skill.*;
@@ -68,19 +70,19 @@ public class ReRegisterSkills {
 
         switch (skillContainer.getSkill().getRegistryName().getPath()) {
             case "roll":
-                return skillContainer.setSkill(ROLL);
+                return setSkillIfAbsent(skillContainer, ROLL);
             case "step":
-                return skillContainer.setSkill(STEP);
+                return setSkillIfAbsent(skillContainer, STEP);
             case "guard":
-                return skillContainer.setSkill(GUARD);
+                return setSkillIfAbsent(skillContainer, GUARD);
             case "active_guard":
-                return skillContainer.setSkill(ACTIVE_GUARD);
+                return setSkillIfAbsent(skillContainer, ACTIVE_GUARD);
             case "energizing_guard":
-                return skillContainer.setSkill(ENERGIZING_GUARD);
+                return setSkillIfAbsent(skillContainer, ENERGIZING_GUARD);
             case "air_attack":
-                return skillContainer.setSkill(AIR_ATTACK);
+                return setSkillIfAbsent(skillContainer, AIR_ATTACK);
             case "knockdown_wakeup":
-                return skillContainer.setSkill(KNOCKDOWN_WAKEUP);
+                return setSkillIfAbsent(skillContainer, KNOCKDOWN_WAKEUP);
 
             default:
                 return false;
@@ -90,11 +92,27 @@ public class ReRegisterSkills {
     //TODO: Make UpdatedServerPlayerMovement a field
     public static void reRegisterToPlayer(UpdatedServerPlayerMovement serverPlayerMovement) {
         ServerPlayerPatch serverPlayerPatch = serverPlayerMovement.serverPlayerPatch;
+        EpicParaglidersMod.LOGGER.info("--------------- GETTING SKILLS --------------");
+        EpicParaglidersMod.LOGGER.info("Keep skills? " + ConfigManager.KEEP_SKILLS.get());
         for (SkillContainer skillContainer : serverPlayerPatch.getSkillCapability().skillContainers) {
             if (skillContainer.getSkill() != null) {
-                reDefineSkill(skillContainer);
+                EpicParaglidersMod.LOGGER.info("Skill: " + skillContainer.getSkill().getRegistryName());
+                EpicParaglidersMod.LOGGER.info("Is skill " + skillContainer.getSkill() + " replaced? " + reDefineSkill(skillContainer));
             }
         }
+        EpicParaglidersMod.LOGGER.info("-----------------------------------------------");
+    }
+
+    /**
+     * Will set the PlayerPatch SkillContainer skill if it is not the same skill as the static one
+     * defined in this class. This is done to ensure that this class's skills are always being used.
+     *
+     * @param skillContainer Skill to be checked
+     * @param thisSkill Skill that will replace the container skill if it's different
+     * @return Returns whether the skill is replaced or not.
+     */
+    private static boolean setSkillIfAbsent(SkillContainer skillContainer, Skill thisSkill) {
+        return (skillContainer.getSkill() == thisSkill) ? false : skillContainer.setSkill(thisSkill);
     }
 
     private static Skill registerSkill(Skill skill) {
