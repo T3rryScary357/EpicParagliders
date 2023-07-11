@@ -4,9 +4,11 @@ import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.network.ModNet;
 import net.cravencraft.epicparagliders.network.SyncActionMsg;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import tictim.paraglider.capabilities.ClientPlayerMovement;
 import yesman.epicfight.client.ClientEngine;
 import yesman.epicfight.client.gui.screen.SkillBookScreen;
+import yesman.epicfight.client.gui.screen.SkillEditScreen;
 import yesman.epicfight.world.item.SkillBookItem;
 
 public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
@@ -68,7 +70,8 @@ public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
      * is set to ensure that the skill is set server side.
      */
     private void setNewSkill() {
-        if (Minecraft.getInstance().screen instanceof SkillBookScreen) {
+        Screen screen = Minecraft.getInstance().screen;
+        if (screen instanceof SkillBookScreen || screen instanceof SkillEditScreen) {
             EpicParaglidersMod.LOGGER.info("Current skill: " + SkillBookItem.getContainSkill(this.playerMovement.player.getMainHandItem()).getRegistryName());
 //            SkillBookItem.getContainSkill(this.playerMovement.player.getMainHandItem());
             this.setNewSkill = true;
