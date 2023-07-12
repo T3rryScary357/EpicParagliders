@@ -50,10 +50,10 @@ public class ReRegisterSkills {
     public static void setNewSkills(UpdatedServerPlayerMovement serverPlayerMovement) {
 
         ROLL = registerSkill(new NewDodgeSkill(NewDodgeSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "roll"))
-                .setConsumption(7.0F)
+                .setConsumption(15.0F)
                 .setAnimations(Animations.BIPED_ROLL_FORWARD, Animations.BIPED_ROLL_BACKWARD), serverPlayerMovement));
         STEP = registerSkill(new NewStepSkill(NewDodgeSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "step"))
-                .setConsumption(5.0F)
+                .setConsumption(12.0F)
                 .setAnimations(Animations.BIPED_STEP_FORWARD, Animations.BIPED_STEP_BACKWARD, Animations.BIPED_STEP_LEFT, Animations.BIPED_STEP_RIGHT), serverPlayerMovement));
         GUARD = registerSkill(new NewGuardSkill(NewGuardSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "guard"))
                 .setRequiredXp(0), serverPlayerMovement));

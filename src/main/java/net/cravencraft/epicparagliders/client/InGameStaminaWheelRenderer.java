@@ -40,7 +40,7 @@ public class InGameStaminaWheelRenderer extends StaminaWheelRenderer implements 
 				Color color = DEPLETED_1.blend(DEPLETED_2, cycle(System.currentTimeMillis(), clientPlayer.playerMovement.isDepleted() ? DEPLETED_BLINK : BLINK));
 				PlayerState state = clientPlayer.playerMovement.getState();
 				// TODO: Maybe we can replace that entire giant if with this?? Look into it.
-				int stateChange = (state.isConsume()) ? state.change() : -clientPlayer.actionStaminaCost;
+				int stateChange = (state.isConsume()) ? state.change() : -clientPlayer.totalActionStaminaCost;
 				for (WheelLevel t : WheelLevel.values()) {
 					addWheel(t, 0, t.getProportion(maxStamina), EMPTY);
 					if (clientPlayer.playerMovement.isDepleted()) {
@@ -48,7 +48,7 @@ public class InGameStaminaWheelRenderer extends StaminaWheelRenderer implements 
 					} else {
 						addWheel(t, 0, t.getProportion(stamina), IDLE);
 						if (((state.isConsume() && (state.isParagliding() ? UpdatedModCfg.paraglidingConsumesStamina() : UpdatedModCfg.runningConsumesStamina())))
-								|| clientPlayer.actionStaminaCost > 0) {
+								|| clientPlayer.totalActionStaminaCost > 0) {
 							addWheel(t, t.getProportion(stamina + stateChange * 10), t.getProportion(stamina), color);
 						}
 					}

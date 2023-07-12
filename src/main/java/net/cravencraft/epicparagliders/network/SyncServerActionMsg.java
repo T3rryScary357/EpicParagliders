@@ -2,22 +2,21 @@ package net.cravencraft.epicparagliders.network;
 
 import net.cravencraft.epicparagliders.capabilities.UpdatedPlayerMovement;
 import net.minecraft.network.FriendlyByteBuf;
-import tictim.paraglider.capabilities.PlayerMovement;
 
-public record SyncServerActionMsg (int actionStaminaCost) {
+public record SyncServerActionMsg (int additionalStaminaCost) {
     public static SyncServerActionMsg read(FriendlyByteBuf buffer){
         return new SyncServerActionMsg(buffer.readInt());
     }
 
     public SyncServerActionMsg(UpdatedPlayerMovement playerMovement){
-        this(playerMovement.actionStaminaCost);
+        this(playerMovement.skillStaminaCost);
     }
 
     public void copyTo(UpdatedPlayerMovement playerMovement){
-        playerMovement.actionStaminaCost = actionStaminaCost;
+        playerMovement.skillStaminaCost = additionalStaminaCost;
     }
 
     public void write(FriendlyByteBuf buffer){
-        buffer.writeInt(actionStaminaCost);
+        buffer.writeInt(additionalStaminaCost);
     }
 }

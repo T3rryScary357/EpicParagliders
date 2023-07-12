@@ -33,13 +33,6 @@ public class UpdatedServerPlayerMovement extends UpdatedPlayerMovement {
 
     @Override
     public void update() {
-////        EpicParaglidersMod.LOGGER.info("NUMBER OF SKILLS: " + this.currentSkills);
-//        if (this.serverPlayerPatch == null) {
-////            initServerPlayerPatch();
-//        }
-//        else {
-////            checkSkills();
-//        }
         initServerPlayerPatch();
         if(!serverPlayerMovement.player.isCreative()&&serverPlayerMovement.isDepleted()){
             serverPlayerMovement.player.addEffect(new MobEffectInstance(MobEffect.byId(18))); // Adds weakness
@@ -69,11 +62,6 @@ public class UpdatedServerPlayerMovement extends UpdatedPlayerMovement {
             EpicParaglidersMod.LOGGER.info("SETTING NEW SKILL");
             ReRegisterSkills.reRegisterToPlayer(this);
         }
-//        else if (this.serverPlayerPatch != null) {
-//            //TODO: Need to find a way to do this more efficiently.
-//            //      Currently, iterating through the skill list every single tick.
-//            ReRegisterSkills.reRegisterToPlayer(this);
-//        }
     }
 
     public void initServerPlayerPatch(ServerPlayerPatch serverPlayerPatch) {
@@ -83,7 +71,7 @@ public class UpdatedServerPlayerMovement extends UpdatedPlayerMovement {
     private void syncActionStamina() {
         if (actionStaminaNeedsSync && serverPlayerPatch != null) {
             if (serverPlayerMovement.player instanceof ServerPlayer serverPlayer) {
-                EpicParaglidersMod.LOGGER.info("Server side block cost: " + this.actionStaminaCost);
+                EpicParaglidersMod.LOGGER.info("Server side block cost: " + this.totalActionStaminaCost);
                 SyncServerActionMsg msg = new SyncServerActionMsg(this);
                 if(ModCfg.traceMovementPacket()) ParagliderMod.LOGGER.debug("Sending packet {} to player {}", msg, this.serverPlayerMovement.player);
                 ModNet.NET.send(PacketDistributor.PLAYER.with(() -> serverPlayer), msg);

@@ -3,19 +3,12 @@ package net.cravencraft.epicparagliders.events;
 import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.UpdatedClientPlayerMovement;
 import net.cravencraft.epicparagliders.capabilities.UpdatedServerPlayerMovement;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import tictim.paraglider.capabilities.ClientPlayerMovement;
 import tictim.paraglider.capabilities.PlayerMovement;
 import tictim.paraglider.capabilities.ServerPlayerMovement;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
-import yesman.epicfight.world.gamerule.EpicFightGamerules;
 
 @Mod.EventBusSubscriber(modid = EpicParaglidersMod.MOD_ID)
 public final class EpicParaglidersEventHandler {

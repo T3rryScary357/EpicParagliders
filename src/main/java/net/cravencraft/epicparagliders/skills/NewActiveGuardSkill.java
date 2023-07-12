@@ -11,7 +11,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import tictim.paraglider.capabilities.ServerPlayerMovement;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
@@ -105,7 +104,7 @@ public class NewActiveGuardSkill extends NewGuardSkill {
 				event.getPlayerPatch().knockBackEntity(damageSource.getDirectEntity().position(), knockback);
 
 				// TODO: Gotta make this actually different from the guard.
-				updatedServerPlayerMovement.actionStaminaCost = (int)((penalty * impact) * 10);
+				updatedServerPlayerMovement.skillStaminaCost = (int)((penalty * impact) * 10);
 				updatedServerPlayerMovement.actionStaminaNeedsSync = true;
 
 				// If the player's stamina is depleted, then the guard is always broken.

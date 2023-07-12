@@ -11,10 +11,8 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import org.antlr.v4.codegen.model.Sync;
 import tictim.paraglider.ModCfg;
 import tictim.paraglider.ParagliderMod;
-import tictim.paraglider.capabilities.PlayerMovement;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -44,7 +42,7 @@ public class ModNet {
                 return;
             }
 
-            UpdatedServerPlayerMovement.instance.actionStaminaCost = msg.actionStaminaCost();
+            UpdatedServerPlayerMovement.instance.totalActionStaminaCost = msg.totalActionStaminaCost();
             UpdatedServerPlayerMovement.instance.setNewSkill = msg.setNewSkill();
         });
     }

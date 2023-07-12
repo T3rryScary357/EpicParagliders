@@ -1,6 +1,7 @@
 package net.cravencraft.epicparagliders.skills;
 
 import io.netty.buffer.Unpooled;
+import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.UpdatedServerPlayerMovement;
 import net.minecraft.client.player.Input;
 import net.minecraft.network.FriendlyByteBuf;
@@ -126,7 +127,9 @@ public class NewDodgeSkill extends Skill {
 		// Only roll if the player's stamina isn't depleted.
 		if (!updatedServerPlayerMovement.serverPlayerMovement.isDepleted()){
 			super.executeOnServer(executer, args);
-			updatedServerPlayerMovement.actionStaminaCost = (int) Formulars.getStaminarConsumePenalty(executer.getWeight(), getConsumption(), executer);
+			EpicParaglidersMod.LOGGER.info("Current weight: " + executer.getWeight());
+			updatedServerPlayerMovement.skillStaminaCost = (int) Formulars.getStaminarConsumePenalty(executer.getWeight(), getConsumption(), executer);
+			EpicParaglidersMod.LOGGER.info("Skill Consumption: " + updatedServerPlayerMovement.skillStaminaCost);
 			 // TODO: Need to add MOD NET support for this
 			updatedServerPlayerMovement.actionStaminaNeedsSync = true;
 			int i = args.readInt();

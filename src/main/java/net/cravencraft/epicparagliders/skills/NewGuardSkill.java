@@ -17,7 +17,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import tictim.paraglider.capabilities.ServerPlayerMovement;
 import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.utils.AttackResult;
@@ -223,10 +222,11 @@ public class NewGuardSkill extends Skill {
 			float penalty = container.getDataManager().getDataValue(PENALTY) + this.getPenaltyMultiplier(itemCapability);
 			event.getPlayerPatch().knockBackEntity(damageSource.getDirectEntity().position(), knockback);
 
-			// TODO: Test with more enemies to see if stamina consumption is balanced.
-			EpicParaglidersMod.LOGGER.info("PRIOR TO BLOCKING: " + updatedServerPlayerMovement.actionStaminaCost);
-			updatedServerPlayerMovement.actionStaminaCost = (int)((penalty * impact) * 10);
-			EpicParaglidersMod.LOGGER.info("GUARD SKILL STAMINA COST: " + updatedServerPlayerMovement.actionStaminaCost);
+			// TODO: Maybe factor in weight to this? As a type of poise?
+			EpicParaglidersMod.LOGGER.info("Guard penalty: " + penalty);
+			EpicParaglidersMod.LOGGER.info("Guard impact: " + impact);
+			updatedServerPlayerMovement.skillStaminaCost = (int)((penalty * impact) * 10);
+			EpicParaglidersMod.LOGGER.info("GUARD SKILL STAMINA COST: " + updatedServerPlayerMovement.skillStaminaCost);
 			updatedServerPlayerMovement.actionStaminaNeedsSync = true;
 			
 			container.getDataManager().setDataSync(PENALTY, penalty, event.getPlayerPatch().getOriginal());
