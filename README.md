@@ -29,7 +29,7 @@ More than likely this mod won't work straight out of the gate.
    balanced with all weapons. Currently, weapons like axes consume WAY too much stamina).
 
 ## V0.0.2
-- All Epic Fight skills, except for Technician and (maybe) Knockdown Wakeup (still WIP), should now be compatible with
+- All Epic Fight skills, except for some of the Passive skills like Technician and (maybe) Knockdown Wakeup (still WIP), should now be compatible with
    Paraglider's stamina system.
 - Do **NOT** use the **Technician** skill until support is added. Doing so will disable the dodge ability. 
    If you do accidentally learn it, just open the Skills menu and assign it to something else 
