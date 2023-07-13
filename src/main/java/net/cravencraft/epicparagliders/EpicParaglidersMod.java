@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import tictim.paraglider.contents.Contents;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(EpicParaglidersMod.MOD_ID)
 @Mod.EventBusSubscriber(modid = EpicParaglidersMod.MOD_ID, bus = Bus.MOD)
 public class EpicParaglidersMod

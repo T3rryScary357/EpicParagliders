@@ -24,15 +24,20 @@ public final class EpicParaglidersClientEventHandler {
 
     private EpicParaglidersClientEventHandler() {}
 
+    /**
+     * This will Render the Paragliders stamina wheel based on the new 'UpdatedModCfg' properties.
+     * Ensures that only the new system is used whenever the old system is disabled.
+     *
+     * @param event
+     */
     @SubscribeEvent
     public static void afterGameOverlayRenderer(RenderGameOverlayEvent.Post event) {
-        ModCfg.paraglidingConsumesStamina();
         UpdatedClientPlayerMovement clientPlayerMovement = UpdatedClientPlayerMovement.instance;
 
         if (clientPlayerMovement != null) {
             if(Minecraft.getInstance().screen instanceof DisableStaminaRender ||
                 event.getType()!=RenderGameOverlayEvent.ElementType.ALL ||
-                    !(UpdatedModCfg.paraglidingConsumesStamina()||UpdatedModCfg.runningConsumesStamina())) return;
+                !(UpdatedModCfg.paraglidingConsumesStamina()||UpdatedModCfg.runningConsumesStamina())) return;
             Window window = event.getWindow();
 
             int x = Mth.clamp((int)Math.round(ModCfg.staminaWheelX()*window.getGuiScaledWidth()), 1+WHEEL_RADIUS, window.getGuiScaledWidth()-2-WHEEL_RADIUS);
