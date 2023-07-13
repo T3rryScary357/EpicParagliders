@@ -101,7 +101,7 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.80'
 
-    implementation fg.deobf('curse.maven:epicfight-405076:4447075')
+    implementation fg.deobf('curse.maven:epicfight-405076:4018756')
     implementation fg.deobf('curse.maven:paragliders-289240:4478246')
 }
 
