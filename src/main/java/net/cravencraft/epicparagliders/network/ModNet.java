@@ -1,13 +1,17 @@
 package net.cravencraft.epicparagliders.network;
 
 import net.cravencraft.epicparagliders.EpicParaglidersMod;
+import net.cravencraft.epicparagliders.capabilities.UpdatedClientPlayerMovement;
 import net.cravencraft.epicparagliders.capabilities.UpdatedServerPlayerMovement;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import tictim.paraglider.ModCfg;
 import tictim.paraglider.ParagliderMod;
 
 import java.util.Optional;
@@ -23,6 +27,10 @@ public class ModNet {
         NET.registerMessage(0, SyncActionMsg.class,
                 SyncActionMsg::write, SyncActionMsg::read,
                 ModNet::handleActionStaminaCost, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+
+        NET.registerMessage(1, SyncServerActionMsg.class,
+                SyncServerActionMsg::write, SyncServerActionMsg::read,
+                Client::handleServerActionStaminaCost, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     private static void handleActionStaminaCost(SyncActionMsg msg, Supplier<NetworkEvent.Context> context) {
@@ -34,7 +42,26 @@ public class ModNet {
                 return;
             }
 
-            UpdatedServerPlayerMovement.instance.actionStaminaCost = msg.actionStaminaCost();
+            UpdatedServerPlayerMovement.instance.totalActionStaminaCost = msg.totalActionStaminaCost();
+            UpdatedServerPlayerMovement.instance.setNewSkill = msg.setNewSkill();
         });
+    }
+
+    private static final class Client {
+
+        private Client(){}
+        public static void handleServerActionStaminaCost(SyncServerActionMsg msg, Supplier<NetworkEvent.Context> ctx) {
+            ctx.get().setPacketHandled(true);
+            LocalPlayer localPlayer = Minecraft.getInstance().player;
+            if (localPlayer == null) return;
+            UpdatedClientPlayerMovement updatedClientPlayerMovement = UpdatedClientPlayerMovement.instance;
+            if (updatedClientPlayerMovement != null) {
+                if (ModCfg.traceMovementPacket()) ParagliderMod.LOGGER.debug("Received {}", msg);
+                msg.copyTo(updatedClientPlayerMovement);
+            }
+            else {
+                ParagliderMod.LOGGER.error("Couldn't handle packet {}, capability not found", msg);
+            }
+        }
     }
 }

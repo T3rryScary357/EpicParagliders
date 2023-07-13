@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import tictim.paraglider.ModCfg;
@@ -25,22 +24,20 @@ public final class EpicParaglidersClientEventHandler {
 
     private EpicParaglidersClientEventHandler() {}
 
-    @SubscribeEvent
-    public static void logout(PlayerEvent event) {
-        if (UpdatedClientPlayerMovement.instance != null && event.getPlayer() == null) {
-            UpdatedClientPlayerMovement.instance = null;
-        }
-    }
-
+    /**
+     * This will Render the Paragliders stamina wheel based on the new 'UpdatedModCfg' properties.
+     * Ensures that only the new system is used whenever the old system is disabled.
+     *
+     * @param event
+     */
     @SubscribeEvent
     public static void afterGameOverlayRenderer(RenderGameOverlayEvent.Post event) {
-        ModCfg.paraglidingConsumesStamina();
         UpdatedClientPlayerMovement clientPlayerMovement = UpdatedClientPlayerMovement.instance;
 
         if (clientPlayerMovement != null) {
             if(Minecraft.getInstance().screen instanceof DisableStaminaRender ||
                 event.getType()!=RenderGameOverlayEvent.ElementType.ALL ||
-                    !(UpdatedModCfg.paraglidingConsumesStamina()||UpdatedModCfg.runningConsumesStamina())) return;
+                !(UpdatedModCfg.paraglidingConsumesStamina()||UpdatedModCfg.runningConsumesStamina())) return;
             Window window = event.getWindow();
 
             int x = Mth.clamp((int)Math.round(ModCfg.staminaWheelX()*window.getGuiScaledWidth()), 1+WHEEL_RADIUS, window.getGuiScaledWidth()-2-WHEEL_RADIUS);
