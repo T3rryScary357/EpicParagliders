@@ -13,6 +13,9 @@ import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import java.util.Map;
 
 public class ReRegisterSkills {
+
+    public static final float ROLL_CONSUMPTION = 15.0F;
+    public static final float STEP_CONSUMPTION = 12.0F;
     private static Map<ResourceLocation, Skill> SKILLS = Maps.newHashMap();
     private static Map<ResourceLocation, Skill> LEARNABLE_SKILLS = Maps.newHashMap();
 
@@ -50,10 +53,10 @@ public class ReRegisterSkills {
     public static void setNewSkills(UpdatedServerPlayerMovement serverPlayerMovement) {
 
         ROLL = registerSkill(new NewDodgeSkill(NewDodgeSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "roll"))
-                .setConsumption(15.0F)
+                .setConsumption(ROLL_CONSUMPTION)
                 .setAnimations(Animations.BIPED_ROLL_FORWARD, Animations.BIPED_ROLL_BACKWARD), serverPlayerMovement));
         STEP = registerSkill(new NewStepSkill(NewDodgeSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "step"))
-                .setConsumption(12.0F)
+                .setConsumption(STEP_CONSUMPTION)
                 .setAnimations(Animations.BIPED_STEP_FORWARD, Animations.BIPED_STEP_BACKWARD, Animations.BIPED_STEP_LEFT, Animations.BIPED_STEP_RIGHT), serverPlayerMovement));
         GUARD = registerSkill(new NewGuardSkill(NewGuardSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "guard"))
                 .setRequiredXp(0), serverPlayerMovement));
@@ -64,6 +67,7 @@ public class ReRegisterSkills {
                 .setConsumption(0.0F)
                 .setCategory(SkillCategories.KNOCKDOWN_WAKEUP)
                 .setAnimations(Animations.BIPED_KNOCKDOWN_WAKEUP_LEFT, Animations.BIPED_KNOCKDOWN_WAKEUP_RIGHT)));
+        TECHNICIAN = registerSkill(new NewTechnicianSkill(PassiveSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "technician")), serverPlayerMovement));
     }
 
     public static boolean reDefineSkill(SkillContainer skillContainer) {
@@ -83,6 +87,8 @@ public class ReRegisterSkills {
                 return setSkillIfAbsent(skillContainer, AIR_ATTACK);
             case "knockdown_wakeup":
                 return setSkillIfAbsent(skillContainer, KNOCKDOWN_WAKEUP);
+            case "technician":
+                return setSkillIfAbsent(skillContainer, TECHNICIAN);
 
             default:
                 return false;

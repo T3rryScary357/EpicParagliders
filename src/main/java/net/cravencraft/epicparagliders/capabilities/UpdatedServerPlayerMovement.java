@@ -47,6 +47,7 @@ public class UpdatedServerPlayerMovement extends UpdatedPlayerMovement {
 
         if (this.serverPlayerPatch == null && this.serverPlayerMovement.player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).isPresent()) {
             this.serverPlayerPatch = (ServerPlayerPatch) this.serverPlayerMovement.player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).orElse(null);
+            this.serverPlayerPatch.getOriginal().getAttribute(EpicFightAttributes.MAX_STAMINA.get()).setBaseValue(0.0D);
             ReRegisterSkills.setNewSkills(this);
             ReRegisterSkills.reRegisterToPlayer(this);
         }

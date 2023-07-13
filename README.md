@@ -27,3 +27,16 @@ More than likely this mod won't work straight out of the gate.
 - Both mods now use the Paraglider's stamina system
 - Basic attacks now consume a set amount of stamina based on the attack speed of a weapon (will modify later to be more
    balanced with all weapons. Currently, weapons like axes consume WAY too much stamina).
+
+## V0.0.2
+- All Epic Fight skills, except for Technician and (maybe) Knockdown Wakeup (still WIP), should now be compatible with
+   Paraglider's stamina system.
+- Do **NOT** use the **Technician** skill until support is added. Doing so will disable the dodge ability. 
+   If you do accidentally learn it, just open the Skills menu and assign it to something else 
+   (or use commands to unlearn it).
+- Fixed various bugs causing stamina issues such as player death, dimension transport, skill learning/swapping.
+- Stamina system is a bit more balanced with all weapons now. Takes in both attack delay time and weapon strength.
+   So, higher tiered weapons such as diamond and netherite will drain a little more stamina, which should be balanced
+   out by the player having a larger stamina wheel late game.
+- Epic Fight's stamina bar has now been fully removed from the GUI. The only time it should show up is possibly 
+   sometimes upon respawning, but should disappear once it fills up if so.
