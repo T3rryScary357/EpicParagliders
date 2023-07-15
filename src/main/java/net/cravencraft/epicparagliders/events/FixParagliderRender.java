@@ -21,7 +21,7 @@ import tictim.paraglider.item.ParagliderItem;
  * animation to play properly.
  *
  * Big thanks to Thunder for taking the code used in the DawnCraft-Tweaks mod, and integrating it
- * with this mod. 
+ * with this mod.
  */
 @Mod.EventBusSubscriber(modid = EpicParaglidersMod.MOD_ID, value = Dist.CLIENT)
 public class FixParagliderRender {
