@@ -29,8 +29,8 @@ More than likely this mod won't work straight out of the gate.
    balanced with all weapons. Currently, weapons like axes consume WAY too much stamina).
 
 ## V0.0.2
-- All Epic Fight skills, except for some of the Passive skills like Technician and (maybe) Knockdown Wakeup (still WIP), should now be compatible with
-   Paraglider's stamina system.
+- All Epic Fight skills, except for some Passive skills like Technician and (maybe) Knockdown Wakeup (still WIP), 
+   should now be compatible with Paraglider's stamina system.
 - Do **NOT** use the **Technician** skill until support is added. Doing so will disable the dodge ability. 
    If you do accidentally learn it, just open the Skills menu and assign it to something else 
    (or use commands to unlearn it).
@@ -40,3 +40,10 @@ More than likely this mod won't work straight out of the gate.
    out by the player having a larger stamina wheel late game.
 - Epic Fight's stamina bar has now been fully removed from the GUI. The only time it should show up is possibly 
    sometimes upon respawning, but should disappear once it fills up if so.
+
+## V0.0.3
+- Fixed the rendering issue with the Epic Fight rendering engine conflicting with Paraglider's gliding animation.
+  Huge shoutout to [Thunder](https://github.com/Thundertheidiot) for implementing a similar fix as to the one done in 
+  the [DawnCraft-Tweaks](https://github.com/SmileycorpMC/DawnCraft-Tweaks/blob/master/src/main/java/com/afunproject/dawncraft/integration/epicfight/client/EpicFightParagliderEvents.java) mod.
+- [Fixed a small bug](https://github.com/CravenCraft/EpicParagliders/commit/58aef081e8344c28da4568d77dbaf004301bd4ec#diff-228c4b34c9b6bb9d3dd5f8ac49b7521d6254e0f6042287053022bd6126bd3e12R124-R132)
+  that allowed the player to attack while gliding if they were in **Battle** mode

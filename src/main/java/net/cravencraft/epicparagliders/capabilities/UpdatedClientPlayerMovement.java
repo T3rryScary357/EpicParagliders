@@ -12,17 +12,20 @@ import tictim.paraglider.capabilities.ClientPlayerMovement;
 import yesman.epicfight.client.ClientEngine;
 import yesman.epicfight.client.gui.screen.SkillBookScreen;
 import yesman.epicfight.client.gui.screen.SkillEditScreen;
+import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.world.item.*;
 
 public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
 
     public static UpdatedClientPlayerMovement instance;
+    private final LocalPlayerPatch localPlayerPatch;
     public ClientPlayerMovement clientPlayerMovement;
     private int skillCheckDelay;
 
     public UpdatedClientPlayerMovement(ClientPlayerMovement clientPlayerMovement) {
         super(clientPlayerMovement);
         this.clientPlayerMovement = clientPlayerMovement;
+        this.localPlayerPatch = ClientEngine.instance.getPlayerPatch();
         instance = this;
     }
 
@@ -37,7 +40,7 @@ public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
         if (this.isAttacking){
             this.isAttacking = false;
         }
-        else if (ClientEngine.instance.getPlayerPatch().getEntityState().attacking() && !this.isAttacking) {
+        else if (this.localPlayerPatch.getEntityState().attacking() && !this.isAttacking) {
             this.attackStaminaCost = getAttackStaminaCost(clientPlayerMovement.player.getMainHandItem().getItem());
             this.isAttacking = true;
         }
@@ -60,6 +63,7 @@ public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
             this.totalActionStaminaCost = 0;
         }
 
+        disableAttackIfParagliding();
         updateStamina();
         addEffects();
         setNewSkill();
@@ -89,7 +93,7 @@ public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
     /**
      * Some math done here to determine how much stamina should be consumed from each weapon type.
      * Takes in the attack delay of the weapon as well as its attack strength to create a balanced
-     * stamina cost.
+     * stamina cost. Also, factors in the extra damage that Epic Fight applies to certain weapons.
      *
      * @param item The weapon that is attacking
      * @return The amount of stamina that should be drained from the attacking weapon
@@ -97,30 +101,33 @@ public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
     private int getAttackStaminaCost(Item item) {
         int itemAttackStrDelay = (int) this.clientPlayerMovement.player.getCurrentItemAttackStrengthDelay();
         if (item instanceof SwordItem swordItem) {
-            //TODO: may have to account for this as well. This doesn't quite work. Need to find a better way to
-            //      figure out the bonus applied to weapons via datapacks.
+            //TODO: May have to factor this in. Test with a datapack in the future.
             if (clientPlayerMovement.player.getMainHandItem().getTag().contains("damage_bonus")) {
-                EpicParaglidersMod.LOGGER.info("Damage bonus of weapon: " + clientPlayerMovement.player.getMainHandItem().getTag().getDouble("damage_bonus"));
+                EpicParaglidersMod.LOGGER.info(swordItem.getRegistryName() + " contains a damage bonus!");
             }
-            if (swordItem instanceof GreatswordItem greatswordItem) {
-                EpicParaglidersMod.LOGGER.info("Greatsword item " + greatswordItem.getRegistryName());
-                EpicParaglidersMod.LOGGER.info("Tier damage bonus: " + greatswordItem.getTier().getAttackDamageBonus());
-                EpicParaglidersMod.LOGGER.info("Attack damage: " + (greatswordItem.getDamage() + 12));
+
+            if (swordItem instanceof GreatswordItem) {
                 return (int) (itemAttackStrDelay + (swordItem.getDamage() + 12) / 2);
             }
             else {
-                EpicParaglidersMod.LOGGER.info("Sword item: " + swordItem.getRegistryName());
-                EpicParaglidersMod.LOGGER.info("Attack damage: " + swordItem.getDamage() + 1);
                 return (int) (itemAttackStrDelay + (swordItem.getDamage() + 1));
             }
         }
         else if (item instanceof AxeItem axeItem) {
-            EpicParaglidersMod.LOGGER.info("Axe item " + item.getRegistryName());
-            EpicParaglidersMod.LOGGER.info("Attack damage: " + axeItem.getAttackDamage() + 1);
             return (int) ((itemAttackStrDelay / 2) + (axeItem.getAttackDamage() + 1));
         }
         else {
             return itemAttackStrDelay;
+        }
+    }
+
+    /**
+     * Will disable Epic Fight's battle mode if the player is paragliding.
+     * This fixes the awkward issue where the player can still attack while gliding.
+     */
+    private void disableAttackIfParagliding() {
+        if (clientPlayerMovement.isParagliding() && localPlayerPatch.isBattleMode()) {
+            localPlayerPatch.toggleMode();
         }
     }
 }

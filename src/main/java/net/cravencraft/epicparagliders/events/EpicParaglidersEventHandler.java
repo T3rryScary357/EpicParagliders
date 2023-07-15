@@ -10,8 +10,6 @@ import tictim.paraglider.capabilities.ClientPlayerMovement;
 import tictim.paraglider.capabilities.PlayerMovement;
 import tictim.paraglider.capabilities.ServerPlayerMovement;
 import yesman.epicfight.client.ClientEngine;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
 @Mod.EventBusSubscriber(modid = EpicParaglidersMod.MOD_ID)
@@ -28,7 +26,7 @@ public final class EpicParaglidersEventHandler {
      * @param event
      */
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event){
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         PlayerMovement pm = PlayerMovement.of(event.player);
         if (pm != null && event.phase==TickEvent.Phase.END) {
             if (pm instanceof ServerPlayerMovement serverPlayerMovement) {
