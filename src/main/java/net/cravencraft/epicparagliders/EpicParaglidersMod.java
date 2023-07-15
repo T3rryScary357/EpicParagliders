@@ -1,7 +1,6 @@
 package net.cravencraft.epicparagliders;
 
 import net.cravencraft.epicparagliders.capabilities.UpdatedPlayerMovement;
-import net.cravencraft.epicparagliders.events.FixParagliderRender;
 import net.cravencraft.epicparagliders.network.ModNet;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -30,7 +29,6 @@ public class EpicParaglidersMod
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(new FixParagliderRender());
     }
 
     @SubscribeEvent
