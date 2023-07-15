@@ -9,9 +9,11 @@ import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SwordItem;
 import tictim.paraglider.capabilities.ClientPlayerMovement;
+import tictim.paraglider.item.ParagliderItem;
 import yesman.epicfight.client.ClientEngine;
 import yesman.epicfight.client.gui.screen.SkillBookScreen;
 import yesman.epicfight.client.gui.screen.SkillEditScreen;
+import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.world.item.*;
 
 public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
