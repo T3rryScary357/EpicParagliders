@@ -13,6 +13,16 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import tictim.paraglider.item.ParagliderItem;
 
+/**
+ * author: Thundertheidiot
+ *
+ * Contains client events that will override Epic Fight's render engine regardless of whether
+ * the 'filterAnimations' config option is set or not. Necessary to allow the Paragliders glide
+ * animation to play properly.
+ *
+ * Big thanks to Thunder for taking the code used in the DawnCraft-Tweaks mod, and integrating it
+ * with this mod. 
+ */
 @Mod.EventBusSubscriber(modid = EpicParaglidersMod.MOD_ID, value = Dist.CLIENT)
 public class FixParagliderRender {
     // DawnCraft-Tweaks
