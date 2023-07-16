@@ -67,9 +67,11 @@ public class ReRegisterSkills {
                 .setConsumption(0.0F)
                 .setCategory(SkillCategories.KNOCKDOWN_WAKEUP)
                 .setAnimations(Animations.BIPED_KNOCKDOWN_WAKEUP_LEFT, Animations.BIPED_KNOCKDOWN_WAKEUP_RIGHT)));
-        TECHNICIAN = registerSkill(new NewTechnicianSkill(PassiveSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "technician")), serverPlayerMovement));
+        TECHNICIAN = registerSkill(new NewTechnicianSkill(PassiveSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "technician"))
+                .setCategory(SkillCategories.PASSIVE).setConsumption(5.0F).setMaxStack(0)
+                .setResource(Skill.Resource.NONE).setRequiredXp(5), serverPlayerMovement));
     }
-
+// return (new Skill.Builder(resourceLocation)).setCategory(SkillCategories.PASSIVE).setConsumption(0.0F).setMaxStack(0).setResource(Skill.Resource.NONE).setRequiredXp(5);
     public static boolean reDefineSkill(SkillContainer skillContainer) {
 
         switch (skillContainer.getSkill().getRegistryName().getPath()) {

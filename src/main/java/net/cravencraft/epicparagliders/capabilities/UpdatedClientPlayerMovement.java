@@ -18,7 +18,7 @@ import yesman.epicfight.world.item.*;
 public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
 
     public static UpdatedClientPlayerMovement instance;
-    private final LocalPlayerPatch localPlayerPatch;
+    public final LocalPlayerPatch localPlayerPatch;
     public ClientPlayerMovement clientPlayerMovement;
     private int skillCheckDelay;
 
@@ -64,6 +64,7 @@ public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
         }
 
         disableAttackIfParagliding();
+//        disableEpicFightUI();
         updateStamina();
         addEffects();
         setNewSkill();
@@ -130,4 +131,19 @@ public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
             localPlayerPatch.toggleMode();
         }
     }
+
+    /**
+     * TODO: OK, so we had to disable setting the stamina to 0 to properly enable the Technician skill.
+     *      Seems like that worked fine, but the problem now is that the stamina bar from Epic Fight
+     *      comes up when logging in or respawning for a very short time. It's purely a cosmetic issue,
+     *      but one I would like to find a solution to nonetheless. Regardless, we can now take the
+     *      set max stamina to 0 logic out now.
+     */
+//    private void disableEpicFightUI() {
+//
+//        if (localPlayerPatch.isBattleMode()) {
+//            EpicParaglidersMod.LOGGER.info("disabling UI");
+//            ClientEngine.instance.renderEngine.downSlideSkillUI();
+//        }
+//    }
 }

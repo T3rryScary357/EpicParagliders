@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -19,8 +20,13 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import tictim.paraglider.ModCfg;
+import tictim.paraglider.capabilities.ClientPlayerMovement;
+import tictim.paraglider.capabilities.PlayerMovement;
 import tictim.paraglider.client.DisableStaminaRender;
 import tictim.paraglider.client.StaminaWheelRenderer;
+import yesman.epicfight.client.ClientEngine;
+import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 
 import static tictim.paraglider.client.StaminaWheelConstants.WHEEL_RADIUS;
 
