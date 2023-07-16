@@ -127,9 +127,7 @@ public class NewDodgeSkill extends Skill {
 		// Only roll if the player's stamina isn't depleted.
 		if (!updatedServerPlayerMovement.serverPlayerMovement.isDepleted()){
 			super.executeOnServer(executer, args);
-			EpicParaglidersMod.LOGGER.info("Current weight: " + executer.getWeight());
 			updatedServerPlayerMovement.skillStaminaCost = (int) Formulars.getStaminarConsumePenalty(executer.getWeight(), getConsumption(), executer);
-			EpicParaglidersMod.LOGGER.info("Skill Consumption: " + updatedServerPlayerMovement.skillStaminaCost);
 			 // TODO: Need to add MOD NET support for this
 			updatedServerPlayerMovement.actionStaminaNeedsSync = true;
 			int i = args.readInt();

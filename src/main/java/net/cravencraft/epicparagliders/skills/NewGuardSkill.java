@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.UpdatedServerPlayerMovement;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +20,7 @@ import yesman.epicfight.api.animation.types.EntityState;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.utils.AttackResult;
 import yesman.epicfight.api.utils.ExtendedDamageSource;
+import yesman.epicfight.api.utils.math.Formulars;
 import yesman.epicfight.client.gui.BattleModeGui;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSounds;
@@ -221,12 +221,10 @@ public class NewGuardSkill extends Skill {
 			
 			float penalty = container.getDataManager().getDataValue(PENALTY) + this.getPenaltyMultiplier(itemCapability);
 			event.getPlayerPatch().knockBackEntity(damageSource.getDirectEntity().position(), knockback);
-
-			// TODO: Maybe factor in weight to this? As a type of poise?
-			EpicParaglidersMod.LOGGER.info("Guard penalty: " + penalty);
-			EpicParaglidersMod.LOGGER.info("Guard impact: " + impact);
-			updatedServerPlayerMovement.skillStaminaCost = (int)((penalty * impact) * 10);
-			EpicParaglidersMod.LOGGER.info("GUARD SKILL STAMINA COST: " + updatedServerPlayerMovement.skillStaminaCost);
+			float poise = Formulars.getStaminarConsumePenalty(event.getPlayerPatch().getWeight(), 1, event.getPlayerPatch()) * 0.1F;
+			int totalPenalty = (int) (penalty * 5);
+			int totalImpact = (int) (impact * 5);
+			updatedServerPlayerMovement.skillStaminaCost = (int) ((getConsumption() + totalPenalty + totalImpact) * (1 - poise));
 			updatedServerPlayerMovement.actionStaminaNeedsSync = true;
 			
 			container.getDataManager().setDataSync(PENALTY, penalty, event.getPlayerPatch().getOriginal());

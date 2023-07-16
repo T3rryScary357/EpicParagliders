@@ -23,23 +23,15 @@ More than likely this mod won't work straight out of the gate.
 
 3. Restart your game and the new settings should take effect!
 
-## V0.0.1
-- Both mods now use the Paraglider's stamina system
-- Basic attacks now consume a set amount of stamina based on the attack speed of a weapon (will modify later to be more
-   balanced with all weapons. Currently, weapons like axes consume WAY too much stamina).
-
-## V0.0.2
-- All Epic Fight skills, except for some Passive skills like Technician and (maybe) Knockdown Wakeup (still WIP), 
-   should now be compatible with Paraglider's stamina system.
-- Do **NOT** use the **Technician** skill until support is added. Doing so will disable the dodge ability. 
-   If you do accidentally learn it, just open the Skills menu and assign it to something else 
-   (or use commands to unlearn it).
-- Fixed various bugs causing stamina issues such as player death, dimension transport, skill learning/swapping.
-- Stamina system is a bit more balanced with all weapons now. Takes in both attack delay time and weapon strength.
-   So, higher tiered weapons such as diamond and netherite will drain a little more stamina, which should be balanced
-   out by the player having a larger stamina wheel late game.
-- Epic Fight's stamina bar has now been fully removed from the GUI. The only time it should show up is possibly 
-   sometimes upon respawning, but should disappear once it fills up if so.
+## V0.0.4
+- Changed logic for disabling EF stamina bar. Should now only display for half a second upon respawning.
+- Added support for the passive skills Technician, Energized Guard, and Active Guard (need to finish stamina pillager).
+- Added weight benefits to blocking (similar to how poise would work). The heavier the player is, the less stamina is 
+    used to block an attack. Inversely, the heavier the player, the more stamina is used to dodge.
+- Refactored how different guard drain stamina. Guarding now takes a larger initial stamina consumption amount while 
+    draining only a small amount more with each consecutive block. Feels a bit more balanced, and skills like active
+    guard and energizing guard still give good benefits with this new rework. Also, poise is factored into the algorithm
+    as well.
 
 ## V0.0.3
 - Fixed the rendering issue with the Epic Fight rendering engine conflicting with Paraglider's gliding animation.
@@ -47,3 +39,21 @@ More than likely this mod won't work straight out of the gate.
   the [DawnCraft-Tweaks](https://github.com/SmileycorpMC/DawnCraft-Tweaks/blob/master/src/main/java/com/afunproject/dawncraft/integration/epicfight/client/EpicFightParagliderEvents.java) mod.
 - [Fixed a small bug](https://github.com/CravenCraft/EpicParagliders/commit/58aef081e8344c28da4568d77dbaf004301bd4ec#diff-228c4b34c9b6bb9d3dd5f8ac49b7521d6254e0f6042287053022bd6126bd3e12R124-R132)
   that allowed the player to attack while gliding if they were in **Battle** mode
+
+## V0.0.2
+- All Epic Fight skills, except for some Passive skills like Technician and (maybe) Knockdown Wakeup (still WIP),
+  should now be compatible with Paraglider's stamina system.
+- Do **NOT** use the **Technician** skill until support is added. Doing so will disable the dodge ability.
+  If you do accidentally learn it, just open the Skills menu and assign it to something else
+  (or use commands to unlearn it).
+- Fixed various bugs causing stamina issues such as player death, dimension transport, skill learning/swapping.
+- Stamina system is a bit more balanced with all weapons now. Takes in both attack delay time and weapon strength.
+  So, higher tiered weapons such as diamond and netherite will drain a little more stamina, which should be balanced
+  out by the player having a larger stamina wheel late game.
+- Epic Fight's stamina bar has now been fully removed from the GUI. The only time it should show up is possibly
+  sometimes upon respawning, but should disappear once it fills up if so.
+
+## V0.0.1
+- Both mods now use the Paraglider's stamina system
+- Basic attacks now consume a set amount of stamina based on the attack speed of a weapon (will modify later to be more
+  balanced with all weapons. Currently, weapons like axes consume WAY too much stamina).

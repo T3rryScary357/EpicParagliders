@@ -9,10 +9,6 @@ import net.minecraftforge.fml.common.Mod;
 import tictim.paraglider.capabilities.ClientPlayerMovement;
 import tictim.paraglider.capabilities.PlayerMovement;
 import tictim.paraglider.capabilities.ServerPlayerMovement;
-import yesman.epicfight.client.ClientEngine;
-import yesman.epicfight.client.events.engine.RenderEngine;
-import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
-import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
 @Mod.EventBusSubscriber(modid = EpicParaglidersMod.MOD_ID)
 public final class EpicParaglidersEventHandler {
@@ -46,12 +42,10 @@ public final class EpicParaglidersEventHandler {
             else if (pm instanceof ClientPlayerMovement clientPlayerMovement) {
 
                 if (UpdatedClientPlayerMovement.instance == null) {
-                    //TODO: This happens on player spawn
                     EpicParaglidersMod.LOGGER.info("SETTING NEW CLIENT MOVEMENT");
                     new UpdatedClientPlayerMovement(clientPlayerMovement);
                 }
                  if (clientPlayerMovement != UpdatedClientPlayerMovement.instance.clientPlayerMovement) {
-                     //TODO: This happens on death and dimension travel
                     EpicParaglidersMod.LOGGER.info("Does client pm = new pm? " + (clientPlayerMovement == UpdatedClientPlayerMovement.instance.clientPlayerMovement));
                     new UpdatedClientPlayerMovement(clientPlayerMovement);
                 }

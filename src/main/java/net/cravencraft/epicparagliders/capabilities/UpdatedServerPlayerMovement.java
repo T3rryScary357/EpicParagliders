@@ -47,7 +47,6 @@ public class UpdatedServerPlayerMovement extends UpdatedPlayerMovement {
 
         if (this.serverPlayerPatch == null && this.serverPlayerMovement.player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).isPresent()) {
             this.serverPlayerPatch = (ServerPlayerPatch) this.serverPlayerMovement.player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).orElse(null);
-            EpicParaglidersMod.LOGGER.info("SETTING SERVER STAM & MINING MODE");
             this.serverPlayerPatch.setStamina(20.0f); // Stops EF stamina bar from rendering since it's greater than the max.
             ReRegisterSkills.setNewSkills(this);
             ReRegisterSkills.reRegisterToPlayer(this);
