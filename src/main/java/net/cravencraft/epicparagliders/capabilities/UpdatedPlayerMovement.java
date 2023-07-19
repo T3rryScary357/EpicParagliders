@@ -12,6 +12,7 @@ public abstract class UpdatedPlayerMovement {
     public int totalActionStaminaCost;
     public int attackStaminaCost;
     public int skillStaminaCost;
+    public int skillStaminaGain;
     public boolean setNewSkill;
     public boolean isAttacking;
 
@@ -27,11 +28,11 @@ public abstract class UpdatedPlayerMovement {
      */
     public void updateStamina() {
         PlayerState state = playerMovement.getState();
-        if (this.totalActionStaminaCost > 0 || state.isConsume() ) {
+        if (this.totalActionStaminaCost != 0 || state.isConsume() ) {
+
             playerMovement.setRecoveryDelay(playerMovement.RECOVERY_DELAY);
             int stateChange = (state.isConsume()) ? state.change() : -this.totalActionStaminaCost;
-
-            if (!playerMovement.isDepleted() && ((state.isParagliding() ? UpdatedModCfg.paraglidingConsumesStamina() : UpdatedModCfg.runningConsumesStamina()) || this.totalActionStaminaCost > 0)) {
+            if (!playerMovement.isDepleted() && ((state.isParagliding() ? UpdatedModCfg.paraglidingConsumesStamina() : UpdatedModCfg.runningConsumesStamina()) || this.totalActionStaminaCost != 0)) {
                 // TODO: Double check this area if you're getting an increasing value with attacks.
                 playerMovement.setStamina(Math.max(0, playerMovement.getStamina() + stateChange));
             }

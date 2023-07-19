@@ -59,17 +59,20 @@ public class ReRegisterSkills {
                 .setConsumption(STEP_CONSUMPTION)
                 .setAnimations(Animations.BIPED_STEP_FORWARD, Animations.BIPED_STEP_BACKWARD, Animations.BIPED_STEP_LEFT, Animations.BIPED_STEP_RIGHT), serverPlayerMovement));
         GUARD = registerSkill(new NewGuardSkill(NewGuardSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "guard"))
-                .setRequiredXp(0), serverPlayerMovement));
+                .setConsumption(10.0F).setRequiredXp(0), serverPlayerMovement));
         ACTIVE_GUARD = registerSkill(new NewActiveGuardSkill(NewActiveGuardSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "active_guard")), serverPlayerMovement));
-        ENERGIZING_GUARD = registerSkill(new EnergizingGuardSkill(EnergizingGuardSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "energizing_guard"))));
+        ENERGIZING_GUARD = registerSkill(new NewEnergizingGuardSkill(NewEnergizingGuardSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "energizing_guard"))
+                .setRequiredXp(8), serverPlayerMovement));
         AIR_ATTACK = registerSkill(new NewAirAttack(NewAirAttack.createBuilder()));
+        STAMINA_PILLAGER = registerSkill(new NewStaminaPillagerSkill(PassiveSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "stamina_pillager"))));
         KNOCKDOWN_WAKEUP = registerSkill(new KnockdownWakeupSkill(DodgeSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "knockdown_wakeup"))
                 .setConsumption(0.0F)
                 .setCategory(SkillCategories.KNOCKDOWN_WAKEUP)
                 .setAnimations(Animations.BIPED_KNOCKDOWN_WAKEUP_LEFT, Animations.BIPED_KNOCKDOWN_WAKEUP_RIGHT)));
-        TECHNICIAN = registerSkill(new NewTechnicianSkill(PassiveSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "technician")), serverPlayerMovement));
+        TECHNICIAN = registerSkill(new NewTechnicianSkill(PassiveSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "technician"))
+                .setCategory(SkillCategories.PASSIVE).setConsumption(5.0F).setMaxStack(0)
+                .setResource(Skill.Resource.NONE).setRequiredXp(5), serverPlayerMovement));
     }
-
     public static boolean reDefineSkill(SkillContainer skillContainer) {
 
         switch (skillContainer.getSkill().getRegistryName().getPath()) {
@@ -89,6 +92,8 @@ public class ReRegisterSkills {
                 return setSkillIfAbsent(skillContainer, KNOCKDOWN_WAKEUP);
             case "technician":
                 return setSkillIfAbsent(skillContainer, TECHNICIAN);
+            case "stamina_pillager":
+                return setSkillIfAbsent(skillContainer, STAMINA_PILLAGER);
 
             default:
                 return false;
