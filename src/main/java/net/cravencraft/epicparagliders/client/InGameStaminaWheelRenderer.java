@@ -1,5 +1,6 @@
 package net.cravencraft.epicparagliders.client;
 
+import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.UpdatedModCfg;
 import net.cravencraft.epicparagliders.capabilities.UpdatedClientPlayerMovement;
 import tictim.paraglider.capabilities.PlayerMovement;
@@ -38,6 +39,8 @@ public class InGameStaminaWheelRenderer extends StaminaWheelRenderer implements 
 			else {
 				prevStamina = stamina;
 				Color color = DEPLETED_1.blend(DEPLETED_2, cycle(System.currentTimeMillis(), clientPlayer.playerMovement.isDepleted() ? DEPLETED_BLINK : BLINK));
+				Color gainStam = Color.of(2, 2, 150).blend(Color.of(2, 150, 255), cycle(System.currentTimeMillis(), clientPlayer.playerMovement.isDepleted() ? DEPLETED_BLINK : BLINK));;
+//				Color gainStam2 = Color.of(2, 150, 255);
 				PlayerState state = clientPlayer.playerMovement.getState();
 				// TODO: Maybe we can replace that entire giant if with this?? Look into it.
 				int stateChange = (state.isConsume()) ? state.change() : -clientPlayer.totalActionStaminaCost;
@@ -50,6 +53,11 @@ public class InGameStaminaWheelRenderer extends StaminaWheelRenderer implements 
 						if (((state.isConsume() && (state.isParagliding() ? UpdatedModCfg.paraglidingConsumesStamina() : UpdatedModCfg.runningConsumesStamina())))
 								|| clientPlayer.totalActionStaminaCost > 0) {
 							addWheel(t, t.getProportion(stamina + stateChange * 10), t.getProportion(stamina), color);
+						}
+						//TODO: If we render this only for the gain, then we could have both at the same time
+						if (clientPlayer.totalActionStaminaCost < 0) {
+							EpicParaglidersMod.LOGGER.info("Inside positive wheel gain " + (-clientPlayer.totalActionStaminaCost));
+							addWheel(t,  t.getProportion(stamina), t.getProportion(stamina + (-clientPlayer.totalActionStaminaCost) * 10), gainStam);
 						}
 					}
 				}

@@ -25,7 +25,12 @@ More than likely this mod won't work straight out of the gate.
 
 ## V0.0.4
 - Changed logic for disabling EF stamina bar. Should now only display for half a second upon respawning.
-- Added support for the passive skills Technician, Energized Guard, and Active Guard (need to finish stamina pillager).
+- Added support for the passive skills Technician, Energized Guard, Stamina Pillager, and Active Guard.
+- Introduced a new system for multiple moves draining stamina at the same time (such as rolling right after an attack)
+    that will drain almost exactly the proper amount of stamina needed regardless of when the actions take place. Uses
+    the Triangular Number algorithm to do this.
+- Using the above new system/algorithm introduced a new blue stamina "drain" bar that displays whenever the user performs
+    an action that replenishes stamina (so far that is only the passive skill "Stamina Pillager").
 - Added weight benefits to blocking (similar to how poise would work). The heavier the player is, the less stamina is 
     used to block an attack. Inversely, the heavier the player, the more stamina is used to dodge.
 - Refactored how different guard drain stamina. Guarding now takes a larger initial stamina consumption amount while 

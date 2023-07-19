@@ -3,6 +3,7 @@ package net.cravencraft.epicparagliders.capabilities;
 import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.network.ModNet;
 import net.cravencraft.epicparagliders.network.SyncActionMsg;
+import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.AxeItem;
@@ -44,30 +45,36 @@ public class UpdatedClientPlayerMovement extends UpdatedPlayerMovement {
             this.attackStaminaCost = getAttackStaminaCost(clientPlayerMovement.player.getMainHandItem().getItem());
             this.isAttacking = true;
         }
-        else if (this.skillStaminaCost > 0 || this.attackStaminaCost > 0) {
-            if (this.attackStaminaCost > this.skillStaminaCost) {
-                this.totalActionStaminaCost = this.attackStaminaCost;
-                this.attackStaminaCost--;
-            }
-            else if (this.skillStaminaCost > this.attackStaminaCost) {
-                this.totalActionStaminaCost = this.skillStaminaCost;
-                this.skillStaminaCost--;
-            }
-            else {
-                this.totalActionStaminaCost = this.attackStaminaCost + this.skillStaminaCost;
-                this.skillStaminaCost--;
-                this.attackStaminaCost--;
-            }
+        // TODO: Maybe account for the negative skill stam in this as well.
+        else if (this.attackStaminaCost > 0 && this.skillStaminaCost > 0) {
+            this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(this.attackStaminaCost) + MathUtils.calculateTriangularNumber(this.skillStaminaCost)));
+
+            this.attackStaminaCost--;
+            this.skillStaminaCost--;
+
+        }
+        else if (this.skillStaminaCost > 0) {
+            this.totalActionStaminaCost = this.skillStaminaCost;
+            this.skillStaminaCost--;
+        }
+        else if (this.attackStaminaCost > 0) {
+            this.totalActionStaminaCost = this.attackStaminaCost;
+            this.attackStaminaCost--;
         }
         else {
             this.totalActionStaminaCost = 0;
+        }
+
+        if (this.skillStaminaGain > 0) {
+            this.totalActionStaminaCost = (int) (this.attackStaminaCost + this.skillStaminaCost - this.skillStaminaGain);
+            this.skillStaminaGain--;
         }
 
         disableAttackIfParagliding();
         updateStamina();
         addEffects();
         setNewSkill();
-        ModNet.NET.sendToServer(new SyncActionMsg(this.totalActionStaminaCost, this.setNewSkill));
+        ModNet.NET.sendToServer(new SyncActionMsg(this.totalActionStaminaCost, this.attackStaminaCost, this.skillStaminaCost, this.skillStaminaGain, this.setNewSkill));
     }
 
     /**

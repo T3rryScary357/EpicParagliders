@@ -64,6 +64,7 @@ public class ReRegisterSkills {
         ENERGIZING_GUARD = registerSkill(new NewEnergizingGuardSkill(NewEnergizingGuardSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "energizing_guard"))
                 .setRequiredXp(8), serverPlayerMovement));
         AIR_ATTACK = registerSkill(new NewAirAttack(NewAirAttack.createBuilder()));
+        STAMINA_PILLAGER = registerSkill(new NewStaminaPillagerSkill(PassiveSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "stamina_pillager"))));
         KNOCKDOWN_WAKEUP = registerSkill(new KnockdownWakeupSkill(DodgeSkill.createBuilder(new ResourceLocation(EpicFightMod.MODID, "knockdown_wakeup"))
                 .setConsumption(0.0F)
                 .setCategory(SkillCategories.KNOCKDOWN_WAKEUP)
@@ -91,6 +92,8 @@ public class ReRegisterSkills {
                 return setSkillIfAbsent(skillContainer, KNOCKDOWN_WAKEUP);
             case "technician":
                 return setSkillIfAbsent(skillContainer, TECHNICIAN);
+            case "stamina_pillager":
+                return setSkillIfAbsent(skillContainer, STAMINA_PILLAGER);
 
             default:
                 return false;
