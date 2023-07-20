@@ -10,18 +10,19 @@ be a fantastic concept for myself and hopefully a few others.
 - [Paragliders](https://www.curseforge.com/minecraft/mc-mods/paragliders/files/4478246) (1.18.2)
 
 ## How Do You Make It Work?
-More than likely this mod won't work straight out of the gate. 
-1. Paraglider's default stamina system must be disabled in the serverconfig folder.
+There are two ways of making this mod work. 
+1. Just load in the local or server game world with this mod, Paragliders, and Epic Fight. Once the world is loaded in,
+   restart the game and load the world in again. The old paraglider server settings should be overriden with these!
+2. If the above method doesn't work, then don't worry. You can still modify things manually. Paraglider's default
+   stamina system must be disabled in the serverconfig folder.
    - That can be found here: **'saves/<YOUR_WORLD_NAME>/serverconfig/paraglider-server.toml'**. 
    - Simply set the **paraGlidingConsumesStamina** and **runningAndSwimmingConsumesStamina** both to **false**.
    - **NOTE**: Everything else in this config file can be whatever you want. Those are the only two settings
      that need to be overridden for this mod to work. Everything else will be read as normal.
-
-2. EpicParaglider's stamina system must be enabled. By default it will be, but if for whatever reason it is not,
-   then check in the same directory for this **'saves/<YOUR_WORLD_NAME>/serverconfig/epicparaglider-server.toml'**.
+   - EpicParaglider's stamina system must be enabled. By default it will be, but if for whatever reason it is not,
+      then check in the same directory for this **'saves/<YOUR_WORLD_NAME>/serverconfig/epicparaglider-server.toml'**.
    - Set whatever you want to consume stamina to be **true**.
-
-3. Restart your game and the new settings should take effect!
+   - Restart your game and the new settings should take effect!
 ## V0.1.0
 - First official minor release!
 - Added a file check that will check for the paraglider-server.toml file in the 'severconfig' directory, and change
