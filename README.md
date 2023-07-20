@@ -22,6 +22,11 @@ More than likely this mod won't work straight out of the gate.
    - Set whatever you want to consume stamina to be **true**.
 
 3. Restart your game and the new settings should take effect!
+## V0.1.0
+- First official minor release!
+- Added a file check that will check for the paraglider-server.toml file in the 'severconfig' directory, and change
+    the paragliding and running stamina drain attributes to false so that Epic Paragliders can automatically override
+    it. This should eliminate the need for manually changing the config file upon first installing this mod, _hopefully_.
 
 ## V0.0.4
 - Changed logic for disabling EF stamina bar. Should now only display for half a second upon respawning.
