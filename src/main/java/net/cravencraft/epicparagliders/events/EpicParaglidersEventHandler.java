@@ -3,22 +3,18 @@ package net.cravencraft.epicparagliders.events;
 import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.UpdatedClientPlayerMovement;
 import net.cravencraft.epicparagliders.capabilities.UpdatedServerPlayerMovement;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.storage.WorldData;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import tictim.paraglider.ModCfg;
 import tictim.paraglider.capabilities.ClientPlayerMovement;
 import tictim.paraglider.capabilities.PlayerMovement;
 import tictim.paraglider.capabilities.ServerPlayerMovement;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Field;
 
 @Mod.EventBusSubscriber(modid = EpicParaglidersMod.MOD_ID)
 public final class EpicParaglidersEventHandler {
@@ -26,59 +22,35 @@ public final class EpicParaglidersEventHandler {
     private EpicParaglidersEventHandler() {}
 
     /**
-     * Looks up the paraglider-server.toml file in the serverconfig file, and changes the paraglidingConsumesStamina and
-     * runningAndSwimmingConsumesStamina attributes to false so that the epicparagliders-server.toml can properly
-     * override it. This should remove the need for players to manually configure the files themselves. Works for
-     * singleplayer and multiplayer worlds.
-     *
-     * TODO: Test in CurseForge. Brand new world.
+     * Once the server is launched, this method looks into the ModCfg.class from Paragliders and
+     * changes the 'paraglidingConsumesStamina' and 'runningConsumesStamina' attributes to false.
+     * This enables us to disable the default Paragliders stamina wheel from rendering, and allows
+     * us to render our own. Needed because the default doesn't allow us to modify it to include
+     * attacks as a form of stamina consumption.
      *
      * @param event The ServerStartEvent fires every time the server is started and ready to play.
      */
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void testGetServerPath(ServerStartedEvent event) throws IOException {
-        MinecraftServer server = event.getServer();
-        WorldData worldData = server.getWorldData();
-
-        if (worldData != null) {
-            String worldName = worldData.getLevelName();
-            File paragliderConfig;
-
-            if (server.isSingleplayer()) {
-                EpicParaglidersMod.LOGGER.info("IS SINGLEPLAYER");
-                paragliderConfig = new File(server.getServerDirectory() + "/saves/" + worldName + "/serverconfig/paraglider-server.toml");
-            }
-            else {
-                paragliderConfig = new File(server.getServerDirectory() + "/" + worldName + "/serverconfig/paraglider-server.toml");
-            }
-
-            if (paragliderConfig.isFile()) {
-                EpicParaglidersMod.LOGGER.info("IS FILE");
-                modifyParagliderServerConfig(paragliderConfig);
-            }
-        }
+    public static void ServerStartedEvent(ServerStartedEvent event) throws NoSuchFieldException, IllegalAccessException {
+        disableParagliderStaminaWheel("paraglidingConsumesStamina");
+        disableParagliderStaminaWheel("runningConsumesStamina");
     }
 
+
     /**
-     * Separate method that performs all the reading and modifying of the paraglider-server.toml file.
-     * Will look up the two attributes for paragliding and running to consume stamina and set them to false
-     * for EpicParagliders to take over.
+     * Using reflection we modify the boolean fields within the ModCfg class in order to disable
+     * the Paragliders stamina wheel render system, which allows us to enable our own.
      *
-     * @param paragliderConfig the paraglider-server.toml file to be edited
-     * @throws IOException
+     * @param fieldName Either 'paraglidingConsumesStamina' or 'runningConsumesStamina'
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
      */
-    private static void modifyParagliderServerConfig(File paragliderConfig) throws IOException {
-        List<String> fileContent = new ArrayList<>(Files.readAllLines(paragliderConfig.toPath(), StandardCharsets.UTF_8));
-
-        for (int i = 0; i < fileContent.size(); i++) {
-            if (fileContent.get(i).contains("paraglidingConsumesStamina = true") || fileContent.get(i).contains("runningAndSwimmingConsumesStamina = true")) {
-                EpicParaglidersMod.LOGGER.info(fileContent.get(i) + " || BEING CHANGED");
-                String overrideSetting = fileContent.get(i).replace("true", "false");
-                fileContent.set(i, overrideSetting);
-            }
-        }
-
-        Files.write(paragliderConfig.toPath(), fileContent, StandardCharsets.UTF_8);
+    private static void disableParagliderStaminaWheel(String fieldName) throws NoSuchFieldException, IllegalAccessException {
+        Field field = ModCfg.class.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        ForgeConfigSpec.BooleanValue fieldValue = (ForgeConfigSpec.BooleanValue) field.get(null);
+        fieldValue.set(false);
+        field.set(null, fieldValue);
     }
 
     /**

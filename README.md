@@ -9,25 +9,22 @@ be a fantastic concept for myself and hopefully a few others.
 - [Epic Fight](https://www.curseforge.com/minecraft/mc-mods/epic-fight-mod/files/4018756) (1.18.2)
 - [Paragliders](https://www.curseforge.com/minecraft/mc-mods/paragliders/files/4478246) (1.18.2)
 
-## How Do You Make It Work?
-There are two ways of making this mod work. 
-1. Just load in the local or server game world with this mod, Paragliders, and Epic Fight. Once the world is loaded in,
-   restart the game and load the world in again. The old paraglider server settings should be overriden with these!
-2. If the above method doesn't work, then don't worry. You can still modify things manually. Paraglider's default
-   stamina system must be disabled in the serverconfig folder.
-   - That can be found here: **'saves/<YOUR_WORLD_NAME>/serverconfig/paraglider-server.toml'**. 
-   - Simply set the **paraGlidingConsumesStamina** and **runningAndSwimmingConsumesStamina** both to **false**.
-   - **NOTE**: Everything else in this config file can be whatever you want. Those are the only two settings
-     that need to be overridden for this mod to work. Everything else will be read as normal.
-   - EpicParaglider's stamina system must be enabled. By default it will be, but if for whatever reason it is not,
-      then check in the same directory for this **'saves/<YOUR_WORLD_NAME>/serverconfig/epicparaglider-server.toml'**.
-   - Set whatever you want to consume stamina to be **true**.
-   - Restart your game and the new settings should take effect!
+## Install Instructions
+Simply download the mod and the dependencies in the above section along with this mod, and you're golden!
+This mod creates a config file here **'saves/<YOUR_WORLD_NAME>/serverconfig/epicparaglider-server.toml'**. Currently,
+it can only configure paragliding and running to true or false for draining stamina, but in later updates I will have
+configurations for the amount of stamina attacks and skills can drain!
+
+
+## V0.1.1
+- Using reflection we can directly modify the ModCfg file of Paragliders. This means no more restarting for my mod
+    to override it! This mod is now plug and play!
+
 ## V0.1.0
 - First official minor release!
-- Added a file check that will check for the paraglider-server.toml file in the 'severconfig' directory, and change
+- ~~Added a file check that will check for the paraglider-server.toml file in the 'severconfig' directory, and change
     the paragliding and running stamina drain attributes to false so that Epic Paragliders can automatically override
-    it. This should eliminate the need for manually changing the config file upon first installing this mod, _hopefully_.
+    it. This should eliminate the need for manually changing the config file upon first installing this mod, _hopefully_.~~
 
 ## V0.0.4
 - Changed logic for disabling EF stamina bar. Should now only display for half a second upon respawning.
