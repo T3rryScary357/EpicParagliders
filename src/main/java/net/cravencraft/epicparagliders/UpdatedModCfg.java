@@ -24,15 +24,9 @@ public final class UpdatedModCfg {
 	public static void init(){
 		ForgeConfigSpec.Builder server = new ForgeConfigSpec.Builder();
 		server.push("stamina");
-		paraglidingConsumesStamina = server.comment("Paragliding and ascending will consume stamina.").define("paraglidingConsumesStamina", true);
-		runningConsumesStamina = server.comment("Actions other than paragliding or ascending will consume stamina.").define("runningAndSwimmingConsumesStamina", false);
+//		paraglidingConsumesStamina = server.comment("Paragliding and ascending will consume stamina.").define("paraglidingConsumesStamina", true);
+//		runningConsumesStamina = server.comment("Actions other than paragliding or ascending will consume stamina.").define("runningAndSwimmingConsumesStamina", false);
 
-		//TODO: Maybe add the updated state to include config options for your mod
-//		server.push("consumptions");
-//		for(PlayerState state : PlayerState.values()){
-//			state.setConfig(server.defineInRange(state.id+"StaminaConsumption", state.defaultChange, Integer.MIN_VALUE, Integer.MAX_VALUE));
-//		}
-//		server.pop();
 		server.pop();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, server.build());
 	}

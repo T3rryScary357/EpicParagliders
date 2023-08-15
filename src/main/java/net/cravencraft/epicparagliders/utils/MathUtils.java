@@ -17,4 +17,7 @@ public class MathUtils {
         double triangularRoot = ((Math.sqrt(Math.abs(triangularNumber) * percentageOfTriangularNumber * 8 - 1) - 1) / 2);
         return (triangularNumber > 0) ? triangularRoot : -triangularRoot;
     }
+
+    //TODO: Create one more method here that takes in two numbers and combines them.
+    //      Since this will be a very common piece of math used in this project.
 }
