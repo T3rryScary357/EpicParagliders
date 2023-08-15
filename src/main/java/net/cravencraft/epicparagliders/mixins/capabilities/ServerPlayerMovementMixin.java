@@ -41,6 +41,10 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
             this.totalActionStaminaCost--;
             ModNet.NET.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new SyncActionToClientMsg(this.totalActionStaminaCost));
         }
+        else if (this.totalActionStaminaCost < 0) {
+            this.totalActionStaminaCost++;
+            ModNet.NET.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new SyncActionToClientMsg(this.totalActionStaminaCost));
+        }
         this.setTotalActionStaminaCost(this.totalActionStaminaCost);
     }
 

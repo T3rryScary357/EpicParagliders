@@ -52,6 +52,10 @@ public abstract class ClientPlayerMovementMixin extends PlayerMovement implement
             this.totalActionStaminaCost--;
             ModNet.NET.sendToServer(new SyncActionToServerMsg(this.totalActionStaminaCost));
         }
+        else if (this.totalActionStaminaCost < 0) {
+            this.totalActionStaminaCost++;
+            ModNet.NET.sendToServer(new SyncActionToServerMsg(this.totalActionStaminaCost));
+        }
 //        EpicParaglidersMod.LOGGER.info("CLIENT TOTAL: " + totalActionStaminaCost);
         this.setTotalActionStaminaCost(this.totalActionStaminaCost);
     }

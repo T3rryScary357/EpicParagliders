@@ -1,5 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.client;
 
+import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,6 +14,8 @@ import tictim.paraglider.client.InGameStaminaWheelRenderer;
 import tictim.paraglider.client.StaminaWheelConstants;
 import tictim.paraglider.client.StaminaWheelRenderer;
 import tictim.paraglider.utils.Color;
+
+import static tictim.paraglider.client.StaminaWheelConstants.*;
 
 @Mixin(InGameStaminaWheelRenderer.class)
 public abstract class InGameStaminaWheelRendererMixin extends StaminaWheelRenderer {
@@ -53,6 +56,7 @@ public abstract class InGameStaminaWheelRendererMixin extends StaminaWheelRender
         } else {
             this.prevStamina = stamina;
             Color color = StaminaWheelConstants.DEPLETED_1.blend(StaminaWheelConstants.DEPLETED_2, StaminaWheelConstants.cycle(System.currentTimeMillis(), h.isDepleted() ? 600L : 300L));
+            Color gainStam = Color.of(2, 2, 150).blend(Color.of(2, 150, 255), cycle(System.currentTimeMillis(), h.isDepleted() ? DEPLETED_BLINK : BLINK));
             PlayerState state = h.getState();
             int stateChange = (state.isConsume()) ? state.change() - totalActionStaminaCost : -totalActionStaminaCost;
             WheelLevel[] var14 = WheelLevel.values();
@@ -69,6 +73,10 @@ public abstract class InGameStaminaWheelRendererMixin extends StaminaWheelRender
                             && (state.isParagliding() ? ModCfg.paraglidingConsumesStamina() : ModCfg.runningConsumesStamina())))
                             || totalActionStaminaCost > 0) {
                         this.addWheel(t, t.getProportion(stamina + stateChange * 10), t.getProportion(stamina), color);
+                    }
+                    if (totalActionStaminaCost < 0) {
+                        EpicParaglidersMod.LOGGER.info("Inside positive wheel gain " + (-totalActionStaminaCost));
+                        addWheel(t,  t.getProportion(stamina), t.getProportion(stamina + (-totalActionStaminaCost) * 10), gainStam);
                     }
                 }
             }
