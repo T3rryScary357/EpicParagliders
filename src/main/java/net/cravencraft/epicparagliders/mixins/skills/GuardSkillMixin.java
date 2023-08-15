@@ -29,18 +29,11 @@ public abstract class GuardSkillMixin extends Skill {
     @Inject(method = "guard", at = @At("HEAD"), remap = false)
     private void getPlayerPatch(SkillContainer container, CapabilityItem itemCapability, HurtEvent.Pre event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
         this.playerPatch = event.getPlayerPatch();
-    }
-
-    @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 0, remap = false)
-    private float impact(float impact) {
-        EpicParaglidersMod.LOGGER.info("IMPACT: " + impact);
         this.impact = impact;
-        return impact;
     }
 
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 2, remap = false)
-    private float penalty(float penalty) {
-        EpicParaglidersMod.LOGGER.info("PENALTY: " + penalty);
+    private float getPenalty(float penalty) {
         this.penalty = penalty;
         return penalty;
     }
@@ -48,27 +41,18 @@ public abstract class GuardSkillMixin extends Skill {
     @SuppressWarnings("InvalidInjectorMethodSignature")
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 3, remap = false)
     private float stamina(float stamina) {
-        EpicParaglidersMod.LOGGER.info("INSIDE GUARD MIXIN " + stamina);
         PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
         float poise = Formulars.getStaminarConsumePenalty(this.playerPatch.getWeight(), 1, this.playerPatch) * 0.1F;
+        EpicParaglidersMod.LOGGER.info("PENALTY: " + this.penalty);
         int totalPenalty = (int) (penalty * 5);
-        int totalImpact = (int) (impact * 50);
-        EpicParaglidersMod.LOGGER.info("POISE: " + poise);
-        EpicParaglidersMod.LOGGER.info("TOTAL PENALTY: " + totalPenalty);
-        EpicParaglidersMod.LOGGER.info("TOTAL IMPACT: " + totalImpact);
-//        EpicParaglidersMod.LOGGER.info("CONSUMPTION: " + getConsumption());
-        //TODO: Gonna need to use the triangular numbers algorithm here too.
-        EpicParaglidersMod.LOGGER.info("CURRENT CONSUMPTION: " + ((PlayerMovementInterface) playerMovement).getTotalActionStaminaCost());
-        EpicParaglidersMod.LOGGER.info("INITIAL GUARD COST: " + ((getConsumption() + totalPenalty + totalImpact) * (1 - poise)));
+        int totalImpact = (int) (impact * 10);
         int totalGuardConsumption = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber((int) ((getConsumption() + totalPenalty + totalImpact) * (1 - poise)))
                 + MathUtils.calculateTriangularNumber(((PlayerMovementInterface) playerMovement).getTotalActionStaminaCost())));
-        EpicParaglidersMod.LOGGER.info("GUARD CONSUMPTION AFTER TRIANGULAR NUMBERS: " + totalGuardConsumption);
 
         ((PlayerMovementInterface) playerMovement).setTotalActionStaminaCostServerSide(totalGuardConsumption);
 
         if (playerMovement.isDepleted()) {
-            EpicParaglidersMod.LOGGER.info("IS DEPLETED");
-            return -0.1f; //TODO: That did it.
+            return -0.1f;
         }
         else {
             return 0.0f;

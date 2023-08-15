@@ -26,7 +26,7 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
 
     @Inject(method = "update", at = @At(value = "HEAD"),  remap=false)
     public void update(CallbackInfo ci) {
-        EpicParaglidersMod.LOGGER.info("INIT SERVER ACTION STAMINA COST: " + this.totalActionStaminaCost);
+//        EpicParaglidersMod.LOGGER.info("INIT SERVER ACTION STAMINA COST: " + this.totalActionStaminaCost);
 //        if (this.totalActionStaminaCost > 0) {
 //            EpicParaglidersMod.LOGGER.info("Server Action stamina cost: " + this.totalActionStaminaCost + " | NEEDS SYNC: " + actionStaminaNeedsSync);
 //        }
