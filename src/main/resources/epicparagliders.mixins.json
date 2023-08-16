@@ -6,6 +6,8 @@
   "mixins": [
     "capabilities.ServerPlayerMovementMixin",
     "capabilities.PlayerMovementMixin",
+    "skills.BasicAttackMixin",
+    "skills.SimpleSpecialAttackSkillMixin",
     "skills.GuardSkillMixin",
     "skills.DodgeSkillMixin",
     "skills.ActiveGuardSkillMixin",

@@ -1,6 +1,9 @@
 package net.cravencraft.epicparagliders.mixins.capabilities;
 
+import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
@@ -35,12 +38,6 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
      */
     @Inject(method = "updateStamina", at = @At("HEAD"), cancellable = true, remap = false)
     public void updateStamina(CallbackInfo ci) {
-//        if (player instanceof LocalPlayer) {
-//            EpicParaglidersMod.LOGGER.info("SERVER PLAYER COST: " + this.totalActionStaminaCost);
-//        }
-//        else if (player instanceof ServerPlayer) {
-//            EpicParaglidersMod.LOGGER.info("CLIENT PLAYER COST: " + this.totalActionStaminaCost);
-//        }
 
         //TODO: Doesn't seem to immediately put the depleted status on when below 0. Check that.
         if (this.totalActionStaminaCost != 0 || this.state.isConsume()) {
@@ -59,6 +56,26 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
         else if (this.state.change() > 0) {
             this.stamina = Math.min(this.getMaxStamina(), this.stamina + this.state.change());
         }
+
+        //TODO: Make into single line
+        if (this.totalActionStaminaCost > 0) {
+            this.totalActionStaminaCost--;
+        }
+        else if(this.totalActionStaminaCost < 0) {
+            this.totalActionStaminaCost++;
+        }
+
+        if (this.player instanceof ServerPlayer) {
+//            EpicParaglidersMod.LOGGER.info("SERVER PLAYER COST: " + this.totalActionStaminaCost);
+            this.setTotalActionStaminaCostServerSide(this.totalActionStaminaCost);
+        }
+        else if (this.player instanceof LocalPlayer) {
+//            EpicParaglidersMod.LOGGER.info("LOCAL PLAYER COST: " + this.totalActionStaminaCost);
+            this.setTotalActionStaminaCostClientSide(this.totalActionStaminaCost);
+        }
+
+
+
 
         addEffects();
         ci.cancel();

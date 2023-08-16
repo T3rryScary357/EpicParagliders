@@ -1,7 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.skills;
 
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
-import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -56,10 +55,14 @@ public abstract class ActiveGuardSkillMixin extends GuardSkill {
             totalImpact = (impact * 8);
         }
 
-        float totalGuardConsumption = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber((int) ((getConsumption() + totalPenalty + totalImpact) * (1 - poise)))
-                                    + MathUtils.calculateTriangularNumber(((PlayerMovementInterface) playerMovement).getTotalActionStaminaCost())));
+        int guardConsumption = (int) ((getConsumption() + totalPenalty + totalImpact) * (1 - poise));
 
-        ((PlayerMovementInterface) playerMovement).setTotalActionStaminaCostServerSide((int) totalGuardConsumption);
+//        float totalGuardConsumption = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(guardConsumption))
+//                                    + MathUtils.calculateTriangularNumber(((PlayerMovementInterface) playerMovement).getTotalActionStaminaCost())));
+
+//        ((PlayerMovementInterface) playerMovement).setTotalActionStaminaCostServerSide((int) totalGuardConsumption);
+        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(guardConsumption);
+        ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
 
         if (playerMovement.isDepleted()) {
             return -0.1f;

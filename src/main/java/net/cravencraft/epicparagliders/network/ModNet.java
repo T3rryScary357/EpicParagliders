@@ -27,13 +27,6 @@ public class ModNet {
     public static final SimpleChannel NET = NetworkRegistry.newSimpleChannel(new ResourceLocation(EpicParaglidersMod.MOD_ID, "master"), () -> NET_VERSION, NET_VERSION::equals, NET_VERSION::equals);
 
     public static void init() {
-//        NET.registerMessage(0, SyncActionMsg.class,
-//                SyncActionMsg::write, SyncActionMsg::read,
-//                ModNet::handleActionStaminaCost, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-//
-//        NET.registerMessage(1, SyncServerActionMsg.class,
-//                SyncServerActionMsg::write, SyncServerActionMsg::read,
-//                Client::handleServerActionStaminaCost, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 
         NET.registerMessage(0, SyncActionToServerMsg.class,
                 SyncActionToServerMsg::write, SyncActionToServerMsg::read,
@@ -55,53 +48,23 @@ public class ModNet {
             }
 
             ((PlayerMovementInterface) serverPlayerMovement).setTotalActionStaminaCostServerSide(msg.totalActionStaminaCost());
+            ((PlayerMovementInterface) serverPlayerMovement).isAttackingServerSide(msg.isAttacking());
         });
     }
 
-//    private static void handleActionStaminaCost(SyncActionMsg msg, Supplier<NetworkEvent.Context> context) {
-//        context.get().setPacketHandled(true);
-//        context.get().enqueueWork(() -> {
-//            ServerPlayer player = context.get().getSender();
-//            if(player==null){
-//                ParagliderMod.LOGGER.error("Cannot handle SyncMovementMsg: Wrong side");
-//                return;
-//            }
-//
-//            UpdatedServerPlayerMovement.instance.totalActionStaminaCost = msg.totalActionStaminaCost();
-//            UpdatedServerPlayerMovement.instance.attackStaminaCost = msg.attackStaminaCost();
-//            UpdatedServerPlayerMovement.instance.skillStaminaCost = msg.skillStaminaCost();
-//            UpdatedServerPlayerMovement.instance.skillStaminaGain = msg.skillStaminaGain();
-//            UpdatedServerPlayerMovement.instance.setNewSkill = msg.setNewSkill();
-//        });
-//    }
-
     private static final class Client {
-
         private Client(){}
-//        public static void handleServerActionStaminaCost(SyncServerActionMsg msg, Supplier<NetworkEvent.Context> ctx) {
-//            ctx.get().setPacketHandled(true);
-//            LocalPlayer localPlayer = Minecraft.getInstance().player;
-//            if (localPlayer == null) return;
-//            UpdatedClientPlayerMovement updatedClientPlayerMovement = UpdatedClientPlayerMovement.instance;
-//            if (updatedClientPlayerMovement != null) {
-//                if (ModCfg.traceMovementPacket()) ParagliderMod.LOGGER.debug("Received {}", msg);
-//                msg.copyTo(updatedClientPlayerMovement);
-//            }
-//            else {
-//                ParagliderMod.LOGGER.error("Couldn't handle packet {}, capability not found", msg);
-//            }
-//        }
 
         public static void handleActionToClientStaminaCost(SyncActionToClientMsg msg, Supplier<NetworkEvent.Context> ctx) {
             ctx.get().setPacketHandled(true);
             LocalPlayer localPlayer = Minecraft.getInstance().player;
             if (localPlayer == null) return;
-//            UpdatedClientPlayerMovement updatedClientPlayerMovement = (UpdatedClientPlayerMovement) UpdatedPlayerMovement.getInstance(localPlayer);
             ClientPlayerMovement clientPlayerMovement = (ClientPlayerMovement) PlayerMovement.of(localPlayer);
             if (clientPlayerMovement != null) {
                 if (ModCfg.traceMovementPacket()) ParagliderMod.LOGGER.debug("Received {}", msg);
-//                msg.copyTo(clientPlayerMovement);
+//                msg.copyTo(clientPlayerMovement); //TODO: Look into later since you have multiple calls here.
                 ((PlayerMovementInterface) clientPlayerMovement).setTotalActionStaminaCostClientSide(msg.totalActionStaminaCost());
+                ((PlayerMovementInterface) clientPlayerMovement).performingActionClientSide(msg.isPerformingAction());
             }
             else {
                 ParagliderMod.LOGGER.error("Couldn't handle packet {}, capability not found", msg);

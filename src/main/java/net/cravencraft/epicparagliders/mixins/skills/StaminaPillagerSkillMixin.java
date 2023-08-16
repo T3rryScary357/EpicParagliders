@@ -26,18 +26,22 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
 
             float stamina = playerMovement.getStamina();
             float missingStamina = playerMovement.getMaxStamina() - stamina;
-            float staminaPillaged = (int) MathUtils.calculateModifiedTriangularRoot(missingStamina, STAMINA_PERCENTAGE_RETURNED);
+            int staminaPillaged = (int) MathUtils.calculateModifiedTriangularRoot(missingStamina, STAMINA_PERCENTAGE_RETURNED);
             float currentActionStamina = serverPlayerMovement.getTotalActionStaminaCost();
             int totalStaminaPillaged;
             if (staminaPillaged > currentActionStamina) {
-                totalStaminaPillaged = -(int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber((int) staminaPillaged))
-                        + MathUtils.calculateTriangularNumber(serverPlayerMovement.getTotalActionStaminaCost()));
+//                totalStaminaPillaged = -(int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber((int) staminaPillaged))
+//                        + MathUtils.calculateTriangularNumber(serverPlayerMovement.getTotalActionStaminaCost()));
+                ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(-staminaPillaged);
             }
             else {
-                totalStaminaPillaged =  (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber((int) staminaPillaged))
-                        + MathUtils.calculateTriangularNumber(serverPlayerMovement.getTotalActionStaminaCost()));
+//                totalStaminaPillaged =  (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber((int) staminaPillaged))
+//                        + MathUtils.calculateTriangularNumber(serverPlayerMovement.getTotalActionStaminaCost()));
+                ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(staminaPillaged);
             }
-            ((PlayerMovementInterface) playerMovement).setTotalActionStaminaCostServerSide(totalStaminaPillaged);
+//            ((PlayerMovementInterface) playerMovement).setTotalActionStaminaCostServerSide(totalStaminaPillaged);
+//            ((PlayerMovementInterface) playerMovement).setAttackStaminaCostServerSide(staminaPillaged);
+            ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
         }
     }
 }

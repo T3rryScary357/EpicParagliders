@@ -7,13 +7,15 @@ import net.minecraft.network.FriendlyByteBuf;
  * the player. Sent from client to server.
  *
  * @param totalActionStaminaCost
+ * @param isAttacking
  */
-public record SyncActionToServerMsg(int totalActionStaminaCost) {
+public record SyncActionToServerMsg(int totalActionStaminaCost, boolean isAttacking) {
     public static SyncActionToServerMsg read(FriendlyByteBuf buffer) {
-        return new SyncActionToServerMsg(buffer.readInt());
+        return new SyncActionToServerMsg(buffer.readInt(), buffer.readBoolean());
     }
 
     public void write(FriendlyByteBuf buffer) {
         buffer.writeInt(totalActionStaminaCost);
+        buffer.writeBoolean(isAttacking);
     }
 }
