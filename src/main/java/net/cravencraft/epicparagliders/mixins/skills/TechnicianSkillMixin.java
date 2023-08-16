@@ -34,7 +34,7 @@ public abstract class TechnicianSkillMixin extends PassiveSkill {
 
         int staminaReduction = (int) (currentStaminaCost * ROLL_STAMINA_COST_REDUCTION);
 
-        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(staminaReduction);
+        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(-staminaReduction);
         ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
         return 0.0f;
     }
