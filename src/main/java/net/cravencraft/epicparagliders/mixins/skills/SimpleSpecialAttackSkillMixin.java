@@ -24,7 +24,6 @@ public abstract class SimpleSpecialAttackSkillMixin extends Skill {
     private void getPlayerPatch(ServerPlayerPatch executer, FriendlyByteBuf args, CallbackInfo ci) {
         PlayerMovement playerMovement = PlayerMovement.of(executer.getOriginal());
         int specialAttackStaminaConsumption = MathUtils.getAttackStaminaCost(executer.getOriginal());
-        EpicParaglidersMod.LOGGER.info("SPECIAL ATTACK STAMINA: " + specialAttackStaminaConsumption);
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(specialAttackStaminaConsumption);
         ((PlayerMovementInterface) playerMovement).isAttackingServerSide(true);
     }

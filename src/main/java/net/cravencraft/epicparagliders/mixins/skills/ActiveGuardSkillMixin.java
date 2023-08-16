@@ -38,6 +38,19 @@ public abstract class ActiveGuardSkillMixin extends GuardSkill {
         return penalty;
     }
 
+    /**
+     * Modifies the 'stamina' variable in the 'guard' method of the ActiveGuardSkill class.
+     * Takes in values retrieved from the above methods that simply store the penalty and impact
+     * from the same method to factor into this method's new stamina consumption factor.
+     *
+     * Calculates the stamina cost based on player armor weight, impact, and block penalty.
+     * If active guard is successful (penalty > 0.1), then less stamina is drained
+     * (vs. negating all stamina being drained initially), else even more stamina is drained
+     * from the block. Making this a high risk high reward system to choose of regular guard.
+     *
+     * @param stamina
+     * @return
+     */
     @SuppressWarnings("InvalidInjectorMethodSignature")
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 3, remap = false)
     private float stamina(float stamina) {
@@ -57,10 +70,6 @@ public abstract class ActiveGuardSkillMixin extends GuardSkill {
 
         int guardConsumption = (int) ((getConsumption() + totalPenalty + totalImpact) * (1 - poise));
 
-//        float totalGuardConsumption = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(guardConsumption))
-//                                    + MathUtils.calculateTriangularNumber(((PlayerMovementInterface) playerMovement).getTotalActionStaminaCost())));
-
-//        ((PlayerMovementInterface) playerMovement).setTotalActionStaminaCostServerSide((int) totalGuardConsumption);
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(guardConsumption);
         ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
 

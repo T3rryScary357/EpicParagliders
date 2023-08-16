@@ -23,8 +23,9 @@ public abstract class BasicAttackMixin extends Skill {
     @Inject(method = "executeOnServer", at = @At("TAIL"), remap = false)
     private void getPlayerPatch(ServerPlayerPatch executer, FriendlyByteBuf args, CallbackInfo ci) {
         PlayerMovement playerMovement = PlayerMovement.of(executer.getOriginal());
+
         int specialAttackStaminaConsumption = MathUtils.getAttackStaminaCost(executer.getOriginal());
-        EpicParaglidersMod.LOGGER.info("BASIC ATTACK STAMINA: " + specialAttackStaminaConsumption);
+
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(specialAttackStaminaConsumption);
         ((PlayerMovementInterface) playerMovement).isAttackingServerSide(true);
     }

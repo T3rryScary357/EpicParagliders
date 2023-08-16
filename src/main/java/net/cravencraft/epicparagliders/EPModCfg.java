@@ -10,8 +10,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import static net.cravencraft.epicparagliders.EpicParaglidersMod.MOD_ID;
 
 @Mod.EventBusSubscriber(modid = MOD_ID, bus = Bus.MOD)
-public final class UpdatedModCfg {
-	private UpdatedModCfg(){}
+public final class EPModCfg {
+	private EPModCfg(){}
 	private static BooleanValue paraglidingConsumesStamina;
 	private static BooleanValue runningConsumesStamina;
 

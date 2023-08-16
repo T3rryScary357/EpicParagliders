@@ -23,8 +23,6 @@ public interface PlayerMovementInterface {
      * ClientPlayerMovement
      */
     void setTotalActionStaminaCostClientSide(int totalActionStaminaCost);
-    void isAttackingClientSide(boolean isAttacking);
-    void performingActionClientSide(boolean isPerformingAction);
 
 
 }

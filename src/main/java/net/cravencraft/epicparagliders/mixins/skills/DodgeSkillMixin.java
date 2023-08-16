@@ -25,10 +25,9 @@ public abstract class DodgeSkillMixin extends Skill {
 
         if (!playerMovement.isDepleted()){
             super.executeOnServer(executer, args);
+
             int rollConsumption = (int) (Formulars.getStaminarConsumePenalty(executer.getWeight(), 10, executer));
-//            int totalRollConsumption = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(rollConsumption)
-//                                        + MathUtils.calculateTriangularNumber(((PlayerMovementInterface) playerMovement).getTotalActionStaminaCost())));
-//            ((PlayerMovementInterface) playerMovement).setTotalActionStaminaCostServerSide(totalRollConsumption);
+
             ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(rollConsumption);
             ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
         }

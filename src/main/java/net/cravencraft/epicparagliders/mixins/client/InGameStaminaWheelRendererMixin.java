@@ -1,6 +1,5 @@
 package net.cravencraft.epicparagliders.mixins.client;
 
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,6 +23,12 @@ public abstract class InGameStaminaWheelRendererMixin extends StaminaWheelRender
 
     @Shadow private long fullTime;
 
+    /**
+     * Overrides
+     *
+     * @param h
+     * @param ci
+     */
     @Inject(method = "makeWheel", at = @At(value = "HEAD"), remap=false)
     public void makeWheel(PlayerMovement h, CallbackInfo ci) {
         int totalActionStaminaCost = ((PlayerMovementInterface) h).getTotalActionStaminaCost();
@@ -75,7 +80,6 @@ public abstract class InGameStaminaWheelRendererMixin extends StaminaWheelRender
                         this.addWheel(t, t.getProportion(stamina + stateChange * 10), t.getProportion(stamina), color);
                     }
                     if (totalActionStaminaCost < 0) {
-                        EpicParaglidersMod.LOGGER.info("Inside positive wheel gain " + (-totalActionStaminaCost));
                         addWheel(t,  t.getProportion(stamina), t.getProportion(stamina + (-totalActionStaminaCost) * 10), gainStam);
                     }
                 }

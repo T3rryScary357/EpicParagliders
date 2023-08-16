@@ -1,6 +1,5 @@
 package net.cravencraft.epicparagliders.mixins.skills;
 
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
@@ -42,13 +41,10 @@ public abstract class GuardSkillMixin extends Skill {
     private float stamina(float stamina) {
         PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
         float poise = Formulars.getStaminarConsumePenalty(this.playerPatch.getWeight(), 1, this.playerPatch) * 0.1F;
-        EpicParaglidersMod.LOGGER.info("PENALTY: " + this.penalty);
         int totalPenalty = (int) (penalty * 5);
         int totalImpact = (int) (impact * 10);
+
         int guardConsumption = (int) ((getConsumption() + totalPenalty + totalImpact) * (1 - poise));
-//        int totalGuardConsumption = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(guardConsumption)
-//                + MathUtils.calculateTriangularNumber(((PlayerMovementInterface) playerMovement).getTotalActionStaminaCost())));
-//        ((PlayerMovementInterface) playerMovement).setTotalActionStaminaCostServerSide(totalGuardConsumption);
 
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(guardConsumption);
         ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);

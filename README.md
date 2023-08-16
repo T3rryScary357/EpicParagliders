@@ -11,10 +11,19 @@ be a fantastic concept for myself and hopefully a few others.
 
 ## Install Instructions
 Simply download the mod and the dependencies in the above section along with this mod, and you're golden!
-This mod creates a config file here **'saves/<YOUR_WORLD_NAME>/serverconfig/epicparaglider-server.toml'**. Currently,
-it can only configure paragliding and running to true or false for draining stamina, but in later updates I will have
-configurations for the amount of stamina attacks and skills can drain!
 
+## Notes
+This mod creates a config file here **'saves/<YOUR_WORLD_NAME>/serverconfig/epicparaglider-server.toml'**.
+Currently, this config file doesn't have anything you can change, but is a placeholder for a future update soon
+that will have several config options for the amount of stamina you want different actions to drain.
+
+## V0.2.0
+- MASSIVE change in the mod's code. Using mixins (I finally learned how to use them) now to do almost everything.
+- This mod should be a lot more optimized because of these changes.
+- Code rework will make porting a LOT easier in the future. Especially with the BIG update EFM will have soon.
+- Removed unnecessary logs that would constantly spam the console.
+- Fixed a bug in multiplayer that would cause players to sometimes share stamina with other's.
+- Attribute and config support coming in the next update soon!
 
 ## V0.1.1
 - Using reflection we can directly modify the ModCfg file of Paragliders. This means no more restarting for my mod

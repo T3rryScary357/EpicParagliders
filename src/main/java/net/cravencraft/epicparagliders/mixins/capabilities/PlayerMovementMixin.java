@@ -1,6 +1,5 @@
 package net.cravencraft.epicparagliders.mixins.capabilities;
 
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,20 +25,21 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
     @Shadow public abstract int getMaxStamina();
     @Shadow @Final public Player player;
     public int totalActionStaminaCost;
-    private int comboCount;
 
 
     /**
-     * TODO: Double check everything, but I think we have mixins working. DO make the updates
-     *       to the static instances of the updated client and server players movements classes.
-     *       Once you have that done, then start the clean up.
+     * Functions very similarly to the updateStamina() method of PlayerMovement in the Paragliders mod.
+     * The main difference here is that the amount of stamina to drain also factors in actionStaminaCost,
+     * which will be any action performed that drains stamina (attacking, rolling, dodging, etc.).
      *
      * @param ci
      */
     @Inject(method = "updateStamina", at = @At("HEAD"), cancellable = true, remap = false)
     public void updateStamina(CallbackInfo ci) {
 
-        //TODO: Doesn't seem to immediately put the depleted status on when below 0. Check that.
+        //TODO: Small bug where stamina isn't depleted if attacking and going up a block at the same time.
+        //      State and action consumption are both combined, so can't be an issue with one being chose
+        //      over the other. Look into this in a later release.
         if (this.totalActionStaminaCost != 0 || this.state.isConsume()) {
             this.recoveryDelay = 10;
             int stateChange = (state.isConsume()) ? state.change() - this.totalActionStaminaCost : -this.totalActionStaminaCost;
@@ -57,7 +57,6 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
             this.stamina = Math.min(this.getMaxStamina(), this.stamina + this.state.change());
         }
 
-        //TODO: Make into single line
         if (this.totalActionStaminaCost > 0) {
             this.totalActionStaminaCost--;
         }
@@ -66,16 +65,11 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
         }
 
         if (this.player instanceof ServerPlayer) {
-//            EpicParaglidersMod.LOGGER.info("SERVER PLAYER COST: " + this.totalActionStaminaCost);
             this.setTotalActionStaminaCostServerSide(this.totalActionStaminaCost);
         }
         else if (this.player instanceof LocalPlayer) {
-//            EpicParaglidersMod.LOGGER.info("LOCAL PLAYER COST: " + this.totalActionStaminaCost);
             this.setTotalActionStaminaCostClientSide(this.totalActionStaminaCost);
         }
-
-
-
 
         addEffects();
         ci.cancel();

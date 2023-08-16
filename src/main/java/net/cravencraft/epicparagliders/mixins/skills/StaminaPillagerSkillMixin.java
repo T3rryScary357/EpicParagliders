@@ -26,21 +26,12 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
 
             float stamina = playerMovement.getStamina();
             float missingStamina = playerMovement.getMaxStamina() - stamina;
-            int staminaPillaged = (int) MathUtils.calculateModifiedTriangularRoot(missingStamina, STAMINA_PERCENTAGE_RETURNED);
             float currentActionStamina = serverPlayerMovement.getTotalActionStaminaCost();
-            int totalStaminaPillaged;
-            if (staminaPillaged > currentActionStamina) {
-//                totalStaminaPillaged = -(int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber((int) staminaPillaged))
-//                        + MathUtils.calculateTriangularNumber(serverPlayerMovement.getTotalActionStaminaCost()));
-                ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(-staminaPillaged);
-            }
-            else {
-//                totalStaminaPillaged =  (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber((int) staminaPillaged))
-//                        + MathUtils.calculateTriangularNumber(serverPlayerMovement.getTotalActionStaminaCost()));
-                ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(staminaPillaged);
-            }
-//            ((PlayerMovementInterface) playerMovement).setTotalActionStaminaCostServerSide(totalStaminaPillaged);
-//            ((PlayerMovementInterface) playerMovement).setAttackStaminaCostServerSide(staminaPillaged);
+            int staminaPillaged = (int) MathUtils.calculateModifiedTriangularRoot(missingStamina, STAMINA_PERCENTAGE_RETURNED);
+
+            staminaPillaged = (staminaPillaged > currentActionStamina) ? (-staminaPillaged) : staminaPillaged;
+
+            ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(staminaPillaged);
             ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
         }
     }
