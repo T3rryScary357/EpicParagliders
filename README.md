@@ -11,10 +11,42 @@ be a fantastic concept for myself and hopefully a few others.
 
 ## Install Instructions
 Simply download the mod and the dependencies in the above section along with this mod, and you're golden!
-This mod creates a config file here **'saves/<YOUR_WORLD_NAME>/serverconfig/epicparaglider-server.toml'**. Currently,
-it can only configure paragliding and running to true or false for draining stamina, but in later updates I will have
-configurations for the amount of stamina attacks and skills can drain!
 
+## Notes
+This mod creates a config file here **'saves/<YOUR_WORLD_NAME>/serverconfig/epicparaglider-server.toml'**.
+Currently, this config file doesn't have anything you can change, but is a placeholder for a future update soon
+that will have several config options for the amount of stamina you want different actions to drain.
+
+## Skills
+The Epic Fight Skills work a bit differently in this mod. Most have had their original behavior modified in order
+to properly integrate with Paragliders stamina system.
+- **Attacks:** Both basic and simple special attacks now drain stamina based on the swing time of the item as well as
+    the give item's attack damage. Weapons with higher attack damage and/or slower swing speeds will drain more stamina.
+    This system currently does have its flaws, and I'll be tweaking it more in the future.
+- **Guard:** Stamina is drained when guarding based on the player's weight (armor weight. Higher means less drained),
+    the impact of the blocked attack, and the penalty of consecutive blocks. The penalty for consecutive blocks has 
+    been toned down some in favor of overall higher block costs. May be tweaked more in the future.
+- **Active Guard:** Similar to **Guard**, **Active Guard** is a type of guard that focuses on parrying attacks.
+    Originally, if the player blocked right before an attack then they would have no stamina penalty, and if not
+    then they would have the normal stamina penalty of guard. There are only benefits. Now, if the player guards
+    right before an attack 35% of the stamina will be drained, and if they just guard 35% **extra** stamina will
+    be applied. There is a risk/reward to the skill now, which makes this great against solo enemies, but not 
+    against groups.
+- **Dodge:** Stamina is drained based on player weight. So, heavier armors will drain more stamina.
+- **Stamina Pillager:** Still gives the player roughly 30% of their missing stamina on killing an entity. This factors
+    into stamina already being drained by actions, which means if an action is being performed when an entity is killed,
+    then less stamina will be drained by the action if the stamina to return is less. If the stamina to return is higher
+    than the stamina being drained, or if no stamina is being drained at all, then it will be clear that the player is
+    gaining stamina from the skill by a section of the wheel representing the stamina to be returned turning blue.
+- **Technician Skill:** Doesn't completely negate stamina from dodging when dodging right before an enemy's attack.
+    Instead, this reduces the dodge stamina consumption by 50%. 
+## V0.2.0
+- MASSIVE change in the mod's code. Using mixins (I finally learned how to use them) now to do almost everything.
+- This mod should be a lot more optimized because of these changes.
+- Code rework will make porting a LOT easier in the future. Especially with the BIG update EFM will have soon.
+- Removed unnecessary logs that would constantly spam the console.
+- Fixed a bug in multiplayer that would cause players to sometimes share stamina with other's.
+- Attribute and config support coming in the next update soon!
 
 ## V0.1.1
 - Using reflection we can directly modify the ModCfg file of Paragliders. This means no more restarting for my mod

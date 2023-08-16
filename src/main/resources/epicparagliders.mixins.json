@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "minVersion": "0.7",
+  "package": "net.cravencraft.epicparagliders.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "capabilities.ServerPlayerMovementMixin",
+    "capabilities.PlayerMovementMixin",
+    "skills.BasicAttackMixin",
+    "skills.SimpleSpecialAttackSkillMixin",
+    "skills.GuardSkillMixin",
+    "skills.DodgeSkillMixin",
+    "skills.ActiveGuardSkillMixin",
+    "skills.StaminaPillagerSkillMixin",
+    "skills.TechnicianSkillMixin",
+    "capabilities.PlayerPatchMixin"
+  ],
+  "client": [
+    "client.InGameStaminaWheelRendererMixin",
+    "capabilities.ClientPlayerMovementMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

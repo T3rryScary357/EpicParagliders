@@ -1,11 +1,8 @@
 package net.cravencraft.epicparagliders;
 
-import net.cravencraft.epicparagliders.capabilities.UpdatedPlayerMovement;
 import net.cravencraft.epicparagliders.network.ModNet;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -24,16 +21,10 @@ public class EpicParaglidersMod
     {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         Contents.registerEventHandlers(eventBus);
-        UpdatedModCfg.init();
+        EPModCfg.init();
         ModNet.init();
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @SubscribeEvent
-    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        //TODO: Might be needed for the new PlayerMovement classes.
-        event.register(UpdatedPlayerMovement.class);
     }
 }
