@@ -28,7 +28,6 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
             float missingStamina = playerMovement.getMaxStamina() - stamina;
             float staminaPillaged = (int) MathUtils.calculateModifiedTriangularRoot(missingStamina, STAMINA_PERCENTAGE_RETURNED);
             float currentActionStamina = serverPlayerMovement.getTotalActionStaminaCost();
-
             int totalStaminaPillaged;
             if (staminaPillaged > currentActionStamina) {
                 totalStaminaPillaged = -(int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber((int) staminaPillaged))
@@ -38,7 +37,6 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
                 totalStaminaPillaged =  (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber((int) staminaPillaged))
                         + MathUtils.calculateTriangularNumber(serverPlayerMovement.getTotalActionStaminaCost()));
             }
-
             ((PlayerMovementInterface) playerMovement).setTotalActionStaminaCostServerSide(totalStaminaPillaged);
         }
     }

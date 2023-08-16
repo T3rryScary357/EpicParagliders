@@ -10,6 +10,7 @@
     "skills.DodgeSkillMixin",
     "skills.ActiveGuardSkillMixin",
     "skills.StaminaPillagerSkillMixin",
+    "skills.TechnicianSkillMixin",
     "capabilities.PlayerPatchMixin"
   ],
   "client": [

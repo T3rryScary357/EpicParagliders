@@ -36,7 +36,7 @@ public abstract class ClientPlayerMovementMixin extends PlayerMovement implement
      */
     @Inject(method = "update", at = @At(value = "HEAD"), remap=false)
     public void update(CallbackInfo ci) {
-//        EpicParaglidersMod.LOGGER.info("INIT CLIENT TOTAL: " + totalActionStaminaCost);
+        EpicParaglidersMod.LOGGER.info("INIT CLIENT TOTAL: " + totalActionStaminaCost);
         if (!ClientEngine.instance.getPlayerPatch().getEntityState().movementLocked()){
             this.isAttacking = false;
         }
@@ -56,7 +56,6 @@ public abstract class ClientPlayerMovementMixin extends PlayerMovement implement
             this.totalActionStaminaCost++;
             ModNet.NET.sendToServer(new SyncActionToServerMsg(this.totalActionStaminaCost));
         }
-//        EpicParaglidersMod.LOGGER.info("CLIENT TOTAL: " + totalActionStaminaCost);
         this.setTotalActionStaminaCost(this.totalActionStaminaCost);
     }
 

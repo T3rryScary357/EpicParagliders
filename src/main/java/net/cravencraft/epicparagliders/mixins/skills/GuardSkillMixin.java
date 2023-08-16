@@ -48,7 +48,6 @@ public abstract class GuardSkillMixin extends Skill {
         int totalImpact = (int) (impact * 10);
         int totalGuardConsumption = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber((int) ((getConsumption() + totalPenalty + totalImpact) * (1 - poise)))
                 + MathUtils.calculateTriangularNumber(((PlayerMovementInterface) playerMovement).getTotalActionStaminaCost())));
-
         ((PlayerMovementInterface) playerMovement).setTotalActionStaminaCostServerSide(totalGuardConsumption);
 
         if (playerMovement.isDepleted()) {
