@@ -64,6 +64,7 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
             this.totalActionStaminaCost++;
         }
 
+        //TODO: Maybe put this to add as the else if?
         if (this.player instanceof ServerPlayer) {
             this.setTotalActionStaminaCostServerSide(this.totalActionStaminaCost);
         }
