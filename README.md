@@ -50,6 +50,7 @@ to properly integrate with Paragliders stamina system.
     double the stamina is drained, etc. 
 - Modified the Active Guard skill a bit. Now perfect guards give you back a bit of stamina while missed guards drain
     30% more stamina than regular guards. Great for boss fights.
+- Jump attacks now consume stamina.
 
 ## V0.2.0
 - MASSIVE change in the mod's code. Using mixins (I finally learned how to use them) now to do almost everything.
