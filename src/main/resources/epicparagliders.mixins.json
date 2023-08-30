@@ -7,6 +7,7 @@
     "capabilities.ServerPlayerMovementMixin",
     "capabilities.PlayerMovementMixin",
     "skills.BasicAttackMixin",
+    "skills.AirAttackMixin",
     "skills.SimpleSpecialAttackSkillMixin",
     "skills.GuardSkillMixin",
     "skills.DodgeSkillMixin",
@@ -16,6 +17,7 @@
     "capabilities.PlayerPatchMixin"
   ],
   "client": [
+    "client.ClientAnimatorMixin",
     "client.InGameStaminaWheelRendererMixin",
     "capabilities.ClientPlayerMovementMixin"
   ],

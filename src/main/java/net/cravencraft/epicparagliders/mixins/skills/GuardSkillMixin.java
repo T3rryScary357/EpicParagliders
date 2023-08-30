@@ -1,5 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.skills;
 
+import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
@@ -44,7 +45,7 @@ public abstract class GuardSkillMixin extends Skill {
         int totalPenalty = (int) (penalty * 5);
         int totalImpact = (int) (impact * 10);
 
-        int guardConsumption = (int) ((getConsumption() + totalPenalty + totalImpact) * (1 - poise));
+        int guardConsumption = (int) ((getConsumption() + totalPenalty + totalImpact) * (1 - poise) * EPModCfg.baseBlockStaminaConsumption());
 
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(guardConsumption);
         ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);

@@ -39,7 +39,19 @@ to properly integrate with Paragliders stamina system.
     than the stamina being drained, or if no stamina is being drained at all, then it will be clear that the player is
     gaining stamina from the skill by a section of the wheel representing the stamina to be returned turning blue.
 - **Technician Skill:** Doesn't completely negate stamina from dodging when dodging right before an enemy's attack.
-    Instead, this reduces the dodge stamina consumption by 50%. 
+    Instead, this reduces the dodge stamina consumption by 50%.
+
+## V0.3.0
+- Added exhaustion animations for whenever the player's stamina is fully depleted. Big thansk to bstylia14 for providing
+    the animations!
+- Added all new configs for each weapon type! Can be found in the serverconfig folder of your world save. The amount in
+    the config will be directly multiplied to the amount of stamina that is drained from a weapon or skill. So, if the 
+    config is set to 0.0 then no stamina is drained, if it's set to 0.5 then only half is drained, if it's 2.0 then
+    double the stamina is drained, etc. 
+- Modified the Active Guard skill a bit. Now perfect guards give you back a bit of stamina while missed guards drain
+    30% more stamina than regular guards. Great for boss fights.
+- Jump attacks now consume stamina.
+
 ## V0.2.0
 - MASSIVE change in the mod's code. Using mixins (I finally learned how to use them) now to do almost everything.
 - This mod should be a lot more optimized because of these changes.

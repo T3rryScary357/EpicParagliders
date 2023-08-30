@@ -1,6 +1,8 @@
 package net.cravencraft.epicparagliders.mixins.skills;
 
+import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -55,20 +57,18 @@ public abstract class ActiveGuardSkillMixin extends GuardSkill {
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 3, remap = false)
     private float stamina(float stamina) {
         PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
+        PlayerMovementInterface serverPlayerMovement = ((PlayerMovementInterface) playerMovement);
 
         float poise = Formulars.getStaminarConsumePenalty(this.playerPatch.getWeight(), 1, this.playerPatch) * 0.1F;
-        float totalPenalty;
-        float totalImpact;
+        float currentStamina = playerMovement.getStamina();
+        float missingStamina = playerMovement.getMaxStamina() - currentStamina;
+        int guardConsumption;
         if (this.penalty > 0.1f) {
-            totalPenalty = (penalty * 5);
-            totalImpact = (impact * 12);
+            guardConsumption = (int) ((getConsumption() + (penalty * 5) + (impact * 12)) * (1 - poise) * EPModCfg.baseBlockStaminaConsumption());
         }
         else {
-            totalPenalty = (penalty * 5);
-            totalImpact = (impact * 8);
+            guardConsumption = -(int) MathUtils.calculateModifiedTriangularRoot(missingStamina, 0.3f);
         }
-
-        int guardConsumption = (int) ((getConsumption() + totalPenalty + totalImpact) * (1 - poise));
 
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(guardConsumption);
         ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);

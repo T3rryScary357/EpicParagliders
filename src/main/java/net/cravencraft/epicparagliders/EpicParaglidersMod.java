@@ -1,5 +1,6 @@
 package net.cravencraft.epicparagliders;
 
+import net.cravencraft.epicparagliders.gameasset.ExhaustionAnimations;
 import net.cravencraft.epicparagliders.network.ModNet;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,6 +21,7 @@ public class EpicParaglidersMod
     public EpicParaglidersMod()
     {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        eventBus.addListener(ExhaustionAnimations::registerAnimations);
         Contents.registerEventHandlers(eventBus);
         EPModCfg.init();
         ModNet.init();
