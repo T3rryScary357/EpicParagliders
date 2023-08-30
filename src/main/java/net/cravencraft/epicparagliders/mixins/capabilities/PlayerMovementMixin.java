@@ -72,7 +72,7 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
             this.setTotalActionStaminaCostClientSide(this.totalActionStaminaCost);
         }
 
-        addEffects();
+//        addEffects();
         ci.cancel();
     }
 

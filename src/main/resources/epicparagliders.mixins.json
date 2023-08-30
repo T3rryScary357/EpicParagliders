@@ -16,6 +16,7 @@
     "capabilities.PlayerPatchMixin"
   ],
   "client": [
+    "client.ClientAnimatorMixin",
     "client.InGameStaminaWheelRendererMixin",
     "capabilities.ClientPlayerMovementMixin"
   ],

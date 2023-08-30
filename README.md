@@ -39,7 +39,12 @@ to properly integrate with Paragliders stamina system.
     than the stamina being drained, or if no stamina is being drained at all, then it will be clear that the player is
     gaining stamina from the skill by a section of the wheel representing the stamina to be returned turning blue.
 - **Technician Skill:** Doesn't completely negate stamina from dodging when dodging right before an enemy's attack.
-    Instead, this reduces the dodge stamina consumption by 50%. 
+    Instead, this reduces the dodge stamina consumption by 50%.
+
+## V0.3.0
+- Added exhaustion animations for whenever the player's stamina is fully depleted. Big thansk to bstylia14 for providing
+    the animations!
+
 ## V0.2.0
 - MASSIVE change in the mod's code. Using mixins (I finally learned how to use them) now to do almost everything.
 - This mod should be a lot more optimized because of these changes.
