@@ -1,5 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.skills;
 
+import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.minecraft.network.FriendlyByteBuf;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,7 +27,7 @@ public abstract class DodgeSkillMixin extends Skill {
         if (!playerMovement.isDepleted()){
             super.executeOnServer(executer, args);
 
-            int rollConsumption = (int) (Formulars.getStaminarConsumePenalty(executer.getWeight(), 10, executer));
+            int rollConsumption = (int) (Formulars.getStaminarConsumePenalty(executer.getWeight(), 10, executer) * EPModCfg.baseDodgeStaminaConsumption());
 
             ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(rollConsumption);
             ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);

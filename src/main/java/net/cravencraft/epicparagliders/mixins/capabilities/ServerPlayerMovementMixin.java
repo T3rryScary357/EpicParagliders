@@ -1,4 +1,5 @@
 package net.cravencraft.epicparagliders.mixins.capabilities;
+import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.network.ModNet;
@@ -111,7 +112,7 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
         //      Also, this will need attribute support as well.
         //      Can probably even check if the weapon is being pulled back or not using 'projectileWeaponItem'
         if (player.getUseItem().getItem() instanceof  ProjectileWeaponItem projectileWeaponItem) {
-            this.currentActionStaminaCost = 6;
+            this.currentActionStaminaCost = (int) (6 * EPModCfg.baseRangedStaminaConsumption());
             this.isPerformingAction = true;
         }
     }
