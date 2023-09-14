@@ -5,6 +5,9 @@ import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.network.ModNet;
 import net.cravencraft.epicparagliders.network.SyncActionToClientMsg;
 import net.cravencraft.epicparagliders.utils.MathUtils;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -23,6 +26,9 @@ import tictim.paraglider.capabilities.PlayerState;
 import tictim.paraglider.capabilities.ServerPlayerMovement;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
+
+import java.util.List;
+import java.util.UUID;
 
 @Mixin(ServerPlayerMovement.class)
 public abstract class ServerPlayerMovementMixin extends PlayerMovement implements PlayerMovementInterface {
@@ -89,18 +95,44 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
                     + MathUtils.calculateTriangularNumber(currentActionStaminaCost)));
         }
 
-        //TODO: Is this necessary?
-        if(!this.player.isCreative() && this.isDepleted()){
-            this.player.addEffect(new MobEffectInstance(MobEffect.byId(18))); // Adds weakness
-        }
-
         if(this.isPerformingAction) {
             ModNet.NET.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new SyncActionToClientMsg(this.totalActionStaminaCost));
             this.currentActionStaminaCost = 0;
             this.isPerformingAction = false;
         }
 
+        addEffects();
         this.setTotalActionStaminaCost(this.totalActionStaminaCost);
+    }
+
+    /**
+     * Adds all the effects to be applied whenever the player's stamina is depleted.
+     */
+    private void addEffects() {
+        if(!this.player.isCreative() && this.isDepleted()) {
+            List<Integer> effects = EPModCfg.depletionEffectList();
+            List<Integer> effectStrengths = EPModCfg.depletionEffectStrengthList();
+
+            for (int i=0; i < effects.size(); i++) {
+                int effectStrength;
+                if (i >= effectStrengths.size()) {
+                    effectStrength = 0;
+                }
+                else {
+                    effectStrength = effectStrengths.get(i) - 1;
+                }
+
+                if (MobEffect.byId(effects.get(i)) != null) {
+                    this.player.addEffect(new MobEffectInstance(MobEffect.byId(effects.get(i)), 0, effectStrength));
+                }
+                else {
+                    if (this.player instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.sendMessage(new TextComponent("Effect with ID " + effects.get(i) + " does not exist."), ChatType.GAME_INFO, UUID.randomUUID());
+                    }
+                }
+
+            }
+        }
     }
 
     /**

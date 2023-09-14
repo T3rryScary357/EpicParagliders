@@ -41,8 +41,12 @@ to properly integrate with Paragliders stamina system.
 - **Technician Skill:** Doesn't completely negate stamina from dodging when dodging right before an enemy's attack.
     Instead, this reduces the dodge stamina consumption by 50%.
 
+## V0.4.0
+- Added a config option to add a list of custom status effects with their respective strengths to the serverconfig file.
+    The default is now Weakness and Mining Fatigue. Both of which can be changed to whatever the player wants in the file.
+
 ## V0.3.0
-- Added exhaustion animations for whenever the player's stamina is fully depleted. Big thansk to bstylia14 for providing
+- Added exhaustion animations for whenever the player's stamina is fully depleted. Big thanks to bstylia14 for providing
     the animations!
 - Added all new configs for each weapon type! Can be found in the serverconfig folder of your world save. The amount in
     the config will be directly multiplied to the amount of stamina that is drained from a weapon or skill. So, if the 
