@@ -1,6 +1,5 @@
 package net.cravencraft.epicparagliders.mixins.skills;
 
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.network.FriendlyByteBuf;

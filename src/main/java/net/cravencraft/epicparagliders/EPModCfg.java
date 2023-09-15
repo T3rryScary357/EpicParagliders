@@ -110,23 +110,23 @@ public final class EPModCfg {
         BASE_MELEE_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from all melee attacks.")
                 .defineInRange("baseMeleeStaminaConsumption", 1.0, 0.0, 10.0);
         DAGGER_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from daggers (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("daggerStaminaConsumption", 1.0, 0.0, 10.0);
+                .defineInRange("daggerStaminaConsumption", 2.5, 0.0, 10.0);
         SWORD_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from swords (stacks with baseMeleeStaminaConsumption)..")
-                .defineInRange("swordStaminaConsumption", 1.0, 0.0, 10.0);
+                .defineInRange("swordStaminaConsumption", 2.5, 0.0, 10.0);
         LONG_SWORD_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from longswords (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("longSwordConsumption", 1.0, 0.0, 10.0);
+                .defineInRange("longSwordConsumption", 2.5, 0.0, 10.0);
         GREAT_SWORD_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from greatswords (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("greatSwordStaminaConsumption", 1.0, 0.0, 10.0);
+                .defineInRange("greatSwordStaminaConsumption", 1.5, 0.0, 10.0);
         KATANA_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from katanas (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("katanaStaminaConsumption", 1.0, 0.0, 10.0);
+                .defineInRange("katanaStaminaConsumption", 2.0, 0.0, 10.0);
         TACHI_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from tachis (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("tachiStaminaConsumption", 1.0, 0.0, 10.0);
+                .defineInRange("tachiStaminaConsumption", 2.0, 0.0, 10.0);
         SPEAR_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from spears (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("spearStaminaConsumption", 1.0, 0.0, 10.0);
+                .defineInRange("spearStaminaConsumption", 2.0, 0.0, 10.0);
         KNUCKLE_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from knuckles (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("knuckleStaminaConsumption", 1.0, 0.0, 10.0);
+                .defineInRange("knuckleStaminaConsumption", 2.0, 0.0, 10.0);
         AXE_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from axes (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("axeStaminaConsumption", 1.0, 0.0, 10.0);
+                .defineInRange("axeStaminaConsumption", 2.5, 0.0, 10.0);
 		BASE_RANGED_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from ranged attacks with bows or crossbows.")
 				.defineInRange("baseRangedStaminaConsumption", 1.0, 0.0, 10.0);
 		BASE_BLOCK_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from using block skills.")
