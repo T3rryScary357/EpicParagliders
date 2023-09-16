@@ -37,5 +37,6 @@ public class EpicParaglidersMod
     @SubscribeEvent
     public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
         event.add(EntityType.PLAYER, EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get());
+        event.add(EntityType.PLAYER, EpicParaglidersAttributes.WEAPON_TYPE.get());
     }
 }

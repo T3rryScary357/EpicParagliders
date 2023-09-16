@@ -111,6 +111,11 @@ dependencies {
 
     implementation fg.deobf('curse.maven:epicfight-405076:4018756')
     implementation fg.deobf('curse.maven:paragliders-289240:4478246')
+    //TODO: For testing. REMOVE BEFORE COMMITTING
+    implementation fg.deobf("curse.maven:mantle-74924:3829975")
+    implementation fg.deobf("curse.maven:tinkers-construct-74072:3998764")
+    implementation fg.deobf("curse.maven:citadel-331936:3783096")
+    implementation fg.deobf("curse.maven:l_ender-s-cataclysm-551586:4418426")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -125,7 +130,7 @@ jar {
                 "Implementation-Vendor"   : "epicparagliderssareus",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "MixinConnector"          : "tictim.paraglider.MixinConnector",
-                "MixinConnector"          : "net.cravencraft.epicparagliders.MixinConnector" // TODO: May cause issues since it has the same name? Remove if not.
+                "MixinConnector"          : "net.cravencraft.epicparagliders.MixinConnector"
         ])
     }
 }

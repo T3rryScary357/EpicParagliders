@@ -52,52 +52,52 @@ public class MathUtils {
         //      Could easily add offhand support too by checking which
         //      hand is swinging the weapon.
         Item weaponItem = player.getMainHandItem().getItem();
-        double attackDamageFactor = player.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+        double attackDamageFactor = player.getAttributeValue(Attributes.ATTACK_DAMAGE);
+//        player.getAttribute(Attributes.ATTACK_DAMAGE).
         double staminaOverride = player.getAttributeValue(EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get());
+        double weaponTypeOverride = player.getAttributeValue(EpicParaglidersAttributes.WEAPON_TYPE.get());
         //TODO: IT'S ALIVE. IT'S ALIVE. OK, Need to test this in multiplayer and ensure that these attribute values don't override
         //      another player's used item when they are different.
         EpicParaglidersMod.LOGGER.info("STAMINA ATTRIBUTE: " + player.getAttributeValue(EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get()));
         EpicParaglidersMod.LOGGER.info("OVERRIDDEN STAMINA COST: " + player.getAttribute(EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get()).getValue());
 
-        if (weaponItem instanceof SwordItem swordItem) {
-            if (swordItem instanceof GreatswordItem) {
-                configFactor *= EPModCfg.greatSwordStaminaConsumption();
-            }
-            else if (swordItem instanceof LongswordItem) {
-                configFactor *= EPModCfg.longSwordConsumption();
-            }
-            else if (swordItem instanceof TachiItem) {
-                configFactor *= EPModCfg.tachiStaminaConsumption();
-            }
-            else if (swordItem instanceof KatanaItem) {
-                configFactor *= EPModCfg.katanaStaminaConsumption();
-            }
-            else if (swordItem instanceof SpearItem) {
-                configFactor *= EPModCfg.spearStaminaConsumption();
-            }
-            else if (swordItem instanceof DaggerItem) {
-                configFactor *= EPModCfg.daggerStaminaConsumption();
-            }
-            else if (swordItem instanceof KnuckleItem) {
-                configFactor *= EPModCfg.knuckleStaminaConsumption();
-            }
-            else {
-                configFactor *= EPModCfg.swordStaminaConsumption();
-            }
-        }
-        else if (weaponItem instanceof AxeItem) {
+        //TODO: Remove all loggers before finishing
+        if (weaponItem instanceof AxeItem || weaponTypeOverride == 1.0) {
+            EpicParaglidersMod.LOGGER.info("AxeItem CONSUMPTION CONFIG: " + EPModCfg.axeStaminaConsumption());
             configFactor *= EPModCfg.axeStaminaConsumption();
         }
-        else {
-            //TODO: Maybe add an extra config option for weapons that aren't EFM or Vanilla style weapons?
-            //      Actually, maybe not and just work on a custom stamina drain for all weapons.
-            EpicParaglidersMod.LOGGER.info("Not an Epic Fight or vanilla Minecraft Weapon Item.");
+        else if (weaponItem instanceof DaggerItem || weaponTypeOverride == 3.0) {
+            EpicParaglidersMod.LOGGER.info("DaggerItem CONSUMPTION CONFIG: " + EPModCfg.daggerStaminaConsumption());
+            configFactor *= EPModCfg.daggerStaminaConsumption();
         }
-
-        //TODO: THIS THIS THIS. Will still need to use the multiple if-else statements for config support, BUT
-        //      this solves a HUGE issue and makes ANY weapon compatible. Need to do this with Better Paragliders as well.
-        //      Need to test this with datapacks that override the "bonus_damage" value.
-
+        else if (weaponItem instanceof KnuckleItem || weaponTypeOverride == 4.0) {
+            EpicParaglidersMod.LOGGER.info("KnuckleItem CONSUMPTION CONFIG: " + EPModCfg.knuckleStaminaConsumption());
+            configFactor *= EPModCfg.knuckleStaminaConsumption();
+        }
+        else if (weaponItem instanceof GreatswordItem || weaponTypeOverride == 5.0) {
+            EpicParaglidersMod.LOGGER.info("GreatswordItem CONSUMPTION CONFIG: " + EPModCfg.greatSwordStaminaConsumption());
+            configFactor *= EPModCfg.greatSwordStaminaConsumption();
+        }
+        else if (weaponItem instanceof KatanaItem || weaponTypeOverride == 6.0) {
+            EpicParaglidersMod.LOGGER.info("KatanaItem CONSUMPTION CONFIG: " + EPModCfg.katanaStaminaConsumption());
+            configFactor *= EPModCfg.katanaStaminaConsumption();
+        }
+        else if (weaponItem instanceof LongswordItem || weaponTypeOverride == 7.0) {
+            EpicParaglidersMod.LOGGER.info("LongswordItem CONSUMPTION CONFIG: " + EPModCfg.longSwordConsumption());
+            configFactor *= EPModCfg.longSwordConsumption();
+        }
+        else if (weaponItem instanceof SpearItem || weaponTypeOverride == 8.0) {
+            EpicParaglidersMod.LOGGER.info("SpearItem CONSUMPTION CONFIG: " + EPModCfg.spearStaminaConsumption());
+            configFactor *= EPModCfg.spearStaminaConsumption();
+        }
+        else if (weaponItem instanceof SwordItem || weaponTypeOverride == 9.0) {
+            EpicParaglidersMod.LOGGER.info("SwordItem CONSUMPTION CONFIG: " + EPModCfg.swordStaminaConsumption());
+            configFactor *= EPModCfg.swordStaminaConsumption();
+        }
+        else if (weaponItem instanceof TachiItem || weaponTypeOverride == 10.0) {
+            EpicParaglidersMod.LOGGER.info("TachiItem CONSUMPTION CONFIG: " + EPModCfg.tachiStaminaConsumption());
+            configFactor *= EPModCfg.tachiStaminaConsumption();
+        }
 
         //TODO: I still need to add one more attribute that gets the type of the weapon (i.e., "greatsword" or "sword").
         //      This will allow me to add an extra conditional to all the above statements so these edited weapons can
