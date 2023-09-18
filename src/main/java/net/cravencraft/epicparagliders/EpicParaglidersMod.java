@@ -2,8 +2,11 @@ package net.cravencraft.epicparagliders;
 
 import net.cravencraft.epicparagliders.gameasset.ExhaustionAnimations;
 import net.cravencraft.epicparagliders.network.ModNet;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -23,10 +26,17 @@ public class EpicParaglidersMod
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(ExhaustionAnimations::registerAnimations);
         Contents.registerEventHandlers(eventBus);
+        EpicParaglidersAttributes.registerEventHandlers(eventBus);
         EPModCfg.init();
         ModNet.init();
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent
+    public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
+        event.add(EntityType.PLAYER, EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get());
+        event.add(EntityType.PLAYER, EpicParaglidersAttributes.WEAPON_TYPE.get());
     }
 }

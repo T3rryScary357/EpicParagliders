@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '0.3.0-1.18.2'
+version = '0.4.0-1.18.2'
 group = 'com.cravencraft.epicparagliders' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'epicparagliders'
 
@@ -125,7 +125,7 @@ jar {
                 "Implementation-Vendor"   : "epicparagliderssareus",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 "MixinConnector"          : "tictim.paraglider.MixinConnector",
-                "MixinConnector"          : "net.cravencraft.epicparagliders.MixinConnector" // TODO: May cause issues since it has the same name? Remove if not.
+                "MixinConnector"          : "net.cravencraft.epicparagliders.MixinConnector"
         ])
     }
 }

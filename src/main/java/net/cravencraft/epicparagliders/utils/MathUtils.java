@@ -1,13 +1,12 @@
 package net.cravencraft.epicparagliders.utils;
 
 import net.cravencraft.epicparagliders.EPModCfg;
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
+import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SwordItem;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
-import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.item.*;
 
 public class MathUtils {
@@ -39,63 +38,54 @@ public class MathUtils {
      * @return The amount of stamina that should be drained from the attacking weapon
      */
     public static int getAttackStaminaCost(Player player) {
-        double tierFactor = 0;
-        double attackDamageFactor = 1; // Default hand damage is 1
         double configFactor = EPModCfg.baseMeleeStaminaConsumption();
         //TODO: Double check duel wielding with this.
         //      Could easily add offhand support too by checking which
         //      hand is swinging the weapon.
         Item weaponItem = player.getMainHandItem().getItem();
 
-        if (weaponItem instanceof SwordItem swordItem) {
-            if (swordItem instanceof GreatswordItem greatswordItem) {
-                attackDamageFactor += 10;
-                tierFactor = greatswordItem.getTier().getAttackDamageBonus();
-                configFactor *= EPModCfg.greatSwordStaminaConsumption();
-            }
-            else if (swordItem instanceof LongswordItem longswordItem) {
-                attackDamageFactor += longswordItem.getDamage();
-                tierFactor = longswordItem.getTier().getAttackDamageBonus();
-                configFactor *= EPModCfg.longSwordConsumption();
-            }
-            else if (swordItem instanceof TachiItem tachiItem) {
-                attackDamageFactor += tachiItem.getDamage();
-                tierFactor = tachiItem.getTier().getAttackDamageBonus();
-                configFactor *= EPModCfg.tachiStaminaConsumption();
-            }
-            else if (swordItem instanceof KatanaItem katanaItem) {
-                attackDamageFactor += katanaItem.getDamage();
-                tierFactor = katanaItem.getTier().getAttackDamageBonus();
-                configFactor *= EPModCfg.katanaStaminaConsumption();
-            }
-            else if (swordItem instanceof SpearItem spearItem) {
-                attackDamageFactor += spearItem.getDamage();
-                tierFactor = spearItem.getTier().getAttackDamageBonus();
-                configFactor *= EPModCfg.spearStaminaConsumption();
-            }
-            else if (swordItem instanceof DaggerItem daggerItem) {
-                attackDamageFactor += daggerItem.getDamage();
-                tierFactor = daggerItem.getTier().getAttackDamageBonus();
-                configFactor *= EPModCfg.daggerStaminaConsumption();
-            }
-            else if (swordItem instanceof KnuckleItem knuckleItem) {
-                attackDamageFactor += knuckleItem.getDamage();
-                tierFactor = knuckleItem.getTier().getAttackDamageBonus();
-                configFactor *= EPModCfg.knuckleStaminaConsumption();
-            }
-            else {
-                attackDamageFactor += swordItem.getDamage();
-                tierFactor = swordItem.getTier().getAttackDamageBonus();
-                configFactor *= EPModCfg.swordStaminaConsumption();
-            }
-        }
-        else if (weaponItem instanceof AxeItem axeItem) {
-            attackDamageFactor += axeItem.getAttackDamage();
-            tierFactor = axeItem.getTier().getAttackDamageBonus();
+        double attackDamageFactor = player.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        double staminaOverride = player.getAttributeValue(EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get());
+        double weaponTypeOverride = player.getAttributeValue(EpicParaglidersAttributes.WEAPON_TYPE.get());
+
+        if (weaponItem instanceof AxeItem || weaponTypeOverride == 1.0) {
             configFactor *= EPModCfg.axeStaminaConsumption();
         }
+        else if (weaponItem instanceof DaggerItem || weaponTypeOverride == 3.0) {
+            configFactor *= EPModCfg.daggerStaminaConsumption();
+        }
+        else if (weaponItem instanceof KnuckleItem || weaponTypeOverride == 4.0) {
+            configFactor *= EPModCfg.knuckleStaminaConsumption();
+        }
+        else if (weaponItem instanceof GreatswordItem || weaponTypeOverride == 5.0) {
+            configFactor *= EPModCfg.greatSwordStaminaConsumption();
+        }
+        else if (weaponItem instanceof KatanaItem || weaponTypeOverride == 6.0) {
+            configFactor *= EPModCfg.katanaStaminaConsumption();
+        }
+        else if (weaponItem instanceof LongswordItem || weaponTypeOverride == 7.0) {
+            configFactor *= EPModCfg.longSwordConsumption();
+        }
+        else if (weaponItem instanceof SpearItem || weaponTypeOverride == 8.0) {
+            configFactor *= EPModCfg.spearStaminaConsumption();
+        }
+        else if (weaponItem instanceof SwordItem || weaponTypeOverride == 9.0) {
+            configFactor *= EPModCfg.swordStaminaConsumption();
+        }
+        else if (weaponItem instanceof TachiItem || weaponTypeOverride == 10.0) {
+            configFactor *= EPModCfg.tachiStaminaConsumption();
+        }
 
-        double totalStaminaDrain = (attackDamageFactor * (tierFactor * 0.1 + 2)) * configFactor;
+        double totalStaminaDrain;
+        // Checks if there is a datapack config set for the given weapon. If so, then
+        // uses the datapack info instead of attack damage. Still implements the weapon type config options.
+        if (staminaOverride > 0) {
+            totalStaminaDrain = staminaOverride * configFactor;
+        }
+        else {
+            totalStaminaDrain = attackDamageFactor * configFactor;
+        }
+
         return (int) Math.ceil(totalStaminaDrain);
     }
 }

@@ -41,8 +41,35 @@ to properly integrate with Paragliders stamina system.
 - **Technician Skill:** Doesn't completely negate stamina from dodging when dodging right before an enemy's attack.
     Instead, this reduces the dodge stamina consumption by 50%.
 
+## V0.4.0
+- Added a config option to add a list of custom status effects with their respective strengths to the serverconfig file.
+    The default is now Weakness and Mining Fatigue. Both of which can be changed to whatever the player wants in the file.
+- Added light compatibility for **all** weapons. By default, they will drain their attack damage in stamina, which is
+    still fairly low compared to others, but not bad out of the box.
+- Updated the **epicparagliders-server.toml** file in the serverconfig. Players and server owners will need to delete the
+    existing one for the new defaults to override.
+- This mod now integrates with datapacks that add compatibility for **Epic Fight**. When creating/adding datapacks that 
+    add weapon capabilities to **Epic Fight** from other mods, simply add an extra field **stamina_cost** to the item's
+    json file. Will looks something like this:
+```
+{
+    "type": "greatsword",
+    "attributes": {
+        "common": {
+            "armor_negation": 10.0,
+            "impact": 15.1,
+            "max_strikes": 1,
+            "damage_bonus": 30,
+            "stamina_cost": 18
+        }
+    }
+}
+```
+- Additionally, this mod now reads the **type** key (like the one listed above) and uses that to determine which
+    weapon type stamina drain (defined in **epicparagliders-server.toml**) this item should drain from.
+
 ## V0.3.0
-- Added exhaustion animations for whenever the player's stamina is fully depleted. Big thansk to bstylia14 for providing
+- Added exhaustion animations for whenever the player's stamina is fully depleted. Big thanks to bstylia14 for providing
     the animations!
 - Added all new configs for each weapon type! Can be found in the serverconfig folder of your world save. The amount in
     the config will be directly multiplied to the amount of stamina that is drained from a weapon or skill. So, if the 

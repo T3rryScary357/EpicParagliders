@@ -4,6 +4,7 @@
   "package": "net.cravencraft.epicparagliders.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "capabilities.ItemCapabilityReloadListenerMixin",
     "capabilities.ServerPlayerMovementMixin",
     "capabilities.PlayerMovementMixin",
     "skills.BasicAttackMixin",
