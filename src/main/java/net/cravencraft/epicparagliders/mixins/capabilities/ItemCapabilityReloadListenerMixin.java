@@ -2,7 +2,6 @@ package net.cravencraft.epicparagliders.mixins.capabilities;
 
 import com.google.gson.Gson;
 import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -34,7 +33,6 @@ public abstract class ItemCapabilityReloadListenerMixin extends SimpleJsonResour
     @Inject(method = "deserializeWeapon", at = @At("HEAD"), cancellable = true, remap = false)
     private static void addWeaponTypeAttributeModifier(Item item, CompoundTag tag, CapabilityItem.Builder defaultCapability, CallbackInfoReturnable<CapabilityItem> cir) {
         if (tag.contains("type")) {
-            EpicParaglidersMod.LOGGER.info("WEAPON TYPE: " + tag.getString("type"));
             switch (tag.getString("type")) {
                 case "axe":
                     attributeModifier = new AttributeModifier(WEAPON_TYPE_MODIFIER, EpicFightMod.MODID + ":weapon_modifier", 1.0, AttributeModifier.Operation.ADDITION);
@@ -78,8 +76,6 @@ public abstract class ItemCapabilityReloadListenerMixin extends SimpleJsonResour
     @Inject(method = "deserializeAttributes", at = @At("TAIL"), cancellable = true, remap = false)
     private static void addStaminaAttributeModifier(CompoundTag tag, CallbackInfoReturnable<Map<Attribute, AttributeModifier>> cir) {
         if (tag.contains("stamina_cost")) {
-            EpicParaglidersMod.LOGGER.info("DATAPACK MODIFIED STAMINA COST: " + tag.getDouble("stamina_cost"));
-//            EpicParaglidersMod.LOGGER.info("STAMINA ATTRIBUTE PRIOR TO MODIFICATION: " + EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get().getDefaultValue());
             modifierMap.put(EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get(), new AttributeModifier(STAMINA_COST_MODIFIER, EpicFightMod.MODID + ":weapon_modifier", tag.getDouble("stamina_cost"), AttributeModifier.Operation.ADDITION));
         }
         //TODO: Test this with a modified weapon that doesn't have a type.

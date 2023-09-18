@@ -65,6 +65,8 @@ to properly integrate with Paragliders stamina system.
     }
 }
 ```
+- Additionally, this mod now reads the **type** key (like the one listed above) and uses that to determine which
+    weapon type stamina drain (defined in **epicparagliders-server.toml**) this item should drain from.
 
 ## V0.3.0
 - Added exhaustion animations for whenever the player's stamina is fully depleted. Big thanks to bstylia14 for providing
