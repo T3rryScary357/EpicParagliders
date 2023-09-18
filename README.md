@@ -41,6 +41,11 @@ to properly integrate with Paragliders stamina system.
 - **Technician Skill:** Doesn't completely negate stamina from dodging when dodging right before an enemy's attack.
     Instead, this reduces the dodge stamina consumption by 50%.
 
+## Support & Affiliations
+Looking for a hosting service? Check out Kinetic Hosting!
+[![CravenCraft.png](..%2F..%2F..%2F..%2FDownloads%2FCravenCraft.png)](https://billing.kinetichosting.net/aff.php?aff=559)
+Use code **"CravenCraft"** to get your first month **_15%_** off!
+
 ## V0.4.0
 - Added a config option to add a list of custom status effects with their respective strengths to the serverconfig file.
     The default is now Weakness and Mining Fatigue. Both of which can be changed to whatever the player wants in the file.
