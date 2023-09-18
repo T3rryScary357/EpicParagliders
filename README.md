@@ -43,7 +43,7 @@ to properly integrate with Paragliders stamina system.
 
 ## Support & Affiliations
 Looking for a hosting service? Check out Kinetic Hosting!
-[![CravenCraft.png](..%2F..%2F..%2F..%2FDownloads%2FCravenCraft.png)](https://billing.kinetichosting.net/aff.php?aff=559)
+[![CravenCraft.png](src%2Fmain%2Fresources%2Fassets.hostlink%2FCravenCraft.png)](https://billing.kinetichosting.net/aff.php?aff=559)
 Use code **"CravenCraft"** to get your first month **_15%_** off!
 
 ## V0.4.0
