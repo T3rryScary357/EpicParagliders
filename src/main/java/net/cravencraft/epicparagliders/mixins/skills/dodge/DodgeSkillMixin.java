@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.skills;
+package net.cravencraft.epicparagliders.mixins.skills.dodge;
 
 import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
@@ -8,9 +8,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tictim.paraglider.capabilities.PlayerMovement;
-import yesman.epicfight.api.utils.math.Formulars;
-import yesman.epicfight.skill.DodgeSkill;
 import yesman.epicfight.skill.Skill;
+import yesman.epicfight.skill.dodge.DodgeSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 
 @Mixin(DodgeSkill.class)
@@ -27,7 +26,8 @@ public abstract class DodgeSkillMixin extends Skill {
         if (!playerMovement.isDepleted()){
             super.executeOnServer(executer, args);
 
-            int rollConsumption = (int) (Formulars.getStaminarConsumePenalty(executer.getWeight(), 10, executer) * EPModCfg.baseDodgeStaminaConsumption());
+//            int rollConsumption = (int) (Formulars.getStaminarConsumePenalty(executer.getWeight(), 10, executer) * EPModCfg.baseDodgeStaminaConsumption());
+            int rollConsumption = 5;
 
             ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(rollConsumption);
             ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);

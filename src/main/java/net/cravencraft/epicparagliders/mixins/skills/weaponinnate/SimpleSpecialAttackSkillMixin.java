@@ -1,6 +1,5 @@
-package net.cravencraft.epicparagliders.mixins.skills;
+package net.cravencraft.epicparagliders.mixins.skills.weaponinnate;
 
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -9,11 +8,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tictim.paraglider.capabilities.PlayerMovement;
-import yesman.epicfight.skill.SimpleSpecialAttackSkill;
 import yesman.epicfight.skill.Skill;
+import yesman.epicfight.skill.weaponinnate.SimpleWeaponInnateSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 
-@Mixin(SimpleSpecialAttackSkill.class)
+@Mixin(SimpleWeaponInnateSkill.class)
 public abstract class SimpleSpecialAttackSkillMixin extends Skill {
 
     public SimpleSpecialAttackSkillMixin(Builder<? extends Skill> builder) {

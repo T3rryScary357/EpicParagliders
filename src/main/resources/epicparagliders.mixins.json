@@ -9,12 +9,12 @@
     "capabilities.PlayerMovementMixin",
     "skills.BasicAttackMixin",
     "skills.AirAttackMixin",
-    "skills.SimpleSpecialAttackSkillMixin",
-    "skills.GuardSkillMixin",
-    "skills.DodgeSkillMixin",
-    "skills.ActiveGuardSkillMixin",
-    "skills.StaminaPillagerSkillMixin",
-    "skills.TechnicianSkillMixin",
+    "skills.weaponinnate.SimpleSpecialAttackSkillMixin",
+    "skills.guard.GuardSkillMixin",
+    "skills.dodge.DodgeSkillMixin",
+    "skills.guard.ActiveGuardSkillMixin",
+    "skills.passive.StaminaPillagerSkillMixin",
+    "skills.passive.TechnicianSkillMixin",
     "capabilities.PlayerPatchMixin"
   ],
   "client": [

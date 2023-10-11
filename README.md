@@ -46,6 +46,9 @@ Looking for a hosting service? Check out Kinetic Hosting!
 [![CravenCraft.png](src%2Fmain%2Fresources%2Fassets.hostlink%2FCravenCraft.png)](https://billing.kinetichosting.net/aff.php?aff=559)
 Use code **"CravenCraft"** to get your first month **_15%_** off!
 
+## V0.5.0 - The New Epic Fight Version Update
+- TODO: Update this as you make fixes
+
 ## V0.4.0
 - Added a config option to add a list of custom status effects with their respective strengths to the serverconfig file.
     The default is now Weakness and Mining Fatigue. Both of which can be changed to whatever the player wants in the file.

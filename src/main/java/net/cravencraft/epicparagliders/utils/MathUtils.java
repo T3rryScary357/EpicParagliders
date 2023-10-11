@@ -60,7 +60,7 @@ public class MathUtils {
         else if (weaponItem instanceof GreatswordItem || weaponTypeOverride == 5.0) {
             configFactor *= EPModCfg.greatSwordStaminaConsumption();
         }
-        else if (weaponItem instanceof KatanaItem || weaponTypeOverride == 6.0) {
+        else if (weaponItem instanceof UchigatanaItem || weaponTypeOverride == 6.0) {
             configFactor *= EPModCfg.katanaStaminaConsumption();
         }
         else if (weaponItem instanceof LongswordItem || weaponTypeOverride == 7.0) {

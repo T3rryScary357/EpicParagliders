@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.skills;
+package net.cravencraft.epicparagliders.mixins.skills.guard;
 
 import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
@@ -9,15 +9,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tictim.paraglider.capabilities.PlayerMovement;
-import yesman.epicfight.api.utils.math.Formulars;
-import yesman.epicfight.skill.ActiveGuardSkill;
-import yesman.epicfight.skill.GuardSkill;
 import yesman.epicfight.skill.SkillContainer;
+import yesman.epicfight.skill.guard.GuardSkill;
+import yesman.epicfight.skill.guard.ParryingSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.entity.eventlistener.HurtEvent;
 
-@Mixin(ActiveGuardSkill.class)
+@Mixin(ParryingSkill.class)
 public abstract class ActiveGuardSkillMixin extends GuardSkill {
 
     private float penalty;
@@ -59,7 +58,8 @@ public abstract class ActiveGuardSkillMixin extends GuardSkill {
         PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
         PlayerMovementInterface serverPlayerMovement = ((PlayerMovementInterface) playerMovement);
 
-        float poise = Formulars.getStaminarConsumePenalty(this.playerPatch.getWeight(), 1, this.playerPatch) * 0.1F;
+//        float poise = Formulars.getStaminarConsumePenalty(this.playerPatch.getWeight(), 1, this.playerPatch) * 0.1F;
+        float poise = 0.0f;
         float currentStamina = playerMovement.getStamina();
         float missingStamina = playerMovement.getMaxStamina() - currentStamina;
         int guardConsumption;

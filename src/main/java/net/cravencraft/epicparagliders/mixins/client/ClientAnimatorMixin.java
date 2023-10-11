@@ -50,7 +50,7 @@ public abstract class ClientAnimatorMixin extends Animator {
                 return ExhaustionMotions.EXHAUSTED_IDLE_CROSSBOW;
             }
             else if (item instanceof LongswordItem) {
-                if (weaponStyle.equals(CapabilityItem.Styles.LIECHTENAUER)) {
+                if (weaponStyle.equals(CapabilityItem.Styles.OCHS)) {
                     return ExhaustionMotions.EXHAUSTED_IDLE_LIECHTENAUER;
                 }
                 else {
@@ -71,7 +71,7 @@ public abstract class ClientAnimatorMixin extends Animator {
             else if (item instanceof TachiItem) {
                 return ExhaustionMotions.EXHAUSTED_IDLE_TACHI;
             }
-            else if (item instanceof KatanaItem) {
+            else if (item instanceof UchigatanaItem) {
                 if (weaponStyle.equals(CapabilityItem.Styles.SHEATH)) {
                     return ExhaustionMotions.EXHAUSTED_IDLE_SHEATH;
                 }
@@ -88,7 +88,7 @@ public abstract class ClientAnimatorMixin extends Animator {
                 return ExhaustionMotions.EXHAUSTED_WALK_CROSSBOW;
             }
             else if (item instanceof LongswordItem) {
-                if (weaponStyle.equals(CapabilityItem.Styles.LIECHTENAUER)) {
+                if (weaponStyle.equals(CapabilityItem.Styles.OCHS)) {
                     return ExhaustionMotions.EXHAUSTED_WALK_LIECHTENAUER;
                 }
                 else {
@@ -104,7 +104,7 @@ public abstract class ClientAnimatorMixin extends Animator {
             else if (item instanceof TachiItem) {
                 return ExhaustionMotions.EXHAUSTED_WALK_TACHI;
             }
-            else if (item instanceof KatanaItem) {
+            else if (item instanceof UchigatanaItem) {
                 if (weaponStyle.equals(CapabilityItem.Styles.SHEATH)) {
                     return ExhaustionMotions.EXHAUSTED_WALK_SHEATH;
                 }
