@@ -1,8 +1,8 @@
 package net.cravencraft.epicparagliders.mixins.skills.guard;
 
 import net.cravencraft.epicparagliders.EPModCfg;
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,6 +15,7 @@ import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.entity.eventlistener.HurtEvent;
+import yesman.epicfight.world.gamerule.EpicFightGamerules;
 
 @Mixin(GuardSkill.class)
 public abstract class GuardSkillMixin extends Skill {
@@ -39,26 +40,42 @@ public abstract class GuardSkillMixin extends Skill {
         return penalty;
     }
 
-    @SuppressWarnings("InvalidInjectorMethodSignature")
-    @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 3, remap = false)
-    private float stamina(float stamina) {
+    /**
+     * Modifies the 'blockType' variable in the 'guard' method of the GuardSkill. This method will
+     * take block penalty, weight, and armor value into account when determining the block stamina
+     * consumption amount. If the Paragliders stamina system reaches 0, then the blockType will
+     * become GUARD_BREAK.
+     *
+     * @param blockType Either GUARD, GUARD_BREAK, or ADVANCED_GUARD
+     * @return
+     */
+    @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 0, remap = false)
+    private GuardSkill.BlockType blockType(GuardSkill.BlockType blockType) {
         PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
-        EpicParaglidersMod.LOGGER.info("PENALTY (isn't that the multiplier?): " + penalty);
-//        float poise = Formulars.getStaminarConsumePenalty(this.playerPatch.getWeight(), 1, this.playerPatch) * 0.1F;
-        float poise = 0.0f;
+        float weight = this.playerPatch.getWeight();
+        int armorValue = playerMovement.player.getArmorValue();
+        float poise;
+
+        if (weight > 40.0F) {
+            float attenuation = Mth.clamp(this.playerPatch.getOriginal().level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
+            poise = (0.1F * (weight / 40.0F) * (Math.max(armorValue, 0) * 1.5F) * attenuation);
+        }
+        else {
+            poise = 0.0F;
+        }
         int totalPenalty = (int) (penalty * 5);
         int totalImpact = (int) (impact * 10);
 
-        int guardConsumption = (int) ((getConsumption() + totalPenalty + totalImpact) * (1 - poise) * EPModCfg.baseBlockStaminaConsumption());
+        int guardConsumption = (int) (( ((getConsumption() + totalPenalty + totalImpact) - poise) * EPModCfg.baseBlockStaminaConsumption()));
 
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(guardConsumption);
         ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
 
         if (playerMovement.isDepleted()) {
-            return -0.1f;
+            return GuardSkill.BlockType.GUARD_BREAK;
         }
         else {
-            return 0.0f;
+            return blockType;
         }
     }
 }
