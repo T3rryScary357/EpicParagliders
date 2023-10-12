@@ -19,7 +19,7 @@ import yesman.epicfight.world.gamerule.EpicFightGamerules;
 
 @Mixin(GuardSkill.class)
 public abstract class GuardSkillMixin extends Skill {
-
+    //TODO: Cleanup and organize
     private float penalty;
     private float impact;
     private PlayerPatch playerPatch;
@@ -46,27 +46,28 @@ public abstract class GuardSkillMixin extends Skill {
      * consumption amount. If the Paragliders stamina system reaches 0, then the blockType will
      * become GUARD_BREAK.
      *
-     * @param blockType Either GUARD, GUARD_BREAK, or ADVANCED_GUARD
+     * @param blockType GUARD, GUARD_BREAK, or ADVANCED_GUARD
      * @return
      */
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 0, remap = false)
     private GuardSkill.BlockType blockType(GuardSkill.BlockType blockType) {
         PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
         float weight = this.playerPatch.getWeight();
+        double blockMultiplier = EPModCfg.baseBlockStaminaMultiplier();
         int armorValue = playerMovement.player.getArmorValue();
         float poise;
 
-        if (weight > 40.0F) {
+        if (weight < 40.0F || blockMultiplier < 0.0) {
+            poise = 0.0F;
+        }
+        else {
             float attenuation = Mth.clamp(this.playerPatch.getOriginal().level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
             poise = (0.1F * (weight / 40.0F) * (Math.max(armorValue, 0) * 1.5F) * attenuation);
         }
-        else {
-            poise = 0.0F;
-        }
-        int totalPenalty = (int) (penalty * 5);
-        int totalImpact = (int) (impact * 10);
+        int totalPenalty = (int) (penalty * blockMultiplier);
+        int totalImpact = (int) (impact * blockMultiplier);
 
-        int guardConsumption = (int) (( ((getConsumption() + totalPenalty + totalImpact) - poise) * EPModCfg.baseBlockStaminaConsumption()));
+        int guardConsumption = (int) ((getConsumption() + totalPenalty + totalImpact) - poise);
 
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(guardConsumption);
         ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);

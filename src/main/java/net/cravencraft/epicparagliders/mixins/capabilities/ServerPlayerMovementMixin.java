@@ -144,7 +144,7 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
         //      Also, this will need attribute support as well.
         //      Can probably even check if the weapon is being pulled back or not using 'projectileWeaponItem'
         if (player.getUseItem().getItem() instanceof  ProjectileWeaponItem projectileWeaponItem) {
-            this.currentActionStaminaCost = (int) (6 * EPModCfg.baseRangedStaminaConsumption());
+            this.currentActionStaminaCost = (int) (6 * EPModCfg.baseRangedStaminaMultiplier());
             this.isPerformingAction = true;
         }
     }

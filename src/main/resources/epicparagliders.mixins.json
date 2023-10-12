@@ -12,7 +12,7 @@
     "skills.weaponinnate.SimpleSpecialAttackSkillMixin",
     "skills.guard.GuardSkillMixin",
     "skills.dodge.DodgeSkillMixin",
-    "skills.guard.ActiveGuardSkillMixin",
+    "skills.guard.ParryingSkillMixin",
     "skills.passive.StaminaPillagerSkillMixin",
     "skills.passive.TechnicianSkillMixin",
     "capabilities.PlayerPatchMixin"

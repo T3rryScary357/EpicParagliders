@@ -3,6 +3,7 @@ package net.cravencraft.epicparagliders.mixins.skills.guard;
 import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
+import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,15 +16,16 @@ import yesman.epicfight.skill.guard.ParryingSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.entity.eventlistener.HurtEvent;
+import yesman.epicfight.world.gamerule.EpicFightGamerules;
 
 @Mixin(ParryingSkill.class)
-public abstract class ActiveGuardSkillMixin extends GuardSkill {
+public abstract class ParryingSkillMixin extends GuardSkill {
 
     private float penalty;
     private float impact;
     private PlayerPatch playerPatch;
 
-    public ActiveGuardSkillMixin(Builder builder) {
+    public ParryingSkillMixin(Builder builder) {
         super(builder);
     }
 
@@ -49,35 +51,56 @@ public abstract class ActiveGuardSkillMixin extends GuardSkill {
      * (vs. negating all stamina being drained initially), else even more stamina is drained
      * from the block. Making this a high risk high reward system to choose of regular guard.
      *
-     * @param stamina
+     * @param blockType Either GUARD_BREAK or ADVANCED_GUARD
      * @return
      */
-    @SuppressWarnings("InvalidInjectorMethodSignature")
-    @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 3, remap = false)
-    private float stamina(float stamina) {
+//    @SuppressWarnings("InvalidInjectorMethodSignature")
+    @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 0, remap = false)
+    private GuardSkill.BlockType blockType(GuardSkill.BlockType blockType) {
         PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
-        PlayerMovementInterface serverPlayerMovement = ((PlayerMovementInterface) playerMovement);
 
-//        float poise = Formulars.getStaminarConsumePenalty(this.playerPatch.getWeight(), 1, this.playerPatch) * 0.1F;
-        float poise = 0.0f;
+        int guardConsumption;
+        int armorValue = playerMovement.player.getArmorValue();
+
+        double blockMultiplier = EPModCfg.baseBlockStaminaMultiplier();
+        double parryPenaltyMultiplier = EPModCfg.parryPenaltyMultiplier();
+        double parryPercentModifier = EPModCfg.parryPercentModifier() * 0.01;
+
+        float poise;
+        float weight = this.playerPatch.getWeight();
         float currentStamina = playerMovement.getStamina();
         float missingStamina = playerMovement.getMaxStamina() - currentStamina;
-        int guardConsumption;
-        if (this.penalty > 0.1f) {
-            guardConsumption = (int) ((getConsumption() + (penalty * 5) + (impact * 12)) * (1 - poise) * EPModCfg.baseBlockStaminaConsumption());
+
+        if (weight > 40.0F) {
+            float attenuation = Mth.clamp(this.playerPatch.getOriginal().level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
+            poise = (0.1F * (weight / 40.0F) * (Math.max(armorValue, 0) * 1.5F) * attenuation);
         }
         else {
-            guardConsumption = -(int) MathUtils.calculateModifiedTriangularRoot(missingStamina, 0.3f);
+            poise = 0.0F;
+        }
+
+        if (this.penalty > 0.1f) {
+            guardConsumption = (int) (( ((getConsumption() + (penalty * parryPenaltyMultiplier) + (impact * parryPenaltyMultiplier)) - poise)));
+        }
+        else {
+            if (EPModCfg.parryDrain()) {
+                guardConsumption = (int) ((getConsumption() + (penalty * blockMultiplier * parryPercentModifier) + (impact * blockMultiplier * parryPercentModifier)) - poise);
+            }
+            else {
+                guardConsumption = (int) (MathUtils.calculateModifiedTriangularRoot(missingStamina, parryPercentModifier));
+            }
+
+
         }
 
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(guardConsumption);
         ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
 
         if (playerMovement.isDepleted()) {
-            return -0.1f;
+            return GuardSkill.BlockType.GUARD_BREAK;
         }
         else {
-            return 0.0f;
+            return blockType;
         }
     }
 }

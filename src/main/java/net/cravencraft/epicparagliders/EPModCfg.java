@@ -21,27 +21,30 @@ public final class EPModCfg {
     /**
      * Melee Attacks
      */
-    private static ForgeConfigSpec.DoubleValue BASE_MELEE_STAMINA_CONSUMPTION;
-    private static ForgeConfigSpec.DoubleValue DAGGER_STAMINA_CONSUMPTION;
-    private static ForgeConfigSpec.DoubleValue SWORD_STAMINA_CONSUMPTION;
-    private static ForgeConfigSpec.DoubleValue LONG_SWORD_STAMINA_CONSUMPTION;
-    private static ForgeConfigSpec.DoubleValue GREAT_SWORD_STAMINA_CONSUMPTION;
-    private static ForgeConfigSpec.DoubleValue KATANA_STAMINA_CONSUMPTION;
-    private static ForgeConfigSpec.DoubleValue TACHI_STAMINA_CONSUMPTION;
-    private static ForgeConfigSpec.DoubleValue SPEAR_STAMINA_CONSUMPTION;
-    private static ForgeConfigSpec.DoubleValue KNUCKLE_STAMINA_CONSUMPTION;
-    private static ForgeConfigSpec.DoubleValue AXE_STAMINA_CONSUMPTION;
+    private static ForgeConfigSpec.DoubleValue BASE_MELEE_STAMINA_MULTIPLIER;
+    private static ForgeConfigSpec.DoubleValue DAGGER_STAMINA_MULTIPLIER;
+    private static ForgeConfigSpec.DoubleValue SWORD_STAMINA_MULTIPLIER;
+    private static ForgeConfigSpec.DoubleValue LONG_SWORD_STAMINA_MULTIPLIER;
+    private static ForgeConfigSpec.DoubleValue GREAT_SWORD_STAMINA_MULTIPLIER;
+    private static ForgeConfigSpec.DoubleValue UCHIGATANA_STAMINA_MULTIPLIER;
+    private static ForgeConfigSpec.DoubleValue TACHI_STAMINA_MULTIPLIER;
+    private static ForgeConfigSpec.DoubleValue SPEAR_STAMINA_MULTIPLIER;
+    private static ForgeConfigSpec.DoubleValue KNUCKLE_STAMINA_MULTIPLIER;
+    private static ForgeConfigSpec.DoubleValue AXE_STAMINA_MULTIPLIER;
 
     /**
      * Ranged Attacks
      */
-    private static ForgeConfigSpec.DoubleValue BASE_RANGED_STAMINA_CONSUMPTION;
+    private static ForgeConfigSpec.DoubleValue BASE_RANGED_STAMINA_MULTIPLIER;
 
     /**
      * Skills
      */
-    private static ForgeConfigSpec.DoubleValue BASE_BLOCK_STAMINA_CONSUMPTION;
-    private static ForgeConfigSpec.DoubleValue BASE_DODGE_STAMINA_CONSUMPTION;
+    private static ForgeConfigSpec.DoubleValue BASE_BLOCK_STAMINA_MULTIPLIER;
+    private static ForgeConfigSpec.DoubleValue BASE_DODGE_STAMINA_MULTIPLIER;
+    private static ForgeConfigSpec.DoubleValue PARRY_PENALTY_MULTIPLIER;
+    private static ForgeConfigSpec.IntValue PARRY_PERCENT_MODIFIER;
+    private static ForgeConfigSpec.BooleanValue PARRY_DRAIN;
 
     /**
      * Status Effects & Weapon Configs
@@ -49,90 +52,100 @@ public final class EPModCfg {
     private static ForgeConfigSpec.ConfigValue<List<? extends Integer>> DEPLETION_EFFECT_LIST;
     private static ForgeConfigSpec.ConfigValue<List<? extends Integer>> DEPLETION_EFFECT_STRENGTH_LIST;
 
-    public static double baseMeleeStaminaConsumption() {
-        return BASE_MELEE_STAMINA_CONSUMPTION.get();
+    public static double baseMeleeStaminaMultiplier() {
+        return BASE_MELEE_STAMINA_MULTIPLIER.get();
     }
 
-    public static double daggerStaminaConsumption() {
-        return DAGGER_STAMINA_CONSUMPTION.get();
+    public static double daggerStaminaMultiplier() {
+        return DAGGER_STAMINA_MULTIPLIER.get();
     }
 
-    public static double swordStaminaConsumption() {
-        return SWORD_STAMINA_CONSUMPTION.get();
+    public static double swordStaminaMultiplier() {
+        return SWORD_STAMINA_MULTIPLIER.get();
     }
 
-    public static double longSwordConsumption() {
-        return LONG_SWORD_STAMINA_CONSUMPTION.get();
+    public static double longSwordMultiplier() {
+        return LONG_SWORD_STAMINA_MULTIPLIER.get();
     }
 
-    public static double greatSwordStaminaConsumption() {
-        return GREAT_SWORD_STAMINA_CONSUMPTION.get();
+    public static double greatSwordStaminaMultiplier() {
+        return GREAT_SWORD_STAMINA_MULTIPLIER.get();
     }
 
-    public static double katanaStaminaConsumption() {
-        return KATANA_STAMINA_CONSUMPTION.get();
+    public static double uchigatanaStaminaMultiplier() {
+        return UCHIGATANA_STAMINA_MULTIPLIER.get();
     }
 
-    public static double tachiStaminaConsumption() {
-        return TACHI_STAMINA_CONSUMPTION.get();
+    public static double tachiStaminaMultiplier() {
+        return TACHI_STAMINA_MULTIPLIER.get();
     }
 
-    public static double spearStaminaConsumption() {
-        return SPEAR_STAMINA_CONSUMPTION.get();
+    public static double spearStaminaMultiplier() {
+        return SPEAR_STAMINA_MULTIPLIER.get();
     }
 
-    public static double knuckleStaminaConsumption() {
-        return KNUCKLE_STAMINA_CONSUMPTION.get();
+    public static double knuckleStaminaMultiplier() {
+        return KNUCKLE_STAMINA_MULTIPLIER.get();
     }
 
-    public static double axeStaminaConsumption() {
-        return AXE_STAMINA_CONSUMPTION.get();
+    public static double axeStaminaMultiplier() {
+        return AXE_STAMINA_MULTIPLIER.get();
     }
 
-	public static double baseRangedStaminaConsumption() {
-		return BASE_RANGED_STAMINA_CONSUMPTION.get();
+	public static double baseRangedStaminaMultiplier() {
+		return BASE_RANGED_STAMINA_MULTIPLIER.get();
 	}
 
-	public static double baseBlockStaminaConsumption() {
-		return BASE_BLOCK_STAMINA_CONSUMPTION.get();
+	public static double baseBlockStaminaMultiplier() {
+		return BASE_BLOCK_STAMINA_MULTIPLIER.get();
 	}
 
-	public static double baseDodgeStaminaConsumption() {
-		return BASE_DODGE_STAMINA_CONSUMPTION.get();
+	public static double baseDodgeStaminaMultiplier() {
+		return BASE_DODGE_STAMINA_MULTIPLIER.get();
 	}
+
+    public static double parryPenaltyMultiplier() {
+        return PARRY_PENALTY_MULTIPLIER.get();
+    }
+    public static int parryPercentModifier() { return PARRY_PERCENT_MODIFIER.get(); }
+    public static boolean parryDrain() { return PARRY_DRAIN.get(); }
 
     public static List<Integer> depletionEffectList() { return (List<Integer>) DEPLETION_EFFECT_LIST.get(); }
     public static List<Integer> depletionEffectStrengthList() { return (List<Integer>) DEPLETION_EFFECT_STRENGTH_LIST.get(); }
 
     public static void init() {
         Builder server = new Builder();
-        server.push("Stamina");
-        BASE_MELEE_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from all melee attacks.")
-                .defineInRange("baseMeleeStaminaConsumption", 1.0, 0.0, 10.0);
-        DAGGER_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from daggers (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("daggerStaminaConsumption", 2.5, 0.0, 10.0);
-        SWORD_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from swords (stacks with baseMeleeStaminaConsumption)..")
-                .defineInRange("swordStaminaConsumption", 2.5, 0.0, 10.0);
-        LONG_SWORD_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from longswords (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("longSwordConsumption", 2.5, 0.0, 10.0);
-        GREAT_SWORD_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from greatswords (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("greatSwordStaminaConsumption", 1.5, 0.0, 10.0);
-        KATANA_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from katanas (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("katanaStaminaConsumption", 2.0, 0.0, 10.0);
-        TACHI_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from tachis (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("tachiStaminaConsumption", 2.0, 0.0, 10.0);
-        SPEAR_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from spears (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("spearStaminaConsumption", 2.0, 0.0, 10.0);
-        KNUCKLE_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from knuckles (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("knuckleStaminaConsumption", 2.0, 0.0, 10.0);
-        AXE_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from axes (stacks with baseMeleeStaminaConsumption).")
-                .defineInRange("axeStaminaConsumption", 2.5, 0.0, 10.0);
-		BASE_RANGED_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from ranged attacks with bows or crossbows.")
-				.defineInRange("baseRangedStaminaConsumption", 1.0, 0.0, 10.0);
-		BASE_BLOCK_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from using block skills.")
-				.defineInRange("baseBlockStaminaConsumption", 1.0, 0.0, 10.0);
-		BASE_DODGE_STAMINA_CONSUMPTION = server.comment("How much more/less stamina is consumed from dodge skills.")
-				.defineInRange("baseDodgeStaminaConsumption", 1.0, 0.0, 10.0);
+        server.push("stamina");
+        BASE_RANGED_STAMINA_MULTIPLIER = server.defineInRange("weapons.base_ranged_stamina_multiplier", 1.0, 0.0, 10.0);
+        BASE_MELEE_STAMINA_MULTIPLIER = server.comment("Base multiplier for all melee based attacks.").defineInRange("weapons.base_melee_stamina_multiplier", 1.0, 0.0, 10.0);
+        DAGGER_STAMINA_MULTIPLIER = server.defineInRange("weapons.dagger_stamina_multiplier", 2.5, 0.0, 10.0);
+        SWORD_STAMINA_MULTIPLIER = server.defineInRange("weapons.sword_stamina_multiplier", 2.5, 0.0, 10.0);
+        LONG_SWORD_STAMINA_MULTIPLIER = server.defineInRange("weapons.longsword_stamina_multiplier", 2.5, 0.0, 10.0);
+        GREAT_SWORD_STAMINA_MULTIPLIER = server.defineInRange("weapons.greatsword_stamina_multiplier", 1.5, 0.0, 10.0);
+        UCHIGATANA_STAMINA_MULTIPLIER = server.defineInRange("weapons.uchigatana_stamina_multiplier", 2.0, 0.0, 10.0);
+        TACHI_STAMINA_MULTIPLIER = server.defineInRange("weapons.tachi_stamina_multiplier", 2.0, 0.0, 10.0);
+        SPEAR_STAMINA_MULTIPLIER = server.defineInRange("weapons.spear_stamina_multiplier", 2.0, 0.0, 10.0);
+        KNUCKLE_STAMINA_MULTIPLIER = server.defineInRange("weapons.knuckle_stamina_multiplier", 2.0, 0.0, 10.0);
+        AXE_STAMINA_MULTIPLIER = server.defineInRange("weapons.axe_stamina_multiplier", 2.5, 0.0, 10.0);
+
+        BASE_BLOCK_STAMINA_MULTIPLIER = server.defineInRange("skills.block.block_stamina_multiplier", 7.5, 0.0, 10.0);
+        BASE_DODGE_STAMINA_MULTIPLIER = server.defineInRange("skills.dodge.dodge_stamina_multiplier", 1.0, 0.0, 10.0);
+
+        PARRY_PENALTY_MULTIPLIER = server.comment("How much stamina will be drained on a failed parry.\n" +
+                                                  "Make the same as block_stamina_multiplier for no penalty.")
+                .defineInRange("skills.block.block_stamina_multiplier", 9.0, 0.0, 10.0);
+
+        PARRY_DRAIN = server.comment("If true, stamina drain will be reduced based on the percentage defined below.\n" +
+                                     "If false, missing stamina will be replenished based on the percentage defined below.")
+                .define("parry.drain",false);
+
+        PARRY_PERCENT_MODIFIER = server.comment("How much stamina reduction will be applied on a successful parry,\n" +
+                                                " or how much missing stamina will be replenished on a successful parry.")
+                .defineInRange("skills.parry.parry_percent_modifier", 30, 0, 100);
+
+        server.pop();
+
+        server.push("depletion_effects");
         DEPLETION_EFFECT_LIST = server
                 .comment("The effect ID that will be applied when a player runs out of stamina (default is Mining Fatigue and Weakness respectively).\n" +
                          "Refer to https://minecraft.fandom.com/wiki/Effect#Effect_list for a list of the effects and their corresponding IDs")
@@ -141,8 +154,8 @@ public final class EPModCfg {
                 .comment("The strength applied to the depletion effect above (The default is 2 and 7. A value such as 4 would apply Weakness IV).\n" +
                          "If no value is set here, and an extra effect is added above, then the effect strength will default to 1.")
                 .defineListAllowEmpty(Collections.singletonList("effects_strength"), () -> ImmutableList.of(5, 1), o -> true);
-
         server.pop();
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, server.build());
     }
 }

@@ -32,13 +32,13 @@ public class MathUtils {
 
     /**
      * Some math done here to determine how much stamina should be consumed from each weapon type.
-     * Takes in a weapon's attack strengt and tier, and the world's config setting to create a balanced stamina cost.
+     * Takes in a weapon's attack strength and tier, and the world's config setting to create a balanced stamina cost.
      *
      * @param player The given player attacking
      * @return The amount of stamina that should be drained from the attacking weapon
      */
     public static int getAttackStaminaCost(Player player) {
-        double configFactor = EPModCfg.baseMeleeStaminaConsumption();
+        double configFactor = EPModCfg.baseMeleeStaminaMultiplier();
         //TODO: Double check duel wielding with this.
         //      Could easily add offhand support too by checking which
         //      hand is swinging the weapon.
@@ -49,31 +49,31 @@ public class MathUtils {
         double weaponTypeOverride = player.getAttributeValue(EpicParaglidersAttributes.WEAPON_TYPE.get());
 
         if (weaponItem instanceof AxeItem || weaponTypeOverride == 1.0) {
-            configFactor *= EPModCfg.axeStaminaConsumption();
+            configFactor *= EPModCfg.axeStaminaMultiplier();
         }
         else if (weaponItem instanceof DaggerItem || weaponTypeOverride == 3.0) {
-            configFactor *= EPModCfg.daggerStaminaConsumption();
+            configFactor *= EPModCfg.daggerStaminaMultiplier();
         }
         else if (weaponItem instanceof KnuckleItem || weaponTypeOverride == 4.0) {
-            configFactor *= EPModCfg.knuckleStaminaConsumption();
+            configFactor *= EPModCfg.knuckleStaminaMultiplier();
         }
         else if (weaponItem instanceof GreatswordItem || weaponTypeOverride == 5.0) {
-            configFactor *= EPModCfg.greatSwordStaminaConsumption();
+            configFactor *= EPModCfg.greatSwordStaminaMultiplier();
         }
         else if (weaponItem instanceof UchigatanaItem || weaponTypeOverride == 6.0) {
-            configFactor *= EPModCfg.katanaStaminaConsumption();
+            configFactor *= EPModCfg.uchigatanaStaminaMultiplier();
         }
         else if (weaponItem instanceof LongswordItem || weaponTypeOverride == 7.0) {
-            configFactor *= EPModCfg.longSwordConsumption();
+            configFactor *= EPModCfg.longSwordMultiplier();
         }
         else if (weaponItem instanceof SpearItem || weaponTypeOverride == 8.0) {
-            configFactor *= EPModCfg.spearStaminaConsumption();
+            configFactor *= EPModCfg.spearStaminaMultiplier();
         }
         else if (weaponItem instanceof SwordItem || weaponTypeOverride == 9.0) {
-            configFactor *= EPModCfg.swordStaminaConsumption();
+            configFactor *= EPModCfg.swordStaminaMultiplier();
         }
         else if (weaponItem instanceof TachiItem || weaponTypeOverride == 10.0) {
-            configFactor *= EPModCfg.tachiStaminaConsumption();
+            configFactor *= EPModCfg.tachiStaminaMultiplier();
         }
 
         double totalStaminaDrain;
