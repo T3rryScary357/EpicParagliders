@@ -133,15 +133,15 @@ public final class EPModCfg {
 
         PARRY_PENALTY_MULTIPLIER = server.comment("How much stamina will be drained on a failed parry.\n" +
                                                   "Make the same as block_stamina_multiplier for no penalty.")
-                .defineInRange("skills.block.block_stamina_multiplier", 9.0, 0.0, 10.0);
+                .defineInRange("skills.parry.parry_penalty_multiplier", 7.5, 0.0, 10.0);
 
         PARRY_DRAIN = server.comment("If true, stamina drain will be reduced based on the percentage defined below.\n" +
                                      "If false, missing stamina will be replenished based on the percentage defined below.")
-                .define("parry.drain",false);
+                .define("skills.parry.drain",true);
 
         PARRY_PERCENT_MODIFIER = server.comment("How much stamina reduction will be applied on a successful parry,\n" +
                                                 " or how much missing stamina will be replenished on a successful parry.")
-                .defineInRange("skills.parry.parry_percent_modifier", 30, 0, 100);
+                .defineInRange("skills.parry.parry_percent_modifier", 100, 0, 100);
 
         server.pop();
 

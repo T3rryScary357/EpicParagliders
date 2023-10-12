@@ -20,7 +20,7 @@ import yesman.epicfight.world.gamerule.EpicFightGamerules;
 
 @Mixin(ParryingSkill.class)
 public abstract class ParryingSkillMixin extends GuardSkill {
-
+    private boolean successfulParry;
     private float penalty;
     private float impact;
     private PlayerPatch playerPatch;
@@ -29,16 +29,31 @@ public abstract class ParryingSkillMixin extends GuardSkill {
         super(builder);
     }
 
+    /**
+     * Simply retrieves the 'impact' variable from the 'guard' method to use when modifying
+     * the 'blockType'
+     */
     @Inject(method = "guard", at = @At("HEAD"), remap = false)
     private void getPlayerPatch(SkillContainer container, CapabilityItem itemCapability, HurtEvent.Pre event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
         this.playerPatch = event.getPlayerPatch();
         this.impact = impact;
     }
 
+    /**
+     * Simply retrieves the 'penalty' variable from the 'guard' method to use when modifying
+     * the 'blockType'
+     */
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 2, remap = false)
     private float penalty(float penalty) {
         this.penalty = penalty;
         return penalty;
+    }
+
+    @SuppressWarnings("InvalidInjectorMethodSignature")
+    @ModifyVariable(method = "guard", at = @At(value = "STORE"), name = "successParrying", remap = false)
+    private boolean isSuccessfulParry(boolean successParrying) {
+        this.successfulParry = successParrying;
+        return successfulParry;
     }
 
     /**
@@ -54,7 +69,6 @@ public abstract class ParryingSkillMixin extends GuardSkill {
      * @param blockType Either GUARD_BREAK or ADVANCED_GUARD
      * @return
      */
-//    @SuppressWarnings("InvalidInjectorMethodSignature")
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 0, remap = false)
     private GuardSkill.BlockType blockType(GuardSkill.BlockType blockType) {
         PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
@@ -71,26 +85,36 @@ public abstract class ParryingSkillMixin extends GuardSkill {
         float currentStamina = playerMovement.getStamina();
         float missingStamina = playerMovement.getMaxStamina() - currentStamina;
 
-        if (weight > 40.0F) {
+        if (weight <= 40.0F || blockMultiplier <= 0.0) {
+            poise = 0.0F;
+        }
+        else {
             float attenuation = Mth.clamp(this.playerPatch.getOriginal().level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
             poise = (0.1F * (weight / 40.0F) * (Math.max(armorValue, 0) * 1.5F) * attenuation);
         }
-        else {
-            poise = 0.0F;
-        }
 
-        if (this.penalty > 0.1f) {
-            guardConsumption = (int) (( ((getConsumption() + (penalty * parryPenaltyMultiplier) + (impact * parryPenaltyMultiplier)) - poise)));
-        }
-        else {
+        if (this.successfulParry) {
+            // If the player is successful with the parry, use one of these formulas depending on if parrying is set to drain stamina in the config.
             if (EPModCfg.parryDrain()) {
-                guardConsumption = (int) ((getConsumption() + (penalty * blockMultiplier * parryPercentModifier) + (impact * blockMultiplier * parryPercentModifier)) - poise);
+                guardConsumption = (int) (getConsumption() + (impact * blockMultiplier * (1 - parryPercentModifier)));
             }
             else {
-                guardConsumption = (int) (MathUtils.calculateModifiedTriangularRoot(missingStamina, parryPercentModifier));
+                guardConsumption = -(int) (MathUtils.calculateModifiedTriangularRoot(missingStamina, parryPercentModifier));
             }
 
+        }
+        else {
+            // If the player is unsuccessful with the parry, use this penalty formula.
+            guardConsumption = (int)  (getConsumption() + (penalty * parryPenaltyMultiplier) + (impact * parryPenaltyMultiplier));
+        }
 
+        // If the guard consumption is greater than the poise, then subtract poise as well.
+        // If the guard consumption is not negative (not gaining stamina) AND LESS OR EQUAL TO poise, then set to 0.
+        if (guardConsumption > poise) {
+            guardConsumption = (int) (guardConsumption - poise);
+        }
+        else if (Math.signum(guardConsumption) > 0) {
+            guardConsumption = 0;
         }
 
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(guardConsumption);

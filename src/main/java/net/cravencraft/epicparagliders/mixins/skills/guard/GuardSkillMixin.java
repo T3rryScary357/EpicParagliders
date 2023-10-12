@@ -19,7 +19,6 @@ import yesman.epicfight.world.gamerule.EpicFightGamerules;
 
 @Mixin(GuardSkill.class)
 public abstract class GuardSkillMixin extends Skill {
-    //TODO: Cleanup and organize
     private float penalty;
     private float impact;
     private PlayerPatch playerPatch;
@@ -28,12 +27,20 @@ public abstract class GuardSkillMixin extends Skill {
         super(builder);
     }
 
+    /**
+     * Simply retrieves the 'impact' variable from the 'guard' method to use when modifying
+     * the 'blockType'
+     */
     @Inject(method = "guard", at = @At("HEAD"), remap = false)
     private void getPlayerPatch(SkillContainer container, CapabilityItem itemCapability, HurtEvent.Pre event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
         this.playerPatch = event.getPlayerPatch();
         this.impact = impact;
     }
 
+    /**
+     * Simply retrieves the 'penalty' variable from the 'guard' method to use when modifying
+     * the 'blockType'
+     */
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 2, remap = false)
     private float getPenalty(float penalty) {
         this.penalty = penalty;
@@ -52,24 +59,29 @@ public abstract class GuardSkillMixin extends Skill {
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 0, remap = false)
     private GuardSkill.BlockType blockType(GuardSkill.BlockType blockType) {
         PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
-        float weight = this.playerPatch.getWeight();
-        double blockMultiplier = EPModCfg.baseBlockStaminaMultiplier();
-        int armorValue = playerMovement.player.getArmorValue();
-        float poise;
 
-        if (weight < 40.0F || blockMultiplier < 0.0) {
+        int armorValue = playerMovement.player.getArmorValue();
+
+        double blockMultiplier = EPModCfg.baseBlockStaminaMultiplier();
+
+        float poise;
+        float weight = this.playerPatch.getWeight();
+
+        // No armor or no block multiplier means that there is no poise.
+        // If both are true, then we get the poise based on the player's armor weight and protection value.
+        if (weight <= 40.0F) {
             poise = 0.0F;
         }
         else {
             float attenuation = Mth.clamp(this.playerPatch.getOriginal().level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
             poise = (0.1F * (weight / 40.0F) * (Math.max(armorValue, 0) * 1.5F) * attenuation);
         }
-        int totalPenalty = (int) (penalty * blockMultiplier);
-        int totalImpact = (int) (impact * blockMultiplier);
 
-        int guardConsumption = (int) ((getConsumption() + totalPenalty + totalImpact) - poise);
+        // Separate variable here solely because it's more readable to me.
+        double guardConsumption = getConsumption() + (penalty * blockMultiplier) + (impact * blockMultiplier);
+        guardConsumption = (guardConsumption > poise) ? (guardConsumption - poise) : 0;
 
-        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(guardConsumption);
+        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide((int)guardConsumption);
         ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
 
         if (playerMovement.isDepleted()) {
