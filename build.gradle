@@ -109,7 +109,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.10'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf('curse.maven:epicfight-405076:4785517')
+    implementation fg.deobf('curse.maven:epicfight-405076:4794936')
     implementation fg.deobf('curse.maven:paragliders-289240:4478246')
 }
 
