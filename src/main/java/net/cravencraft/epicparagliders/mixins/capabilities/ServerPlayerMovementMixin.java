@@ -91,6 +91,14 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
             isPerformingAction = true;
         }
         else if (isPerformingAction) {
+            if (this.currentActionStaminaCost < 0) {
+                EpicParaglidersMod.LOGGER.info("STAMINA RETURNED: " + this.currentActionStaminaCost);
+                int missingStamina = (int) MathUtils.calculateTriangularRoot(this.getMaxStamina() - this.getStamina());
+                EpicParaglidersMod.LOGGER.info("MISSING STAMINA: " + missingStamina);
+                this.currentActionStaminaCost = (Math.abs(this.currentActionStaminaCost) > missingStamina) ? -missingStamina : this.currentActionStaminaCost;
+                EpicParaglidersMod.LOGGER.info("STAMINA CHOSEN: " + this.currentActionStaminaCost);
+            }
+
             this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(this.totalActionStaminaCost)
                     + MathUtils.calculateTriangularNumber(currentActionStaminaCost)));
         }
