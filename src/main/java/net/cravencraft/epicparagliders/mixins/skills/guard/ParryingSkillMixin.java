@@ -85,6 +85,10 @@ public abstract class ParryingSkillMixin extends GuardSkill {
         float currentStamina = playerMovement.getStamina();
         float missingStamina = playerMovement.getMaxStamina() - currentStamina;
 
+        /*
+         * If the weight is less than 40 or the bock multiplier is 0, then there will be no player poise.
+         * Else, the poise will be a combination of armor value and weight.
+         */
         if (weight <= 40.0F || blockMultiplier <= 0.0) {
             poise = 0.0F;
         }
