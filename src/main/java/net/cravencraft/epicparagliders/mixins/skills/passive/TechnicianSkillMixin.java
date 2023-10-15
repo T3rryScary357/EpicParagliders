@@ -29,12 +29,10 @@ public abstract class TechnicianSkillMixin extends PassiveSkill {
     }
 
     /*
-     * TODO: WORKS!!!!
+     * TODO:
      *  - Clean up code and loggers here and in ServerPlayerMovement.
      *  - Use this method in the stamina pillager class.
-     *  - Honestly, this technically should work for ANY skill that gives you back stamina.
      *  - Make the STAMINA_PERCENTAGE_RETURNED a config option.
-     *  - Also, look into Parry Skill as well. Since it has the option to regain stamina.
      */
 
     @SuppressWarnings("InvalidInjectorMethodSignature")

@@ -6,7 +6,6 @@ import net.cravencraft.epicparagliders.network.ModNet;
 import net.cravencraft.epicparagliders.network.SyncActionToClientMsg;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
@@ -91,16 +90,29 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
             isPerformingAction = true;
         }
         else if (isPerformingAction) {
+            //TODO: Do this for greater than 0 too, so it doesn't go over. Maybe have it a little less to always ensure
+            //      it'll be in the negative. Actually, check it not going into the negative. Could be a cool feature
+            //      like what Storm wants.
             if (this.currentActionStaminaCost < 0) {
-                EpicParaglidersMod.LOGGER.info("STAMINA RETURNED: " + this.currentActionStaminaCost);
                 int missingStamina = (int) MathUtils.calculateTriangularRoot(this.getMaxStamina() - this.getStamina());
-                EpicParaglidersMod.LOGGER.info("MISSING STAMINA: " + missingStamina);
-                this.currentActionStaminaCost = (Math.abs(this.currentActionStaminaCost) > missingStamina) ? -missingStamina : this.currentActionStaminaCost;
-                EpicParaglidersMod.LOGGER.info("STAMINA CHOSEN: " + this.currentActionStaminaCost);
-            }
+                int trueTotalMissing = (int) MathUtils.calculateTriangularSummedNumber(this.totalActionStaminaCost, missingStamina);
 
-            this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(this.totalActionStaminaCost)
-                    + MathUtils.calculateTriangularNumber(currentActionStaminaCost)));
+                /*
+                 * Checks if the current action stamina cost is greater than the total missing stamina.
+                 * If so, just make the amount to recover the missing stamina so that it doesn't pour over.
+                 * If not, calculate the triangular summed number of the current and total action stamina cost.
+                 */
+                if (Math.abs(this.currentActionStaminaCost) > trueTotalMissing) {
+                    this.totalActionStaminaCost = -(missingStamina);
+                }
+                else {
+                    this.totalActionStaminaCost = (int) MathUtils.calculateTriangularSummedNumber(this.totalActionStaminaCost, this.currentActionStaminaCost);
+                }
+            }
+            else {
+                this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(this.totalActionStaminaCost)
+                        + MathUtils.calculateTriangularNumber(currentActionStaminaCost)));
+            }
         }
 
         if(this.isPerformingAction) {

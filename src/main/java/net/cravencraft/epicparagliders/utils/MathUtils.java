@@ -27,8 +27,12 @@ public class MathUtils {
         return (triangularNumber > 0) ? triangularRoot : -triangularRoot;
     }
 
-    //TODO: Create one more method here that takes in two numbers and combines them.
-    //      Since this will be a very common piece of math used in this project.
+    public static double calculateTriangularSummedNumber(int baseNumber1, int baseNumber2) {
+        double triangularNumber1 = calculateTriangularNumber(baseNumber1);
+        double triangularNumber2 = calculateTriangularNumber(baseNumber2);
+
+        return calculateTriangularRoot(triangularNumber1 + triangularNumber2);
+    }
 
     /**
      * Some math done here to determine how much stamina should be consumed from each weapon type.

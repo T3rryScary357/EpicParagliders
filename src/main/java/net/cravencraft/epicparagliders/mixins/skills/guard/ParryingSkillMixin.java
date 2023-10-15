@@ -72,9 +72,12 @@ public abstract class ParryingSkillMixin extends GuardSkill {
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 0, remap = false)
     private GuardSkill.BlockType blockType(GuardSkill.BlockType blockType) {
         PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
+        PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
 
         int guardConsumption;
         int armorValue = playerMovement.player.getArmorValue();
+        int currentStamina = playerMovement.getStamina();
+        int missingStamina = playerMovement.getMaxStamina() - currentStamina;
 
         double blockMultiplier = EPModCfg.baseBlockStaminaMultiplier();
         double parryPenaltyMultiplier = EPModCfg.parryPenaltyMultiplier();
@@ -82,8 +85,6 @@ public abstract class ParryingSkillMixin extends GuardSkill {
 
         float poise;
         float weight = this.playerPatch.getWeight();
-        float currentStamina = playerMovement.getStamina();
-        float missingStamina = playerMovement.getMaxStamina() - currentStamina;
 
         /*
          * If the weight is less than 40 or the bock multiplier is 0, then there will be no player poise.
@@ -103,7 +104,9 @@ public abstract class ParryingSkillMixin extends GuardSkill {
                 guardConsumption = (int) (getConsumption() + (impact * blockMultiplier * (1 - parryPercentModifier)));
             }
             else {
-                guardConsumption = -(int) (MathUtils.calculateModifiedTriangularRoot(missingStamina, parryPercentModifier));
+
+                int trueTotalMissing = (int) MathUtils.calculateTriangularSummedNumber(playerMovementInterface.getTotalActionStaminaCost(), missingStamina);
+                guardConsumption = -(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, parryPercentModifier));
             }
 
         }
@@ -121,8 +124,8 @@ public abstract class ParryingSkillMixin extends GuardSkill {
             guardConsumption = 0;
         }
 
-        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(guardConsumption);
-        ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+        playerMovementInterface.setActionStaminaCostServerSide(guardConsumption);
+        playerMovementInterface.performingActionServerSide(true);
 
         if (playerMovement.isDepleted()) {
             return GuardSkill.BlockType.GUARD_BREAK;

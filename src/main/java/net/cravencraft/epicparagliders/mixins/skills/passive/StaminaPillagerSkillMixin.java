@@ -24,14 +24,17 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
 //    private static void getPlayerPatch(DealtDamageEvent event, CallbackInfo ci) {
 //        if (!event.getTarget().isAlive()) {
 //            PlayerMovement playerMovement = PlayerMovement.of(event.getPlayerPatch().getOriginal());
-//            PlayerMovementInterface serverPlayerMovement = ((PlayerMovementInterface) playerMovement);
+//            PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
 //
-//            float stamina = playerMovement.getStamina();
-//            float missingStamina = playerMovement.getMaxStamina() - stamina;
-//            float currentActionStamina = serverPlayerMovement.getTotalActionStaminaCost();
-//            int staminaPillaged = (int) MathUtils.calculateModifiedTriangularRoot(missingStamina, STAMINA_PERCENTAGE_RETURNED);
+//            playerMovementInterface.setActionStaminaCostServerSide((int) -(playerMovementInterface.getTotalActionStaminaCost() * STAMINA_PERCENTAGE_RETURNED));
+//            playerMovementInterface.performingActionServerSide(true);
 //
-//            staminaPillaged = (staminaPillaged > currentActionStamina) ? (-staminaPillaged) : staminaPillaged;
+////            float stamina = playerMovement.getStamina();
+////            float missingStamina = playerMovement.getMaxStamina() - stamina;
+////            float currentActionStamina = playerMovementInterface.getTotalActionStaminaCost();
+//            int staminaPillaged = (int) MathUtils.calculateModifiedTriangularRoot(playerMovement.getMaxStamina() - playerMovement.getStamina(), STAMINA_PERCENTAGE_RETURNED);
+//
+////            staminaPillaged = (staminaPillaged > currentActionStamina) ? (-staminaPillaged) : staminaPillaged;
 //
 //            ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(staminaPillaged);
 //            ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);

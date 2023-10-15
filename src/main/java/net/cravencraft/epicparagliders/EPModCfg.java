@@ -140,7 +140,7 @@ public final class EPModCfg {
                 .define("skills.parry.drain",true);
 
         PARRY_PERCENT_MODIFIER = server.comment("How much stamina reduction will be applied on a successful parry,\n" +
-                                                " or how much missing stamina will be replenished on a successful parry.")
+                                                "or how much missing stamina will be replenished on a successful parry.")
                 .defineInRange("skills.parry.parry_percent_modifier", 100, 0, 100);
 
         server.pop();
