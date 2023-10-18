@@ -1,5 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.skills.passive;
 
+import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,30 +15,22 @@ import yesman.epicfight.world.entity.eventlistener.DealtDamageEvent;
 
 @Mixin(StaminaPillagerSkill.class)
 public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
-    private static final double STAMINA_PERCENTAGE_RETURNED = 0.3F;
 
     public StaminaPillagerSkillMixin(Builder<? extends Skill> builder) {
         super(builder);
     }
 
-//    @Inject(method = "lambda$onInitiate$0", at = @At("HEAD"), remap = false)
-//    private static void getPlayerPatch(DealtDamageEvent event, CallbackInfo ci) {
-//        if (!event.getTarget().isAlive()) {
-//            PlayerMovement playerMovement = PlayerMovement.of(event.getPlayerPatch().getOriginal());
-//            PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
-//
-//            playerMovementInterface.setActionStaminaCostServerSide((int) -(playerMovementInterface.getTotalActionStaminaCost() * STAMINA_PERCENTAGE_RETURNED));
-//            playerMovementInterface.performingActionServerSide(true);
-//
-////            float stamina = playerMovement.getStamina();
-////            float missingStamina = playerMovement.getMaxStamina() - stamina;
-////            float currentActionStamina = playerMovementInterface.getTotalActionStaminaCost();
-//            int staminaPillaged = (int) MathUtils.calculateModifiedTriangularRoot(playerMovement.getMaxStamina() - playerMovement.getStamina(), STAMINA_PERCENTAGE_RETURNED);
-//
-////            staminaPillaged = (staminaPillaged > currentActionStamina) ? (-staminaPillaged) : staminaPillaged;
-//
-//            ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(staminaPillaged);
-//            ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
-//        }
-//    }
+    @Inject(method = "lambda$onInitiate$0", at = @At("HEAD"), remap = false)
+    private void getPlayerPatch(DealtDamageEvent event, CallbackInfo ci) {
+        if (!event.getTarget().isAlive()) {
+            PlayerMovement playerMovement = PlayerMovement.of(event.getPlayerPatch().getOriginal());
+            PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
+            double staminaPillagerPercentModifier = EPModCfg.staminaPillagerPercentModifier() * 0.01;
+
+            int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.getMaxStamina() - playerMovement.getStamina()));
+
+            playerMovementInterface.setActionStaminaCostServerSide(-(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, staminaPillagerPercentModifier)));
+            playerMovementInterface.performingActionServerSide(true);
+        }
+    }
 }

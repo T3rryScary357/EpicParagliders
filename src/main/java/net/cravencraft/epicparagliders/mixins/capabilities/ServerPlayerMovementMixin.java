@@ -93,21 +93,12 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
             //TODO: Do this for greater than 0 too, so it doesn't go over. Maybe have it a little less to always ensure
             //      it'll be in the negative. Actually, check it not going into the negative. Could be a cool feature
             //      like what Storm wants.
+            //TODO: Double check regular stamina consumption from attacks. Could need a rework as well, but more than
+            //      likely they are fine.
             if (this.currentActionStaminaCost < 0) {
-                int missingStamina = (int) MathUtils.calculateTriangularRoot(this.getMaxStamina() - this.getStamina());
-                int trueTotalMissing = (int) MathUtils.calculateTriangularSummedNumber(this.totalActionStaminaCost, missingStamina);
-
-                /*
-                 * Checks if the current action stamina cost is greater than the total missing stamina.
-                 * If so, just make the amount to recover the missing stamina so that it doesn't pour over.
-                 * If not, calculate the triangular summed number of the current and total action stamina cost.
-                 */
-                if (Math.abs(this.currentActionStaminaCost) > trueTotalMissing) {
-                    this.totalActionStaminaCost = -(missingStamina);
-                }
-                else {
-                    this.totalActionStaminaCost = (int) MathUtils.calculateTriangularSummedNumber(this.totalActionStaminaCost, this.currentActionStaminaCost);
-                }
+                int totalStaminaCostTriangularNumber = (int) MathUtils.calculateTriangularNumber(this.totalActionStaminaCost);
+                int currentStaminaCostTriangularNumber = (int) MathUtils.calculateTriangularNumber(this.currentActionStaminaCost);
+                this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot(totalStaminaCostTriangularNumber + currentStaminaCostTriangularNumber);
             }
             else {
                 this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(this.totalActionStaminaCost)
@@ -123,6 +114,10 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
 
         addEffects();
         this.setTotalActionStaminaCost(this.totalActionStaminaCost);
+    }
+
+    private void noStaminaBleedOver() {
+
     }
 
     /**

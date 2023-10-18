@@ -1,6 +1,9 @@
 package net.cravencraft.epicparagliders.mixins.skills.passive;
 
+import net.cravencraft.epicparagliders.EPModCfg;
+import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,7 +19,6 @@ import yesman.epicfight.world.entity.eventlistener.DodgeSuccessEvent;
 
 @Mixin(TechnicianSkill.class)
 public abstract class TechnicianSkillMixin extends PassiveSkill {
-    private static final float STAMINA_PERCENTAGE_RETURNED = 1.2F;
     private static PlayerPatch PLAYER_PATCH;
 
     public TechnicianSkillMixin(Builder<? extends Skill> builder) {
@@ -41,7 +43,19 @@ public abstract class TechnicianSkillMixin extends PassiveSkill {
         PlayerMovement playerMovement = PlayerMovement.of(PLAYER_PATCH.getOriginal());
         PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
 
-        playerMovementInterface.setActionStaminaCostServerSide((int) -(playerMovementInterface.getTotalActionStaminaCost() * STAMINA_PERCENTAGE_RETURNED));
+        int technicianConsumption = playerMovementInterface.getTotalActionStaminaCost();
+        double technicianPercentModifier = EPModCfg.technicianPercentModifier() * 0.01;
+
+        // If the player is successful with the parry, use one of these formulas depending on if parrying is set to drain stamina in the config.
+        if (EPModCfg.technicianDrain()) {
+            technicianConsumption *= (1 - technicianPercentModifier);
+        }
+        else {
+            int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.getMaxStamina() - playerMovement.getStamina()));
+            technicianConsumption = -(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, technicianPercentModifier));
+        }
+//        EpicParaglidersMod.LOGGER.info("TECHNICIAN STAMINA CONSUMPTION: " + technicianConsumption);
+        playerMovementInterface.setActionStaminaCostServerSide(technicianConsumption);
         playerMovementInterface.performingActionServerSide(true);
         return 0.0f;
     }

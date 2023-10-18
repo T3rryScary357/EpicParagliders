@@ -77,7 +77,6 @@ public abstract class ParryingSkillMixin extends GuardSkill {
         int guardConsumption;
         int armorValue = playerMovement.player.getArmorValue();
         int currentStamina = playerMovement.getStamina();
-        int missingStamina = playerMovement.getMaxStamina() - currentStamina;
 
         double blockMultiplier = EPModCfg.baseBlockStaminaMultiplier();
         double parryPenaltyMultiplier = EPModCfg.parryPenaltyMultiplier();
@@ -89,6 +88,7 @@ public abstract class ParryingSkillMixin extends GuardSkill {
         /*
          * If the weight is less than 40 or the bock multiplier is 0, then there will be no player poise.
          * Else, the poise will be a combination of armor value and weight.
+         *
          */
         if (weight <= 40.0F || blockMultiplier <= 0.0) {
             poise = 0.0F;
@@ -104,8 +104,7 @@ public abstract class ParryingSkillMixin extends GuardSkill {
                 guardConsumption = (int) (getConsumption() + (impact * blockMultiplier * (1 - parryPercentModifier)));
             }
             else {
-
-                int trueTotalMissing = (int) MathUtils.calculateTriangularSummedNumber(playerMovementInterface.getTotalActionStaminaCost(), missingStamina);
+                int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.getMaxStamina() - playerMovement.getStamina()));
                 guardConsumption = -(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, parryPercentModifier));
             }
 

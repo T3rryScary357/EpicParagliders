@@ -27,9 +27,10 @@ public class MathUtils {
         return (triangularNumber > 0) ? triangularRoot : -triangularRoot;
     }
 
-    public static double calculateTriangularSummedNumber(int baseNumber1, int baseNumber2) {
-        double triangularNumber1 = calculateTriangularNumber(baseNumber1);
-        double triangularNumber2 = calculateTriangularNumber(baseNumber2);
+    // valid
+    public static double calculateTriangularSummedRoot(int triangularRoot1, int triangularRoot2) {
+        double triangularNumber1 = calculateTriangularNumber(triangularRoot1);
+        double triangularNumber2 = calculateTriangularNumber(triangularRoot2);
 
         return calculateTriangularRoot(triangularNumber1 + triangularNumber2);
     }

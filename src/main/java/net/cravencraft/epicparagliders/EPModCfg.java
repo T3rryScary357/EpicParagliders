@@ -45,6 +45,9 @@ public final class EPModCfg {
     private static ForgeConfigSpec.DoubleValue PARRY_PENALTY_MULTIPLIER;
     private static ForgeConfigSpec.IntValue PARRY_PERCENT_MODIFIER;
     private static ForgeConfigSpec.BooleanValue PARRY_DRAIN;
+    private static ForgeConfigSpec.IntValue TECHNICIAN_PERCENT_MODIFIER;
+    private static ForgeConfigSpec.BooleanValue TECHNICIAN_DRAIN;
+    private static ForgeConfigSpec.IntValue STAMINA_PILLAGER_PERCENT_MODIFIER;
 
     /**
      * Status Effects & Weapon Configs
@@ -109,6 +112,9 @@ public final class EPModCfg {
     }
     public static int parryPercentModifier() { return PARRY_PERCENT_MODIFIER.get(); }
     public static boolean parryDrain() { return PARRY_DRAIN.get(); }
+    public static int technicianPercentModifier() { return TECHNICIAN_PERCENT_MODIFIER.get(); }
+    public static boolean technicianDrain() { return TECHNICIAN_DRAIN.get(); }
+    public static int staminaPillagerPercentModifier() { return STAMINA_PILLAGER_PERCENT_MODIFIER.get(); }
 
     public static List<Integer> depletionEffectList() { return (List<Integer>) DEPLETION_EFFECT_LIST.get(); }
     public static List<Integer> depletionEffectStrengthList() { return (List<Integer>) DEPLETION_EFFECT_STRENGTH_LIST.get(); }
@@ -137,11 +143,22 @@ public final class EPModCfg {
 
         PARRY_DRAIN = server.comment("If true, stamina drain will be reduced based on the percentage defined below.\n" +
                                      "If false, missing stamina will be replenished based on the percentage defined below.")
-                .define("skills.parry.drain",true);
+                .define("skills.parry.parry_drain",false);
 
         PARRY_PERCENT_MODIFIER = server.comment("How much stamina reduction will be applied on a successful parry,\n" +
                                                 "or how much missing stamina will be replenished on a successful parry.")
-                .defineInRange("skills.parry.parry_percent_modifier", 100, 0, 100);
+                .defineInRange("skills.parry.parry_percent_modifier", 50, 0, 100);
+
+        TECHNICIAN_DRAIN = server.comment("If true, stamina drain will be reduced based on the percentage defined below.\n" +
+                                          "If false, missing stamina will be replenished based on the percentage defined below.")
+                .define("skills.technician.technician_drain",false);
+
+        TECHNICIAN_PERCENT_MODIFIER = server.comment("How much stamina reduction will be applied on a successful dodge,\n" +
+                                                     "or how much missing stamina will be replenished on a successful dodge.")
+                .defineInRange("skills.technician.technician_percent_modifier", 100, 0, 100);
+
+        STAMINA_PILLAGER_PERCENT_MODIFIER = server.comment("How much missing stamina will be replenished on killing an enemy.")
+                .defineInRange("skills.stamina_pillager.stamina_pillager_percent_modifier", 25, 0, 100);
 
         server.pop();
 
