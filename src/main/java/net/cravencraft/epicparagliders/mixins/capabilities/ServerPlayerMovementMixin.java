@@ -6,7 +6,6 @@ import net.cravencraft.epicparagliders.network.ModNet;
 import net.cravencraft.epicparagliders.network.SyncActionToClientMsg;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
@@ -81,7 +80,7 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
         }
 
         //TODO: Would like to organize these better.
-//        checkShieldDisable();
+        checkShieldDisable();
         calculateRangeStaminaCost();
 
         if (isAttacking && serverPlayerPatch.getEntityState().attacking()) {
@@ -91,8 +90,20 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
             isPerformingAction = true;
         }
         else if (isPerformingAction) {
-            this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(this.totalActionStaminaCost)
-                    + MathUtils.calculateTriangularNumber(currentActionStaminaCost)));
+            //TODO: Do this for greater than 0 too, so it doesn't go over. Maybe have it a little less to always ensure
+            //      it'll be in the negative. Actually, check it not going into the negative. Could be a cool feature
+            //      like what Storm wants.
+            //TODO: Double check regular stamina consumption from attacks. Could need a rework as well, but more than
+            //      likely they are fine.
+            if (this.currentActionStaminaCost < 0) {
+                int totalStaminaCostTriangularNumber = (int) MathUtils.calculateTriangularNumber(this.totalActionStaminaCost);
+                int currentStaminaCostTriangularNumber = (int) MathUtils.calculateTriangularNumber(this.currentActionStaminaCost);
+                this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot(totalStaminaCostTriangularNumber + currentStaminaCostTriangularNumber);
+            }
+            else {
+                this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(this.totalActionStaminaCost)
+                        + MathUtils.calculateTriangularNumber(currentActionStaminaCost)));
+            }
         }
 
         if(this.isPerformingAction) {
@@ -103,6 +114,10 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
 
         addEffects();
         this.setTotalActionStaminaCost(this.totalActionStaminaCost);
+    }
+
+    private void noStaminaBleedOver() {
+
     }
 
     /**
@@ -144,7 +159,7 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
         //      Also, this will need attribute support as well.
         //      Can probably even check if the weapon is being pulled back or not using 'projectileWeaponItem'
         if (player.getUseItem().getItem() instanceof  ProjectileWeaponItem projectileWeaponItem) {
-            this.currentActionStaminaCost = (int) (6 * EPModCfg.baseRangedStaminaConsumption());
+            this.currentActionStaminaCost = (int) (6 * EPModCfg.baseRangedStaminaMultiplier());
             this.isPerformingAction = true;
         }
     }
@@ -171,16 +186,12 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
      */
     private void modifyShieldCooldown(ShieldItem shieldItem) {
         if (player.getCooldowns().isOnCooldown(shieldItem) && !this.isDepleted()) {
-            EpicParaglidersMod.LOGGER.info("REMOVING COOLDOWN");
             player.getCooldowns().removeCooldown(shieldItem);
         }
-        else if (this.isDepleted()) {
-            int recoveryRate = PlayerState.IDLE.change();
-            int currentRecoveredAmount = this.getStamina();
-            float cooldownPercentage = player.getCooldowns().getCooldownPercent(shieldItem, 0.0F);
-            int shieldRecoveryDelay = (int) (this.getMaxStamina() * (1 - cooldownPercentage));
-            if (shieldRecoveryDelay > currentRecoveredAmount) {
-                player.getCooldowns().addCooldown(shieldItem, (this.getMaxStamina() - currentRecoveredAmount) / recoveryRate);
+        else if (this.isDepleted() && !player.getCooldowns().isOnCooldown(shieldItem)) {
+            ServerPlayerPatch serverPlayerPatch = (ServerPlayerPatch) player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).orElse(null);
+            if (serverPlayerPatch.getServerAnimator().animationPlayer.getAnimation().toString().contains("hit_shield")) {
+                player.getCooldowns().addCooldown(shieldItem, 40);
             }
         }
     }

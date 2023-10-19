@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '0.4.0-1.18.2'
+version = '0.5.0-1.18.2'
 group = 'com.cravencraft.epicparagliders' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'epicparagliders'
 
@@ -106,10 +106,10 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.80'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.2.10'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf('curse.maven:epicfight-405076:4018756')
+    implementation fg.deobf('curse.maven:epicfight-405076:4794936')
     implementation fg.deobf('curse.maven:paragliders-289240:4478246')
 }
 

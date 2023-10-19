@@ -1,5 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.capabilities;
 
+import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,6 +25,11 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
     @Shadow private int stamina;
     @Shadow public abstract int getMaxStamina();
     @Shadow @Final public Player player;
+
+    @Shadow public abstract int getStamina();
+
+    @Shadow public abstract void setStamina(int stamina);
+
     public int totalActionStaminaCost;
 
 
@@ -38,7 +44,7 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
     public void updateStamina(CallbackInfo ci) {
 
         //TODO: Small bug where stamina isn't depleted if attacking and going up a block at the same time.
-        //      State and action consumption are both combined, so can't be an issue with one being chose
+        //      State and action consumption are both combined, so can't be an issue with one being chosen
         //      over the other. Look into this in a later release.
         if (this.totalActionStaminaCost != 0 || this.state.isConsume()) {
             this.recoveryDelay = 10;
