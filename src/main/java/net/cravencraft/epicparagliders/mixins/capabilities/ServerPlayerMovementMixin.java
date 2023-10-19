@@ -80,7 +80,7 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
         }
 
         //TODO: Would like to organize these better.
-//        checkShieldDisable();
+        checkShieldDisable();
         calculateRangeStaminaCost();
 
         if (isAttacking && serverPlayerPatch.getEntityState().attacking()) {
@@ -186,16 +186,12 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
      */
     private void modifyShieldCooldown(ShieldItem shieldItem) {
         if (player.getCooldowns().isOnCooldown(shieldItem) && !this.isDepleted()) {
-            EpicParaglidersMod.LOGGER.info("REMOVING COOLDOWN");
             player.getCooldowns().removeCooldown(shieldItem);
         }
-        else if (this.isDepleted()) {
-            int recoveryRate = PlayerState.IDLE.change();
-            int currentRecoveredAmount = this.getStamina();
-            float cooldownPercentage = player.getCooldowns().getCooldownPercent(shieldItem, 0.0F);
-            int shieldRecoveryDelay = (int) (this.getMaxStamina() * (1 - cooldownPercentage));
-            if (shieldRecoveryDelay > currentRecoveredAmount) {
-                player.getCooldowns().addCooldown(shieldItem, (this.getMaxStamina() - currentRecoveredAmount) / recoveryRate);
+        else if (this.isDepleted() && !player.getCooldowns().isOnCooldown(shieldItem)) {
+            ServerPlayerPatch serverPlayerPatch = (ServerPlayerPatch) player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).orElse(null);
+            if (serverPlayerPatch.getServerAnimator().animationPlayer.getAnimation().toString().contains("hit_shield")) {
+                player.getCooldowns().addCooldown(shieldItem, 40);
             }
         }
     }
