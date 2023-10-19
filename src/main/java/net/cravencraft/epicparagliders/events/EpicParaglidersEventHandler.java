@@ -52,8 +52,12 @@ public final class EpicParaglidersEventHandler {
                 }
 
                 double guardConsumption = (blockMultiplier) + (event.getBlockedDamage());
+                EpicParaglidersMod.LOGGER.info("PRIOR GUARD CONSUMPTION: " + guardConsumption);
                 guardConsumption = (guardConsumption > poise) ? (guardConsumption - poise) : 0;
-
+                EpicParaglidersMod.LOGGER.info("WEIGHT: " + weight);
+                EpicParaglidersMod.LOGGER.info("POISE: " + poise);
+                EpicParaglidersMod.LOGGER.info("ENEMY DAMAGE: " + event.getBlockedDamage());
+                EpicParaglidersMod.LOGGER.info("AFTER GUARD CONSUMPTION: " + guardConsumption);
                 ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide((int) guardConsumption);
                 ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
             }

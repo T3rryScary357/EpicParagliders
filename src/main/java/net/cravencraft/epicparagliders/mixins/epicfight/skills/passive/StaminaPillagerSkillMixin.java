@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.skills.passive;
+package net.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
 import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;

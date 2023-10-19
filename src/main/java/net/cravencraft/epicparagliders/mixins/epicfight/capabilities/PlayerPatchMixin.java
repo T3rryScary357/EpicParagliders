@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.capabilities;
+package net.cravencraft.epicparagliders.mixins.epicfight.capabilities;
 
 import net.cravencraft.epicparagliders.gameasset.ExhaustionAnimations;
 import net.cravencraft.epicparagliders.gameasset.ExhaustionMotions;

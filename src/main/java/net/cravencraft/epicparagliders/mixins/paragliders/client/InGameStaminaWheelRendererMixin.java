@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.client;
+package net.cravencraft.epicparagliders.mixins.paragliders.client;
 
 import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;

@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.capabilities;
+package net.cravencraft.epicparagliders.mixins.epicfight.capabilities;
 
 import com.google.gson.Gson;
 import net.cravencraft.epicparagliders.EpicParaglidersAttributes;

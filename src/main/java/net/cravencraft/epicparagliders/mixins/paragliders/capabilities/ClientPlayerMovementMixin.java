@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.capabilities;
+package net.cravencraft.epicparagliders.mixins.paragliders.capabilities;
 
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.minecraft.world.entity.player.Player;

@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.client;
+package net.cravencraft.epicparagliders.mixins.epicfight.client;
 
 import net.cravencraft.epicparagliders.gameasset.ExhaustionMotions;
 import net.minecraft.world.effect.MobEffectInstance;

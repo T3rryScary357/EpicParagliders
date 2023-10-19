@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.skills.guard;
+package net.cravencraft.epicparagliders.mixins.epicfight.skills.guard;
 
 import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;

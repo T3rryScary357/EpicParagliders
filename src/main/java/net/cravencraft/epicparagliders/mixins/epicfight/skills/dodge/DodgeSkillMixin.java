@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.skills.dodge;
+package net.cravencraft.epicparagliders.mixins.epicfight.skills.dodge;
 
 import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;

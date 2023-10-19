@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.skills;
+package net.cravencraft.epicparagliders.mixins.epicfight.skills;
 
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
