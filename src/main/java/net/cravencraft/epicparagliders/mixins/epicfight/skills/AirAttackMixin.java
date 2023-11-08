@@ -26,6 +26,6 @@ public abstract class AirAttackMixin extends Skill {
         int specialAttackStaminaConsumption = MathUtils.getAttackStaminaCost(executer.getOriginal());
 
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(specialAttackStaminaConsumption + 3);
-        ((PlayerMovementInterface) playerMovement).isAttackingServerSide(true);
+        ((PlayerMovementInterface) playerMovement).attackingServerSide(true);
     }
 }

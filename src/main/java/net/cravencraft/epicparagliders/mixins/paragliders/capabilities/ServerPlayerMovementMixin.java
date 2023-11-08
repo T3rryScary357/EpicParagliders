@@ -1,6 +1,5 @@
 package net.cravencraft.epicparagliders.mixins.paragliders.capabilities;
 import net.cravencraft.epicparagliders.EPModCfg;
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.network.ModNet;
 import net.cravencraft.epicparagliders.network.SyncActionToClientMsg;
@@ -21,7 +20,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tictim.paraglider.capabilities.PlayerMovement;
-import tictim.paraglider.capabilities.PlayerState;
 import tictim.paraglider.capabilities.ServerPlayerMovement;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
@@ -45,8 +43,18 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
     }
 
     @Override
-    public void isAttackingServerSide(boolean isAttacking) {
+    public boolean isPerformingActionServerSide() {
+        return this.isPerformingAction;
+    }
+
+    @Override
+    public void attackingServerSide(boolean isAttacking) {
         this.isAttacking = isAttacking;
+    }
+
+    @Override
+    public boolean isAttackingServerSide() {
+        return this.isAttacking;
     }
 
     @Override
@@ -114,10 +122,6 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
 
         addEffects();
         this.setTotalActionStaminaCost(this.totalActionStaminaCost);
-    }
-
-    private void noStaminaBleedOver() {
-
     }
 
     /**

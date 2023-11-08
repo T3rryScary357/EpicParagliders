@@ -27,14 +27,6 @@ public class MathUtils {
         return (triangularNumber > 0) ? triangularRoot : -triangularRoot;
     }
 
-    // valid
-    public static double calculateTriangularSummedRoot(int triangularRoot1, int triangularRoot2) {
-        double triangularNumber1 = calculateTriangularNumber(triangularRoot1);
-        double triangularNumber2 = calculateTriangularNumber(triangularRoot2);
-
-        return calculateTriangularRoot(triangularNumber1 + triangularNumber2);
-    }
-
     /**
      * Some math done here to determine how much stamina should be consumed from each weapon type.
      * Takes in a weapon's attack strength and tier, and the world's config setting to create a balanced stamina cost.

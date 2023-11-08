@@ -24,8 +24,7 @@ public abstract class BasicAttackMixin extends Skill {
         PlayerMovement playerMovement = PlayerMovement.of(executer.getOriginal());
 
         int specialAttackStaminaConsumption = MathUtils.getAttackStaminaCost(executer.getOriginal());
-
-        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(specialAttackStaminaConsumption);
-        ((PlayerMovementInterface) playerMovement).isAttackingServerSide(true);
+        ((PlayerMovementInterface) playerMovement).attackingServerSide(true);
+        executer.setStamina(specialAttackStaminaConsumption);
     }
 }

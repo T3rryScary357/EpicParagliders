@@ -20,6 +20,13 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
         super(builder);
     }
 
+    /**
+     * Works like the original skill, but now is integrated with the new system.
+     * Return percentage is now based on the server config.
+     *
+     * @param event
+     * @param ci
+     */
     @Inject(method = "lambda$onInitiate$0", at = @At("HEAD"), remap = false)
     private void getPlayerPatch(DealtDamageEvent event, CallbackInfo ci) {
         if (!event.getTarget().isAlive()) {

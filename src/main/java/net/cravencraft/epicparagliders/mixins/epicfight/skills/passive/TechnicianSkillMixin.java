@@ -54,7 +54,7 @@ public abstract class TechnicianSkillMixin extends PassiveSkill {
             int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.getMaxStamina() - playerMovement.getStamina()));
             technicianConsumption = -(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, technicianPercentModifier));
         }
-//        EpicParaglidersMod.LOGGER.info("TECHNICIAN STAMINA CONSUMPTION: " + technicianConsumption);
+
         playerMovementInterface.setActionStaminaCostServerSide(technicianConsumption);
         playerMovementInterface.performingActionServerSide(true);
         return 0.0f;

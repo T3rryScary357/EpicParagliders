@@ -19,11 +19,18 @@ public abstract class SimpleSpecialAttackSkillMixin extends Skill {
         super(builder);
     }
 
+    /**
+     * TODO: Flesh this out a bit more to make special attacks cost a bit more stamina than regular ones.
+     *
+     * @param executer
+     * @param args
+     * @param ci
+     */
     @Inject(method = "executeOnServer", at = @At("HEAD"), remap = false)
     private void getPlayerPatch(ServerPlayerPatch executer, FriendlyByteBuf args, CallbackInfo ci) {
         PlayerMovement playerMovement = PlayerMovement.of(executer.getOriginal());
         int specialAttackStaminaConsumption = MathUtils.getAttackStaminaCost(executer.getOriginal());
         ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(specialAttackStaminaConsumption);
-        ((PlayerMovementInterface) playerMovement).isAttackingServerSide(true);
+        ((PlayerMovementInterface) playerMovement).attackingServerSide(true);
     }
 }

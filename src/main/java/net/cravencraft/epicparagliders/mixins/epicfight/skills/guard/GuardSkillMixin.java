@@ -48,6 +48,8 @@ public abstract class GuardSkillMixin extends Skill {
     }
 
     /**
+     * TODO: Can probably modify the variable here since we can use the consume method now.
+     *
      * Modifies the 'blockType' variable in the 'guard' method of the GuardSkill. This method will
      * take block penalty, weight, and armor value into account when determining the block stamina
      * consumption amount. If the Paragliders stamina system reaches 0, then the blockType will
@@ -81,8 +83,9 @@ public abstract class GuardSkillMixin extends Skill {
         double guardConsumption = getConsumption() + (penalty * blockMultiplier) + (impact * blockMultiplier);
         guardConsumption = (guardConsumption > poise) ? (guardConsumption - poise) : 0;
 
-        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide((int)guardConsumption);
+//        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide((int)guardConsumption);
         ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+        playerPatch.setStamina((float) guardConsumption);
 
         if (playerMovement.isDepleted()) {
             return GuardSkill.BlockType.GUARD_BREAK;

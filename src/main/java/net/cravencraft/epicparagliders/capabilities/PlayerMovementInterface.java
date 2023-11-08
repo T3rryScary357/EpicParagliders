@@ -10,8 +10,10 @@ public interface PlayerMovementInterface {
      */
     void setTotalActionStaminaCostServerSide(int totalActionStaminaCost);
     void setActionStaminaCostServerSide(int attackStaminaCost);
-    void isAttackingServerSide(boolean isAttacking);
+    void attackingServerSide(boolean isAttacking);
+    boolean isAttackingServerSide();
     void performingActionServerSide(boolean isPerformingAction);
+    boolean isPerformingActionServerSide();
 
     /**
      * PlayerMovement
