@@ -19,6 +19,11 @@ public final class EPModCfg {
     }
 
     /**
+     * GUI
+     */
+    private static ForgeConfigSpec.BooleanValue USE_STAMINA_WHEEL;
+
+    /**
      * Melee Attacks
      */
     private static ForgeConfigSpec.DoubleValue BASE_MELEE_STAMINA_MULTIPLIER;
@@ -54,6 +59,8 @@ public final class EPModCfg {
      */
     private static ForgeConfigSpec.ConfigValue<List<? extends Integer>> DEPLETION_EFFECT_LIST;
     private static ForgeConfigSpec.ConfigValue<List<? extends Integer>> DEPLETION_EFFECT_STRENGTH_LIST;
+
+    public static boolean useStaminaWheel() { return USE_STAMINA_WHEEL.get(); }
 
     public static double baseMeleeStaminaMultiplier() {
         return BASE_MELEE_STAMINA_MULTIPLIER.get();
@@ -122,6 +129,9 @@ public final class EPModCfg {
     public static void init() {
         Builder server = new Builder();
         server.push("stamina");
+        USE_STAMINA_WHEEL = server.comment("If true, the mod will use the Paragliders stamina wheel to display the player's current stamina.\n" +
+                        "If false, the mod will use the Epic Fight stamina bar to display the player's current stamina.")
+                .define("gui.use_stamina_wheel",true);
         BASE_RANGED_STAMINA_MULTIPLIER = server.defineInRange("weapons.base_ranged_stamina_multiplier", 1.0, 0.0, 10.0);
         BASE_MELEE_STAMINA_MULTIPLIER = server.comment("Base multiplier for all melee based attacks.").defineInRange("weapons.base_melee_stamina_multiplier", 1.0, 0.0, 10.0);
         DAGGER_STAMINA_MULTIPLIER = server.defineInRange("weapons.dagger_stamina_multiplier", 2.5, 0.0, 10.0);
