@@ -1,6 +1,7 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -14,7 +15,10 @@ import yesman.epicfight.client.gui.BattleModeGui;
 
 @Mixin(BattleModeGui.class)
 public abstract class BattleModeGuiMixin extends GuiComponent {
-    float ratio;
+    private boolean decreaseOpacity;
+    private float modifiedOpacity;
+    private float ratio;
+
 
     /**
      * Simply retrieves the blue color change ratio (based on the player's current stamina).
@@ -64,10 +68,25 @@ public abstract class BattleModeGuiMixin extends GuiComponent {
         ClientPlayerMovement playerMovement = (ClientPlayerMovement) PlayerMovement.of(Minecraft.getInstance().player);
 
         if (playerMovement.isDepleted()) {
-            RenderSystem.setShaderColor(1.0F, 0.0F, 0.0F, 0.5F);
+            if (decreaseOpacity) {
+                modifiedOpacity -= 0.05F;
+            }
+            else {
+                modifiedOpacity += 0.05f;
+            }
+
+            if (modifiedOpacity >= 1.0F) {
+                decreaseOpacity = true;
+            }
+            else if(modifiedOpacity <= 0.0F) {
+                decreaseOpacity = false;
+            }
+
+            RenderSystem.setShaderColor(red, 0.0F, 0.0F, modifiedOpacity);
         }
         else {
-            RenderSystem.setShaderColor(1.0F, this.ratio, 0.25F, 1.0F);
+            modifiedOpacity = opacity;
+            RenderSystem.setShaderColor(red, this.ratio, 0.25F, opacity);
         }
     }
 }
