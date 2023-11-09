@@ -1,5 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.paragliders.capabilities;
-import net.cravencraft.epicparagliders.EPModCfg;
+import net.cravencraft.epicparagliders.config.ConfigManager;
+import net.cravencraft.epicparagliders.config.ServerConfig;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.network.ModNet;
 import net.cravencraft.epicparagliders.network.SyncActionToClientMsg;
@@ -129,8 +130,8 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
      */
     private void addEffects() {
         if(!this.player.isCreative() && this.isDepleted()) {
-            List<Integer> effects = EPModCfg.depletionEffectList();
-            List<Integer> effectStrengths = EPModCfg.depletionEffectStrengthList();
+            List<Integer> effects = ConfigManager.SERVER_CONFIG.depletionEffectList();
+            List<Integer> effectStrengths = ConfigManager.SERVER_CONFIG.depletionEffectStrengthList();
 
             for (int i=0; i < effects.size(); i++) {
                 int effectStrength;
@@ -163,7 +164,7 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
         //      Also, this will need attribute support as well.
         //      Can probably even check if the weapon is being pulled back or not using 'projectileWeaponItem'
         if (player.getUseItem().getItem() instanceof  ProjectileWeaponItem projectileWeaponItem) {
-            this.currentActionStaminaCost = (int) (6 * EPModCfg.baseRangedStaminaMultiplier());
+            this.currentActionStaminaCost = (int) (6 * ConfigManager.SERVER_CONFIG.baseRangedStaminaMultiplier());
             this.isPerformingAction = true;
         }
     }

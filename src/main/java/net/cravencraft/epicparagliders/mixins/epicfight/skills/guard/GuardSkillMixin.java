@@ -1,6 +1,7 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.guard;
 
-import net.cravencraft.epicparagliders.EPModCfg;
+import net.cravencraft.epicparagliders.config.ConfigManager;
+import net.cravencraft.epicparagliders.config.ServerConfig;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
@@ -64,7 +65,7 @@ public abstract class GuardSkillMixin extends Skill {
 
         int armorValue = playerMovement.player.getArmorValue();
 
-        double blockMultiplier = EPModCfg.baseBlockStaminaMultiplier();
+        double blockMultiplier = ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier();
 
         float poise;
         float weight = this.playerPatch.getWeight();

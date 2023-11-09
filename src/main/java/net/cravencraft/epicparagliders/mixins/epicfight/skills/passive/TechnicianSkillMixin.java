@@ -1,7 +1,7 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
-import net.cravencraft.epicparagliders.EPModCfg;
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
+import net.cravencraft.epicparagliders.config.ConfigManager;
+import net.cravencraft.epicparagliders.config.ServerConfig;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,10 +44,10 @@ public abstract class TechnicianSkillMixin extends PassiveSkill {
         PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
 
         int technicianConsumption = playerMovementInterface.getTotalActionStaminaCost();
-        double technicianPercentModifier = EPModCfg.technicianPercentModifier() * 0.01;
+        double technicianPercentModifier = ConfigManager.SERVER_CONFIG.technicianPercentModifier() * 0.01;
 
         // If the player is successful with the parry, use one of these formulas depending on if parrying is set to drain stamina in the config.
-        if (EPModCfg.technicianDrain()) {
+        if (ConfigManager.SERVER_CONFIG.technicianDrain()) {
             technicianConsumption *= (1 - technicianPercentModifier);
         }
         else {

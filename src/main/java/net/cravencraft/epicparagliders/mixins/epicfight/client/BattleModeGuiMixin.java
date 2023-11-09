@@ -1,7 +1,7 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.cravencraft.epicparagliders.EPModCfg;
+import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +38,7 @@ public abstract class BattleModeGuiMixin extends GuiComponent {
      */
     @ModifyVariable(method = "renderGui", at = @At("STORE"), ordinal = 1, remap = false)
     private float removeGui(float maxStamina) {
-        if (!EPModCfg.useStaminaWheel()) {
+        if (!ConfigManager.CLIENT_CONFIG.useStaminaWheel()) {
             return maxStamina;
         }
         else {
@@ -48,6 +48,8 @@ public abstract class BattleModeGuiMixin extends GuiComponent {
     }
 
     /**
+     * TODO: Some refmap issue when loading this method outside of the test environment.
+     *       Need to figure out what the root cause is.
      * Modifies the Epic Fight stamina bar. It will now turn red and the opacity will decrease whenever
      * the player's stamina is depleted.
      *
@@ -56,7 +58,8 @@ public abstract class BattleModeGuiMixin extends GuiComponent {
      * @param green
      * @param opacity
      */
-    @Redirect(method = "renderGui", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderColor(FFFF)V", ordinal = 0), remap = false)
+    @Redirect(at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderColor(FFFF)V", ordinal = 0),
+            method = "renderGui")
     private void modifyStaminaBar(float red, float blue, float green, float opacity) {
         ClientPlayerMovement playerMovement = (ClientPlayerMovement) PlayerMovement.of(Minecraft.getInstance().player);
 
@@ -66,6 +69,5 @@ public abstract class BattleModeGuiMixin extends GuiComponent {
         else {
             RenderSystem.setShaderColor(1.0F, this.ratio, 0.25F, 1.0F);
         }
-
     }
 }

@@ -1,6 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.paragliders.client;
 
-import net.cravencraft.epicparagliders.EPModCfg;
+import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,7 +33,7 @@ public abstract class InGameStaminaWheelRendererMixin extends StaminaWheelRender
      */
     @Inject(method = "makeWheel", at = @At(value = "HEAD"), remap=false, cancellable = true)
     public void makeWheel(PlayerMovement h, CallbackInfo ci) {
-        if (EPModCfg.useStaminaWheel()) {
+        if (ConfigManager.CLIENT_CONFIG.useStaminaWheel()) {
             int totalActionStaminaCost = ((PlayerMovementInterface) h).getTotalActionStaminaCost();
             int stamina = h.getStamina();
 

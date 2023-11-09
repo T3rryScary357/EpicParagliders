@@ -1,7 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.capabilities;
 
-import net.cravencraft.epicparagliders.EPModCfg;
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
+import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.gameasset.ExhaustionAnimations;
 import net.cravencraft.epicparagliders.gameasset.ExhaustionMotions;
@@ -70,7 +69,6 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
         // Easy way to ensure only my stamina values are being applied.
         // So I don't have to edit 5+ different methods.
         if (((PlayerMovementInterface) playerMovement).isPerformingActionServerSide() || ((PlayerMovementInterface) playerMovement).isAttackingServerSide()) {
-            EpicParaglidersMod.LOGGER.info("PLAYER PATCH STAMINA USED: " + value);
             ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide((int) value);
         }
         ci.cancel();
@@ -88,7 +86,7 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
         float attenuation = Mth.clamp(this.original.level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
         float weight = this.getWeight();
 
-        cir.setReturnValue((float) (((weight / 40.0F - 1.0F) * 0.3F * attenuation + 1.0F) * amount * EPModCfg.baseDodgeStaminaMultiplier()));
+        cir.setReturnValue((float) (((weight / 40.0F - 1.0F) * 0.3F * attenuation + 1.0F) * amount * ConfigManager.SERVER_CONFIG.baseDodgeStaminaMultiplier()));
     }
 
     @OnlyIn(Dist.CLIENT)

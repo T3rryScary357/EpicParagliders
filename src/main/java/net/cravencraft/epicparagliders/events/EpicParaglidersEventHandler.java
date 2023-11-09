@@ -1,6 +1,6 @@
 package net.cravencraft.epicparagliders.events;
 
-import net.cravencraft.epicparagliders.EPModCfg;
+import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,7 +39,7 @@ public final class EpicParaglidersEventHandler {
             } else {
                 int armorValue = player.getArmorValue();
 
-                double blockMultiplier = EPModCfg.baseBlockStaminaMultiplier();
+                double blockMultiplier = ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier();
 
                 float poise;
                 float weight = serverPlayerPatch.getWeight();

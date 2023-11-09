@@ -1,6 +1,7 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.guard;
 
-import net.cravencraft.epicparagliders.EPModCfg;
+import net.cravencraft.epicparagliders.config.ConfigManager;
+import net.cravencraft.epicparagliders.config.ServerConfig;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.util.Mth;
@@ -78,9 +79,9 @@ public abstract class ParryingSkillMixin extends GuardSkill {
         int armorValue = playerMovement.player.getArmorValue();
         int currentStamina = playerMovement.getStamina();
 
-        double blockMultiplier = EPModCfg.baseBlockStaminaMultiplier();
-        double parryPenaltyMultiplier = EPModCfg.parryPenaltyMultiplier();
-        double parryPercentModifier = EPModCfg.parryPercentModifier() * 0.01;
+        double blockMultiplier = ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier();
+        double parryPenaltyMultiplier = ConfigManager.SERVER_CONFIG.parryPenaltyMultiplier();
+        double parryPercentModifier = ConfigManager.SERVER_CONFIG.parryPercentModifier() * 0.01;
 
         float poise;
         float weight = this.playerPatch.getWeight();
@@ -100,7 +101,7 @@ public abstract class ParryingSkillMixin extends GuardSkill {
 
         if (this.successfulParry) {
             // If the player is successful with the parry, use one of these formulas depending on if parrying is set to drain stamina in the config.
-            if (EPModCfg.parryDrain()) {
+            if (ConfigManager.SERVER_CONFIG.parryDrain()) {
                 guardConsumption = (int) (getConsumption() + (impact * blockMultiplier * (1 - parryPercentModifier)));
             }
             else {
