@@ -55,6 +55,12 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
         cir.setReturnValue((float) playerMovement.getStamina());
     }
 
+//    @Inject(method = "toggleMode", at = @At("HEAD"), cancellable = true, remap = false)
+//    private void toggle(CallbackInfo ci) {
+//        PlayerMovement playerMovement = PlayerMovement.of(this.getOriginal());
+////        cir.setReturnValue((float) playerMovement.getStamina());
+//    }
+
     /**
      * Set stamina now sets stamina for the Paragliders stamina system, and only if
      * the player is performing a skill action or an attack action.

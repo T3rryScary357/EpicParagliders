@@ -14,12 +14,14 @@ import tictim.paraglider.client.InGameStaminaWheelRenderer;
 import tictim.paraglider.client.StaminaWheelConstants;
 import tictim.paraglider.client.StaminaWheelRenderer;
 import tictim.paraglider.utils.Color;
+import yesman.epicfight.client.ClientEngine;
 
 import static tictim.paraglider.client.StaminaWheelConstants.*;
 
 @Mixin(InGameStaminaWheelRenderer.class)
 public abstract class InGameStaminaWheelRendererMixin extends StaminaWheelRenderer {
 
+    private boolean staminaBarShowing;
     @Shadow private int prevStamina;
 
     @Shadow private long fullTime;
@@ -93,6 +95,17 @@ public abstract class InGameStaminaWheelRendererMixin extends StaminaWheelRender
                         }
                     }
                 }
+            }
+        }
+        else if (!ClientEngine.getInstance().getPlayerPatch().isBattleMode()) {
+
+            if (h.getStamina() == h.getMaxStamina() && staminaBarShowing == true) {
+                ClientEngine.getInstance().renderEngine.downSlideSkillUI();
+                staminaBarShowing = false;
+            }
+            else if (h.getStamina() < h.getMaxStamina() && staminaBarShowing == false) {
+                ClientEngine.getInstance().renderEngine.upSlideSkillUI();
+                staminaBarShowing = true;
             }
         }
         ci.cancel();

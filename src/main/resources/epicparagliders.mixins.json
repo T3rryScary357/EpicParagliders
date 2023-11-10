@@ -25,6 +25,7 @@
   "client": [
     "epicfight.client.BattleModeGuiMixin",
     "epicfight.client.ClientAnimatorMixin",
+    "epicfight.client.LocalPlayerPatchMixin",
     "paragliders.client.InGameStaminaWheelRendererMixin",
     "paragliders.capabilities.ClientPlayerMovementMixin"
   ],
