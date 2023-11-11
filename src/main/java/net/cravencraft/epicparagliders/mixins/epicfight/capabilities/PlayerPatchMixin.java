@@ -16,20 +16,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tictim.paraglider.capabilities.PlayerMovement;
 import yesman.epicfight.api.client.animation.ClientAnimator;
+import yesman.epicfight.skill.ChargeableSkill;
+import yesman.epicfight.skill.mover.DemolitionLeapSkill;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.gamerule.EpicFightGamerules;
-
-import static yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch.STAMINA;
 
 @Mixin(PlayerPatch.class)
 public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPatch<T> {
     @Shadow public abstract float getStamina();
 
-    @Inject(method = "onConstructed", at = @At("TAIL"), cancellable = true, remap = false)
-    private void constructStamina(CallbackInfo ci) {
-        (this.original).getEntityData().set(STAMINA, 15.0f);
-    }
+    @Shadow protected ChargeableSkill chargingSkill;
 
     /**
      * Modifies the getMaxStamina method to return the max stamina from the Paragliders
@@ -54,12 +51,6 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
         PlayerMovement playerMovement = PlayerMovement.of(this.getOriginal());
         cir.setReturnValue((float) playerMovement.getStamina());
     }
-
-//    @Inject(method = "toggleMode", at = @At("HEAD"), cancellable = true, remap = false)
-//    private void toggle(CallbackInfo ci) {
-//        PlayerMovement playerMovement = PlayerMovement.of(this.getOriginal());
-////        cir.setReturnValue((float) playerMovement.getStamina());
-//    }
 
     /**
      * Set stamina now sets stamina for the Paragliders stamina system, and only if
@@ -91,8 +82,14 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
     private void modifyStaminaConsumption(float amount, CallbackInfoReturnable<Float> cir) {
         float attenuation = Mth.clamp(this.original.level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
         float weight = this.getWeight();
+        float modifiedConsumption = ((weight / 40.0F - 1.0F) * 0.3F * attenuation + 1.0F) * amount;
 
-        cir.setReturnValue((float) (((weight / 40.0F - 1.0F) * 0.3F * attenuation + 1.0F) * amount * ConfigManager.SERVER_CONFIG.baseDodgeStaminaMultiplier()));
+        if (this.chargingSkill instanceof DemolitionLeapSkill) {
+            cir.setReturnValue((float) (modifiedConsumption * ConfigManager.SERVER_CONFIG.demolitionLeapStaminaMultiplier()));
+        }
+        else {
+            cir.setReturnValue((float) (modifiedConsumption * ConfigManager.SERVER_CONFIG.baseDodgeStaminaMultiplier()));
+        }
     }
 
     @OnlyIn(Dist.CLIENT)

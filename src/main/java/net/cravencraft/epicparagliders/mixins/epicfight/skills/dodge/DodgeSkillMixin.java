@@ -1,6 +1,7 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.dodge;
 
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.minecraft.network.FriendlyByteBuf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,10 +33,10 @@ public abstract class DodgeSkillMixin extends Skill {
         String skillName = this.registryName.getPath();
 
         if (skillName.equals("step")) {
-            this.consumption = 16.0F;
+            this.consumption = ConfigManager.SERVER_CONFIG.baseStepStaminaCost();
         }
         else if (skillName.equals("roll")) {
-            this.consumption = 18.0F;
+            this.consumption = ConfigManager.SERVER_CONFIG.baseRollStaminaCost();
         }
 
         ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);

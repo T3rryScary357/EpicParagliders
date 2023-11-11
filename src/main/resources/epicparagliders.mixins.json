@@ -11,6 +11,7 @@
     "epicfight.skills.SkillContainerMixin",
     "epicfight.skills.BasicAttackMixin",
     "epicfight.skills.AirAttackMixin",
+    "epicfight.skills.mover.DemolitionLeapMixin",
     "epicfight.skills.weaponinnate.SimpleSpecialAttackSkillMixin",
     "epicfight.skills.guard.GuardSkillMixin",
     "epicfight.skills.dodge.DodgeSkillMixin",

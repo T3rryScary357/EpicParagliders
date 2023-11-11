@@ -33,7 +33,11 @@ public class ServerConfig {
      * Skills
      */
     private final ForgeConfigSpec.DoubleValue baseBlockStaminaMultiplier;
+    private final ForgeConfigSpec.IntValue baseRollStaminaCost;
+    private final ForgeConfigSpec.IntValue baseStepStaminaCost;
     private final ForgeConfigSpec.DoubleValue baseDodgeStaminaMultiplier;
+    private final ForgeConfigSpec.IntValue baseDemolitionLeapStaminaCost;
+    private final ForgeConfigSpec.DoubleValue demolitionLeapStaminaMultiplier;
     private final ForgeConfigSpec.DoubleValue parryPenaltyMultiplier;
     private final ForgeConfigSpec.IntValue parryPercentModifier;
     private final ForgeConfigSpec.BooleanValue parryDrain;
@@ -96,6 +100,9 @@ public class ServerConfig {
 		return baseBlockStaminaMultiplier.get();
 	}
 
+    public int baseRollStaminaCost() { return baseRollStaminaCost.get(); }
+    public int baseStepStaminaCost() { return baseStepStaminaCost.get(); }
+
 	public double baseDodgeStaminaMultiplier() {
 		return baseDodgeStaminaMultiplier.get();
 	}
@@ -108,6 +115,8 @@ public class ServerConfig {
     public int technicianPercentModifier() { return technicianPercentModifier.get(); }
     public boolean technicianDrain() { return technicianDrain.get(); }
     public int staminaPillagerPercentModifier() { return staminaPillagerPercentModifier.get(); }
+    public int baseDemolitionLeapStaminaCost() { return baseDemolitionLeapStaminaCost.get(); }
+    public double demolitionLeapStaminaMultiplier() { return demolitionLeapStaminaMultiplier.get(); }
 
     public List<Integer> depletionEffectList() { return (List<Integer>) depletionEffectList.get(); }
     public List<Integer> depletionEffectStrengthList() { return (List<Integer>) depletionEffectStrengthList.get(); }
@@ -129,7 +138,13 @@ public class ServerConfig {
         axeStaminaMultiplier = server.defineInRange("weapons.axe_stamina_multiplier", 2.5, 0.0, 10.0);
 
         baseBlockStaminaMultiplier = server.defineInRange("skills.block.block_stamina_multiplier", 7.5, 0.0, 10.0);
+
+        baseRollStaminaCost = server.defineInRange("skills.dodge.roll_stamina_cost", 18, 0, 100);
+        baseStepStaminaCost = server.defineInRange("skills.dodge.step_stamina_cost", 16, 0, 100);
         baseDodgeStaminaMultiplier = server.defineInRange("skills.dodge.dodge_stamina_multiplier", 1.0, 0.0, 10.0);
+
+        baseDemolitionLeapStaminaCost = server.defineInRange("skills.dodge.step_stamina_cost", 18, 0, 100);
+        demolitionLeapStaminaMultiplier = server.defineInRange("skills.demolition_leap.demolition_leap_multiplier", 1.0, 0.0, 10.0);
 
         parryPenaltyMultiplier = server.comment("How much stamina will be drained on a failed parry.\n" +
                                                   "Make the same as block_stamina_multiplier for no penalty.")

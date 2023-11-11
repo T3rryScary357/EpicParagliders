@@ -17,13 +17,13 @@ public abstract class SkillContainerMixin {
 
     /**
      * Modifies the canExecute method to return false if the player is trying to use a skill that requires
-     * stamina, and the player's current stamina is depleted.
+     * stamina and the player's current stamina is depleted.
      *
      * @param executer
      * @param event
      * @param cir
      */
-    @Inject(method = "canExecute", at = @At("RETURN"), remap = false, cancellable = true)
+    @Inject(method = "canExecute", at = @At("TAIL"), remap = false, cancellable = true)
     private void modifyExecution(PlayerPatch<?> executer, SkillExecuteEvent event, CallbackInfoReturnable<Boolean> cir) {
         Skill skill = event.getSkillContainer().getSkill();
         PlayerMovement playerMovement = PlayerMovement.of(executer.getOriginal());
