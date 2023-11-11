@@ -46,6 +46,7 @@ public class ServerConfig {
      */
     private final ForgeConfigSpec.ConfigValue<List<? extends Integer>> depletionEffectList;
     private final ForgeConfigSpec.ConfigValue<List<? extends Integer>> depletionEffectStrengthList;
+    private final ForgeConfigSpec.BooleanValue eldenStaminaSystem;
 
     public double baseMeleeStaminaMultiplier() {
         return baseMeleeStaminaMultiplier.get();
@@ -111,8 +112,9 @@ public class ServerConfig {
     public List<Integer> depletionEffectList() { return (List<Integer>) depletionEffectList.get(); }
     public List<Integer> depletionEffectStrengthList() { return (List<Integer>) depletionEffectStrengthList.get(); }
 
+    public boolean eldenStaminaSystem() { return eldenStaminaSystem.get(); }
+
     public ServerConfig(ForgeConfigSpec.Builder server) {
-//        Builder server = new Builder();
         server.push("stamina");
         baseRangedStaminaMultiplier = server.defineInRange("weapons.base_ranged_stamina_multiplier", 1.0, 0.0, 10.0);
         baseMeleeStaminaMultiplier = server.comment("Base multiplier for all melee based attacks.").defineInRange("weapons.base_melee_stamina_multiplier", 1.0, 0.0, 10.0);
@@ -164,6 +166,12 @@ public class ServerConfig {
                          "If no value is set here, and an extra effect is added above, then the effect strength will default to 1.")
                 .defineListAllowEmpty(Collections.singletonList("effects_strength"), () -> ImmutableList.of(5, 1), o -> true);
         server.pop();
+
+        server.push("Custom Stamina Systems");
+        eldenStaminaSystem = server.comment("The stamina system will function like Elden Ring's IF the paraglider's 'runningAndSwimmingConsumesStamina' config\n" +
+                "is set to true. The player will only drain stamina from running or swimming if they are in combat, or have recently been in combat.\n" +
+                "Makes a good middle ground between the traditional RPG stamina system and one that solely focuses on combat.")
+                        .define("elden_ring_stamina_system", false);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, server.build());
     }
