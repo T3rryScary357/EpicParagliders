@@ -16,9 +16,11 @@
     "epicfight.skills.guard.GuardSkillMixin",
     "epicfight.skills.dodge.DodgeSkillMixin",
     "epicfight.skills.guard.ParryingSkillMixin",
+    "epicfight.skills.identity.MeteorSlamSkillMixin",
     "epicfight.skills.passive.PassiveSkillMixin",
     "epicfight.skills.passive.StaminaPillagerSkillMixin",
     "epicfight.skills.passive.EmergencyEscapeSkillMixin",
+    "epicfight.skills.passive.ForbiddenStrengthSkillMixin",
     "epicfight.skills.passive.TechnicianSkillMixin",
     "paragliders.capabilities.ServerPlayerMovementMixin",
     "paragliders.capabilities.PlayerMovementMixin"

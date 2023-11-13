@@ -44,6 +44,9 @@ public class ServerConfig {
     private final ForgeConfigSpec.IntValue technicianPercentModifier;
     private final ForgeConfigSpec.BooleanValue technicianDrain;
     private final ForgeConfigSpec.IntValue staminaPillagerPercentModifier;
+    private final ForgeConfigSpec.DoubleValue forbiddenStrengthMultiplier;
+    private final ForgeConfigSpec.DoubleValue meteorSlamMultiplier;
+    private final ForgeConfigSpec.DoubleValue meteorSlamFallDamageMitigator;
 
     /**
      * Status Effects & Weapon Configs
@@ -102,6 +105,8 @@ public class ServerConfig {
 
     public int baseRollStaminaCost() { return baseRollStaminaCost.get(); }
     public int baseStepStaminaCost() { return baseStepStaminaCost.get(); }
+    public double meteorSlamMultiplier() { return meteorSlamMultiplier.get(); }
+    public double meteorSlamFallDamageMitigator() { return meteorSlamFallDamageMitigator.get(); }
 
 	public double baseDodgeStaminaMultiplier() {
 		return baseDodgeStaminaMultiplier.get();
@@ -115,6 +120,7 @@ public class ServerConfig {
     public int technicianPercentModifier() { return technicianPercentModifier.get(); }
     public boolean technicianDrain() { return technicianDrain.get(); }
     public int staminaPillagerPercentModifier() { return staminaPillagerPercentModifier.get(); }
+    public double forbiddenStrengthMultiplier() { return forbiddenStrengthMultiplier.get(); }
     public int baseDemolitionLeapStaminaCost() { return baseDemolitionLeapStaminaCost.get(); }
     public double demolitionLeapStaminaMultiplier() { return demolitionLeapStaminaMultiplier.get(); }
 
@@ -145,6 +151,21 @@ public class ServerConfig {
 
         baseDemolitionLeapStaminaCost = server.defineInRange("skills.dodge.step_stamina_cost", 18, 0, 100);
         demolitionLeapStaminaMultiplier = server.defineInRange("skills.demolition_leap.demolition_leap_multiplier", 1.0, 0.0, 10.0);
+
+        meteorSlamMultiplier = server.comment("This will be multiplier by the stamina cost of the meteor slam skill\n" +
+                        "(which is equal to a basic attack with the given weapon).")
+                .defineInRange("skills.identity.base_meteor_slam_cost", 1.2, 0.0, 10.0);
+        meteorSlamFallDamageMitigator = server.comment("How much fall damage will be mitigated based on the player's remaining stamina\n" +
+                        "when performing the meteor slam skill. By default it is set to 0.01 or 1% of remaining stamina. A higher value here\n" +
+                        "will mitigate more damage, and a lower value will mitigate less damage.\n" +
+                        "NOTE: This value represents percentage of remaining stamina (0.01 = 1% of remaining stamina). So, these values are VERY sensitive.\n" +
+                        "I would recommend playing around with small increments at a time if you're not happy with the base amount of fall damage mitigation.")
+                .defineInRange("skills.identity.base_meteor_slam_fall_damage_mitigator", 0.01, 0.0, 1.0);
+
+        forbiddenStrengthMultiplier = server.comment("How much health will be drained when using a skill that consumes stamina.\n" +
+                        "This value is multiplied by the stamina consumption of a weapon. So, a weapon that consumes more stamina\n" +
+                        "will consume more hearts. I would HIGHLY suggest keeping this below 1.0, because anything higher could insta-kill you.")
+                .defineInRange("skills.passive.forbidden_strength_multiplier", 0.1, 0.0, 10.0);
 
         parryPenaltyMultiplier = server.comment("How much stamina will be drained on a failed parry.\n" +
                                                   "Make the same as block_stamina_multiplier for no penalty.")
@@ -182,7 +203,7 @@ public class ServerConfig {
                 .defineListAllowEmpty(Collections.singletonList("effects_strength"), () -> ImmutableList.of(5, 1), o -> true);
         server.pop();
 
-        server.push("Custom Stamina Systems");
+        server.push("custom_stamina_systems");
         eldenStaminaSystem = server.comment("The stamina system will function like Elden Ring's IF the paraglider's 'runningAndSwimmingConsumesStamina' config\n" +
                 "is set to true. The player will only drain stamina from running or swimming if they are in combat, or have recently been in combat.\n" +
                 "Makes a good middle ground between the traditional RPG stamina system and one that solely focuses on combat.")
