@@ -1,6 +1,5 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.core.particles.ParticleTypes;
@@ -9,8 +8,6 @@ import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.skill.Skill;
@@ -27,7 +24,10 @@ public abstract class ForbiddenStrengthSkillMixin extends PassiveSkill {
     }
 
     /**
-     *
+     * Modifies the Forbidden Strength skill to use the Paragliders stamina system.
+     * Multiplies the amount of remaining stamina by the multiplier set for the skill
+     * in the server config, then uses the remainder as the amount of health for the
+     * skill to consume. The consumes health only for skills and NOT for basic attacks.
      *
      * @param container
      * @param event
@@ -51,18 +51,4 @@ public abstract class ForbiddenStrengthSkillMixin extends PassiveSkill {
         }
         ci.cancel();
     }
-
-//    /**
-//     *
-//     *
-//     * @param staminaConsume
-//     * @return
-//     */
-//    @SuppressWarnings("InvalidInjectorMethodSignature")
-//    @ModifyVariable(method = "lambda$onInitiate$0", at = @At(value = "STORE"), ordinal = 0, remap = false)
-//    private static float modifiedStaminaConsumption(float staminaConsume) {
-//        return (float) MathUtils.calculateTriangularNumber((int) staminaConsume);
-//    }
-
-//    @Redirect(at = @At(value = "INVOKE", target = "", ordinal = 0), method = "lambda$onInitiate$0")
 }
