@@ -47,6 +47,7 @@ public class ServerConfig {
     private final ForgeConfigSpec.DoubleValue forbiddenStrengthMultiplier;
     private final ForgeConfigSpec.DoubleValue meteorSlamMultiplier;
     private final ForgeConfigSpec.DoubleValue meteorSlamFallDamageMitigator;
+    private final ForgeConfigSpec.DoubleValue hyperVitalityMultiplier;
 
     /**
      * Status Effects & Weapon Configs
@@ -123,6 +124,7 @@ public class ServerConfig {
     public double forbiddenStrengthMultiplier() { return forbiddenStrengthMultiplier.get(); }
     public int baseDemolitionLeapStaminaCost() { return baseDemolitionLeapStaminaCost.get(); }
     public double demolitionLeapStaminaMultiplier() { return demolitionLeapStaminaMultiplier.get(); }
+    public double hyperVitalityMultiplier() { return hyperVitalityMultiplier.get(); }
 
     public List<Integer> depletionEffectList() { return (List<Integer>) depletionEffectList.get(); }
     public List<Integer> depletionEffectStrengthList() { return (List<Integer>) depletionEffectStrengthList.get(); }
@@ -139,7 +141,7 @@ public class ServerConfig {
         greatSwordStaminaMultiplier = server.defineInRange("weapons.greatsword_stamina_multiplier", 1.5, 0.0, 10.0);
         uchigatanaStaminaMultiplier = server.defineInRange("weapons.uchigatana_stamina_multiplier", 2.0, 0.0, 10.0);
         tachiStaminaMultiplier = server.defineInRange("weapons.tachi_stamina_multiplier", 2.0, 0.0, 10.0);
-        spearStaminaMultiplier = server.defineInRange("weapons.spear_stamina_multiplier", 2.0, 0.0, 10.0);
+        spearStaminaMultiplier = server.defineInRange("weapons.spear_stamina_multiplier", 2.5, 0.0, 10.0);
         knuckleStaminaMultiplier = server.defineInRange("weapons.knuckle_stamina_multiplier", 2.0, 0.0, 10.0);
         axeStaminaMultiplier = server.defineInRange("weapons.axe_stamina_multiplier", 2.5, 0.0, 10.0);
 
@@ -151,6 +153,7 @@ public class ServerConfig {
 
         baseDemolitionLeapStaminaCost = server.defineInRange("skills.dodge.step_stamina_cost", 18, 0, 100);
         demolitionLeapStaminaMultiplier = server.defineInRange("skills.demolition_leap.demolition_leap_multiplier", 1.0, 0.0, 10.0);
+        hyperVitalityMultiplier = server.defineInRange("skills.passive.hyper_vitality_multiplier", 1.2, 0.0, 10.0);
 
         meteorSlamMultiplier = server.comment("This will be multiplier by the stamina cost of the meteor slam skill\n" +
                         "(which is equal to a basic attack with the given weapon).")
