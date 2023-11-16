@@ -1,7 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
 import net.cravencraft.epicparagliders.config.ConfigManager;
-import net.cravencraft.epicparagliders.config.ServerConfig;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,7 +27,7 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
      * @param event
      * @param ci
      */
-    @Inject(method = "lambda$onInitiate$0", at = @At("HEAD"), remap = false)
+    @Inject(method = "lambda$onInitiate$0", at = @At("HEAD"), remap = false, cancellable = true)
     private void getPlayerPatch(DealtDamageEvent event, CallbackInfo ci) {
         if (!event.getTarget().isAlive()) {
             PlayerMovement playerMovement = PlayerMovement.of(event.getPlayerPatch().getOriginal());
@@ -36,9 +35,9 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
             double staminaPillagerPercentModifier = ConfigManager.SERVER_CONFIG.staminaPillagerPercentModifier() * 0.01;
 
             int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.getMaxStamina() - playerMovement.getStamina()));
-
-            playerMovementInterface.setActionStaminaCostServerSide(-(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, staminaPillagerPercentModifier)));
             playerMovementInterface.performingActionServerSide(true);
+            event.getPlayerPatch().setStamina(-(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, staminaPillagerPercentModifier)));
         }
+        ci.cancel();
     }
 }
