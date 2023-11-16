@@ -3,7 +3,6 @@ package net.cravencraft.epicparagliders.mixins.epicfight.client;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -156,13 +155,6 @@ public abstract class BattleModeGuiMixin extends GuiComponent {
     }
 
     /**
-     * TODO: THIS WORKS! I'd like to create one extra config for an Elden Ring-like stamina system.
-     *       Stamina only drains while running/swimming if you are in battle mode. Makes traversal
-     *       less tedious, but still keeps combat intense. Sure, it can be abused by just simply turning
-     *       battle mode off and running away a bit, but I can mitigate that with a counter that takes
-     *       at least 3-5 seconds to stop consuming stamina after switching. Should discourage abusing that.
-     *
-     *
      * Modifies the Epic Fight stamina bar. It will now turn red and the opacity will decrease whenever
      * the player's stamina is depleted.
      *
