@@ -11,6 +11,13 @@ public class EpicParaglidersAttributes {
 
     public static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, EpicParaglidersMod.MOD_ID);
 
+    /**
+     * TODO: Attributes for stats
+     */
+
+    /**
+     * Attributes needed for datapack editing
+     */
     public static final RegistryObject<Attribute> WEAPON_STAMINA_CONSUMPTION = ATTRIBUTES.register("weapon_stamina_consumption", () -> new RangedAttribute("weapon_stamina_consumption", 0.0, 0.0, 1000.0).setSyncable(true));
     public static final RegistryObject<Attribute> WEAPON_TYPE = ATTRIBUTES.register("weapon_type", () -> new RangedAttribute("weapon_type", 0.0, 0.0, 1000.0).setSyncable(true));
 

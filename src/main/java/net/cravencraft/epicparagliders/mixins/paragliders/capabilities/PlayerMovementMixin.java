@@ -1,6 +1,7 @@
-package net.cravencraft.epicparagliders.mixins.capabilities;
+package net.cravencraft.epicparagliders.mixins.paragliders.capabilities;
 
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
@@ -15,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tictim.paraglider.ModCfg;
 import tictim.paraglider.capabilities.PlayerMovement;
 import tictim.paraglider.capabilities.PlayerState;
+import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 @Mixin(PlayerMovement.class)
 public abstract class PlayerMovementMixin implements PlayerMovementInterface {
@@ -24,7 +27,14 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
     @Shadow private int stamina;
     @Shadow public abstract int getMaxStamina();
     @Shadow @Final public Player player;
+
+    @Shadow public abstract int getStamina();
+
+    @Shadow public abstract void setStamina(int stamina);
+
     public int totalActionStaminaCost;
+
+    private int eldenStaminaDelay;
 
 
     /**
@@ -38,11 +48,37 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
     public void updateStamina(CallbackInfo ci) {
 
         //TODO: Small bug where stamina isn't depleted if attacking and going up a block at the same time.
-        //      State and action consumption are both combined, so can't be an issue with one being chose
+        //      State and action consumption are both combined, so can't be an issue with one being chosen
         //      over the other. Look into this in a later release.
         if (this.totalActionStaminaCost != 0 || this.state.isConsume()) {
+            int stateChange;
+            PlayerPatch playerPatch = (PlayerPatch) player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).orElse(null);
             this.recoveryDelay = 10;
-            int stateChange = (state.isConsume()) ? state.change() - this.totalActionStaminaCost : -this.totalActionStaminaCost;
+
+            if (ConfigManager.SERVER_CONFIG.eldenStaminaSystem()) {
+                if (playerPatch.isBattleMode()) {
+                    eldenStaminaDelay = 60;
+                    stateChange = this.state.change();
+                }
+                else if (this.state == PlayerState.RUNNING || this.state == PlayerState.SWIMMING) {
+                    if (eldenStaminaDelay > 0) {
+                        eldenStaminaDelay = 60;
+                        stateChange = this.state.change();
+                    }
+                    else {
+                        stateChange = 0;
+                    }
+
+                }
+                else {
+                    stateChange = this.state.change();
+                }
+            }
+            else {
+                stateChange = this.state.change();
+            }
+
+            stateChange = (state.isConsume()) ? stateChange - this.totalActionStaminaCost : -this.totalActionStaminaCost;
 
             if (!this.depleted && ((state.isParagliding()
                     ? ModCfg.paraglidingConsumesStamina()
@@ -70,6 +106,10 @@ public abstract class PlayerMovementMixin implements PlayerMovementInterface {
         }
         else if (this.player instanceof LocalPlayer) {
             this.setTotalActionStaminaCostClientSide(this.totalActionStaminaCost);
+        }
+
+        if (ConfigManager.SERVER_CONFIG.eldenStaminaSystem() && this.eldenStaminaDelay > 0) {
+            --this.eldenStaminaDelay;
         }
 
 //        addEffects();

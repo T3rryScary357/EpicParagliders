@@ -1,26 +1,37 @@
 {
   "required": true,
-  "minVersion": "0.7",
+  "minVersion": "0.8",
   "package": "net.cravencraft.epicparagliders.mixins",
+  "refmap": "epicparagliders.mixins.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "capabilities.ItemCapabilityReloadListenerMixin",
-    "capabilities.ServerPlayerMovementMixin",
-    "capabilities.PlayerMovementMixin",
-    "skills.BasicAttackMixin",
-    "skills.AirAttackMixin",
-    "skills.SimpleSpecialAttackSkillMixin",
-    "skills.GuardSkillMixin",
-    "skills.DodgeSkillMixin",
-    "skills.ActiveGuardSkillMixin",
-    "skills.StaminaPillagerSkillMixin",
-    "skills.TechnicianSkillMixin",
-    "capabilities.PlayerPatchMixin"
+    "epicfight.capabilities.PlayerPatchMixin",
+    "epicfight.capabilities.ServerPlayerPatchMixin",
+    "epicfight.capabilities.ItemCapabilityReloadListenerMixin",
+    "epicfight.skills.SkillContainerMixin",
+    "epicfight.skills.BasicAttackMixin",
+    "epicfight.skills.AirAttackMixin",
+    "epicfight.skills.mover.DemolitionLeapMixin",
+    "epicfight.skills.guard.GuardSkillMixin",
+    "epicfight.skills.dodge.DodgeSkillMixin",
+    "epicfight.skills.guard.ParryingSkillMixin",
+    "epicfight.skills.identity.MeteorSlamSkillMixin",
+    "epicfight.skills.passive.PassiveSkillMixin",
+    "epicfight.skills.passive.EnduranceSkillMixin",
+    "epicfight.skills.passive.HyperVitalitySkillMixin",
+    "epicfight.skills.passive.StaminaPillagerSkillMixin",
+    "epicfight.skills.passive.EmergencyEscapeSkillMixin",
+    "epicfight.skills.passive.ForbiddenStrengthSkillMixin",
+    "epicfight.skills.passive.TechnicianSkillMixin",
+    "paragliders.capabilities.ServerPlayerMovementMixin",
+    "paragliders.capabilities.PlayerMovementMixin"
   ],
   "client": [
-    "client.ClientAnimatorMixin",
-    "client.InGameStaminaWheelRendererMixin",
-    "capabilities.ClientPlayerMovementMixin"
+    "epicfight.client.BattleModeGuiMixin",
+    "epicfight.client.ClientAnimatorMixin",
+    "epicfight.client.LocalPlayerPatchMixin",
+    "paragliders.client.InGameStaminaWheelRendererMixin",
+    "paragliders.capabilities.ClientPlayerMovementMixin"
   ],
   "injectors": {
     "defaultRequire": 1

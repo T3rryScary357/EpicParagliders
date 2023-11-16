@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.skills;
+package net.cravencraft.epicparagliders.mixins.epicfight.skills;
 
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
@@ -25,7 +25,7 @@ public abstract class AirAttackMixin extends Skill {
 
         int specialAttackStaminaConsumption = MathUtils.getAttackStaminaCost(executer.getOriginal());
 
-        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(specialAttackStaminaConsumption);
-        ((PlayerMovementInterface) playerMovement).isAttackingServerSide(true);
+        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(specialAttackStaminaConsumption + 3);
+        ((PlayerMovementInterface) playerMovement).attackingServerSide(true);
     }
 }

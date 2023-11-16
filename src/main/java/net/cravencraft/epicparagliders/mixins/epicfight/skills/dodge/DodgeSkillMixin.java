@@ -1,16 +1,15 @@
-package net.cravencraft.epicparagliders.mixins.skills;
+package net.cravencraft.epicparagliders.mixins.epicfight.skills.dodge;
 
-import net.cravencraft.epicparagliders.EPModCfg;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.minecraft.network.FriendlyByteBuf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tictim.paraglider.capabilities.PlayerMovement;
-import yesman.epicfight.api.utils.math.Formulars;
-import yesman.epicfight.skill.DodgeSkill;
 import yesman.epicfight.skill.Skill;
+import yesman.epicfight.skill.dodge.DodgeSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 
 @Mixin(DodgeSkill.class)
@@ -20,20 +19,26 @@ public abstract class DodgeSkillMixin extends Skill {
         super(builder);
     }
 
-    @Inject(method = "executeOnServer", at = @At("HEAD"), remap = false)
+    /**
+     * Modifies the base stamina consumed when performing a Step or Roll
+     * dodge skill.
+     *
+     * @param executer
+     * @param args
+     * @param ci
+     */
+    @Inject(method = "executeOnServer", at = @At("HEAD"), remap = false, cancellable = true)
     private void getPlayerPatch(ServerPlayerPatch executer, FriendlyByteBuf args, CallbackInfo ci) {
         PlayerMovement playerMovement = PlayerMovement.of(executer.getOriginal());
+        String skillName = this.registryName.getPath();
 
-        if (!playerMovement.isDepleted()){
-            super.executeOnServer(executer, args);
-
-            int rollConsumption = (int) (Formulars.getStaminarConsumePenalty(executer.getWeight(), 10, executer) * EPModCfg.baseDodgeStaminaConsumption());
-
-            ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(rollConsumption);
-            ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+        if (skillName.equals("step")) {
+            this.consumption = ConfigManager.SERVER_CONFIG.baseStepStaminaCost();
         }
-        else {
-            ci.cancel();
+        else if (skillName.equals("roll")) {
+            this.consumption = ConfigManager.SERVER_CONFIG.baseRollStaminaCost();
         }
+
+        ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
     }
 }

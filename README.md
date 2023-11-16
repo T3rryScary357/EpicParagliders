@@ -5,46 +5,28 @@ both [Epic Fight](https://www.curseforge.com/minecraft/mc-mods/epic-fight-mod) a
 sleepless nights trying to make these two mods play nice together because I think the marriage of the two would
 be a fantastic concept for myself and hopefully a few others.
 
-## Required Mod Versions
-- [Epic Fight](https://www.curseforge.com/minecraft/mc-mods/epic-fight-mod/files/4018756) (1.18.2)
-- [Paragliders](https://www.curseforge.com/minecraft/mc-mods/paragliders/files/4478246) (1.18.2)
-
 ## Install Instructions
 Simply download the mod and the dependencies in the above section along with this mod, and you're golden!
 
 ## Notes
-This mod creates a config file here **'saves/<YOUR_WORLD_NAME>/serverconfig/epicparaglider-server.toml'**.
+This mod creates a config file here `saves/<YOUR_WORLD_NAME>/serverconfig/epicparaglider-server.toml`.
 Currently, this config file doesn't have anything you can change, but is a placeholder for a future update soon
 that will have several config options for the amount of stamina you want different actions to drain.
-
-## Skills
-The Epic Fight Skills work a bit differently in this mod. Most have had their original behavior modified in order
-to properly integrate with Paragliders stamina system.
-- **Attacks:** Both basic and simple special attacks now drain stamina based on the swing time of the item as well as
-    the give item's attack damage. Weapons with higher attack damage and/or slower swing speeds will drain more stamina.
-    This system currently does have its flaws, and I'll be tweaking it more in the future.
-- **Guard:** Stamina is drained when guarding based on the player's weight (armor weight. Higher means less drained),
-    the impact of the blocked attack, and the penalty of consecutive blocks. The penalty for consecutive blocks has 
-    been toned down some in favor of overall higher block costs. May be tweaked more in the future.
-- **Active Guard:** Similar to **Guard**, **Active Guard** is a type of guard that focuses on parrying attacks.
-    Originally, if the player blocked right before an attack then they would have no stamina penalty, and if not
-    then they would have the normal stamina penalty of guard. There are only benefits. Now, if the player guards
-    right before an attack 35% of the stamina will be drained, and if they just guard 35% **extra** stamina will
-    be applied. There is a risk/reward to the skill now, which makes this great against solo enemies, but not 
-    against groups.
-- **Dodge:** Stamina is drained based on player weight. So, heavier armors will drain more stamina.
-- **Stamina Pillager:** Still gives the player roughly 30% of their missing stamina on killing an entity. This factors
-    into stamina already being drained by actions, which means if an action is being performed when an entity is killed,
-    then less stamina will be drained by the action if the stamina to return is less. If the stamina to return is higher
-    than the stamina being drained, or if no stamina is being drained at all, then it will be clear that the player is
-    gaining stamina from the skill by a section of the wheel representing the stamina to be returned turning blue.
-- **Technician Skill:** Doesn't completely negate stamina from dodging when dodging right before an enemy's attack.
-    Instead, this reduces the dodge stamina consumption by 50%.
 
 ## Support & Affiliations
 Looking for a hosting service? Check out Kinetic Hosting!
 [![CravenCraft.png](src%2Fmain%2Fresources%2Fassets.hostlink%2FCravenCraft.png)](https://billing.kinetichosting.net/aff.php?aff=559)
 Use code **"CravenCraft"** to get your first month **_15%_** off!
+
+## V0.5.0 - The New Epic Fight Version Update
+- Updated to the latest version of the [Epic Fight Mod](https://www.curseforge.com/minecraft/mc-mods/epic-fight-mod/files/4861783)
+- All new skills added
+- MASSIVE update to the server config
+- Client side config now available as well
+- Option to swap between the Paraglider stamina wheel and the Epic Fight stamina bar in the client config
+- Huge restructure to all the underlying code of the mod. May even be more efficient now
+- Added an option for an Elden Ring-like stamina system in the server config
+- Fixed shields. They now drain an appropriate amount of stamina
 
 ## V0.4.0
 - Added a config option to add a list of custom status effects with their respective strengths to the serverconfig file.

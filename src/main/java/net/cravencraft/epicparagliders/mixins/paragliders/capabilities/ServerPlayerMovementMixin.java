@@ -1,12 +1,11 @@
-package net.cravencraft.epicparagliders.mixins.capabilities;
-import net.cravencraft.epicparagliders.EPModCfg;
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
+package net.cravencraft.epicparagliders.mixins.paragliders.capabilities;
+import net.cravencraft.epicparagliders.config.ConfigManager;
+import net.cravencraft.epicparagliders.config.ServerConfig;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.network.ModNet;
 import net.cravencraft.epicparagliders.network.SyncActionToClientMsg;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
@@ -22,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tictim.paraglider.capabilities.PlayerMovement;
-import tictim.paraglider.capabilities.PlayerState;
 import tictim.paraglider.capabilities.ServerPlayerMovement;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
@@ -46,8 +44,18 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
     }
 
     @Override
-    public void isAttackingServerSide(boolean isAttacking) {
+    public boolean isPerformingActionServerSide() {
+        return this.isPerformingAction;
+    }
+
+    @Override
+    public void attackingServerSide(boolean isAttacking) {
         this.isAttacking = isAttacking;
+    }
+
+    @Override
+    public boolean isAttackingServerSide() {
+        return this.isAttacking;
     }
 
     @Override
@@ -81,7 +89,7 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
         }
 
         //TODO: Would like to organize these better.
-//        checkShieldDisable();
+        checkShieldDisable();
         calculateRangeStaminaCost();
 
         if (isAttacking && serverPlayerPatch.getEntityState().attacking()) {
@@ -91,8 +99,20 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
             isPerformingAction = true;
         }
         else if (isPerformingAction) {
-            this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(this.totalActionStaminaCost)
-                    + MathUtils.calculateTriangularNumber(currentActionStaminaCost)));
+            //TODO: Do this for greater than 0 too, so it doesn't go over. Maybe have it a little less to always ensure
+            //      it'll be in the negative. Actually, check it not going into the negative. Could be a cool feature
+            //      like what Storm wants.
+            //TODO: Double check regular stamina consumption from attacks. Could need a rework as well, but more than
+            //      likely they are fine.
+            if (this.currentActionStaminaCost < 0) {
+                int totalStaminaCostTriangularNumber = (int) MathUtils.calculateTriangularNumber(this.totalActionStaminaCost);
+                int currentStaminaCostTriangularNumber = (int) MathUtils.calculateTriangularNumber(this.currentActionStaminaCost);
+                this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot(totalStaminaCostTriangularNumber + currentStaminaCostTriangularNumber);
+            }
+            else {
+                this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(this.totalActionStaminaCost)
+                        + MathUtils.calculateTriangularNumber(currentActionStaminaCost)));
+            }
         }
 
         if(this.isPerformingAction) {
@@ -110,8 +130,8 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
      */
     private void addEffects() {
         if(!this.player.isCreative() && this.isDepleted()) {
-            List<Integer> effects = EPModCfg.depletionEffectList();
-            List<Integer> effectStrengths = EPModCfg.depletionEffectStrengthList();
+            List<Integer> effects = ConfigManager.SERVER_CONFIG.depletionEffectList();
+            List<Integer> effectStrengths = ConfigManager.SERVER_CONFIG.depletionEffectStrengthList();
 
             for (int i=0; i < effects.size(); i++) {
                 int effectStrength;
@@ -144,7 +164,7 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
         //      Also, this will need attribute support as well.
         //      Can probably even check if the weapon is being pulled back or not using 'projectileWeaponItem'
         if (player.getUseItem().getItem() instanceof  ProjectileWeaponItem projectileWeaponItem) {
-            this.currentActionStaminaCost = (int) (6 * EPModCfg.baseRangedStaminaConsumption());
+            this.currentActionStaminaCost = (int) (6 * ConfigManager.SERVER_CONFIG.baseRangedStaminaMultiplier());
             this.isPerformingAction = true;
         }
     }
@@ -171,16 +191,12 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
      */
     private void modifyShieldCooldown(ShieldItem shieldItem) {
         if (player.getCooldowns().isOnCooldown(shieldItem) && !this.isDepleted()) {
-            EpicParaglidersMod.LOGGER.info("REMOVING COOLDOWN");
             player.getCooldowns().removeCooldown(shieldItem);
         }
-        else if (this.isDepleted()) {
-            int recoveryRate = PlayerState.IDLE.change();
-            int currentRecoveredAmount = this.getStamina();
-            float cooldownPercentage = player.getCooldowns().getCooldownPercent(shieldItem, 0.0F);
-            int shieldRecoveryDelay = (int) (this.getMaxStamina() * (1 - cooldownPercentage));
-            if (shieldRecoveryDelay > currentRecoveredAmount) {
-                player.getCooldowns().addCooldown(shieldItem, (this.getMaxStamina() - currentRecoveredAmount) / recoveryRate);
+        else if (this.isDepleted() && !player.getCooldowns().isOnCooldown(shieldItem)) {
+            ServerPlayerPatch serverPlayerPatch = (ServerPlayerPatch) player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).orElse(null);
+            if (serverPlayerPatch.getServerAnimator().animationPlayer.getAnimation().toString().contains("hit_shield")) {
+                player.getCooldowns().addCooldown(shieldItem, 40);
             }
         }
     }

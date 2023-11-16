@@ -1,4 +1,4 @@
-package net.cravencraft.epicparagliders.mixins.capabilities;
+package net.cravencraft.epicparagliders.mixins.epicfight.capabilities;
 
 import com.google.gson.Gson;
 import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
@@ -69,7 +69,6 @@ public abstract class ItemCapabilityReloadListenerMixin extends SimpleJsonResour
                 default:
                     attributeModifier = new AttributeModifier(WEAPON_TYPE_MODIFIER, EpicFightMod.MODID + ":weapon_modifier", 0.0, AttributeModifier.Operation.ADDITION);
             }
-//            modifierMap.put(EpicParaglidersAttributes.WEAPON_TYPE.get(), attributeModifier);
         }
     }
 

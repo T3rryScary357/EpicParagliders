@@ -2,6 +2,7 @@ buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = "https://repo.spongepowered.org/maven" }
         mavenCentral()
     }
     dependencies {
@@ -18,7 +19,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '0.4.0-1.18.2'
+version = '0.5.0-1.18.2'
 group = 'com.cravencraft.epicparagliders' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'epicparagliders'
 
@@ -28,6 +29,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
     mappings channel: 'official', version: '1.18.2'
+//    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client {
@@ -36,6 +38,9 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'epicparagliders'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+            args '-mixin.config=epicparagliders.mixins.json'
 
             mods {
                 epicparagliders {
@@ -50,6 +55,9 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'epicparagliders'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+            args '-mixin.config=epicparagliders.mixins.json'
 
             mods {
                 epicparagliders {
@@ -64,6 +72,9 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'epicparagliders'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+            args '-mixin.config=epicparagliders.mixins.json'
 
             mods {
                 epicparagliders {
@@ -74,9 +85,11 @@ minecraft {
 
         data {
             workingDirectory project.file('run')
-
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+            args '-mixin.config=epicparagliders.mixins.json'
             args '--mod', 'epicparagliders', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
@@ -92,7 +105,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 mixin {
-    add sourceSets.main, "paraglider.refmap.json"
+    add sourceSets.main, "epicparagliders.mixins.refmap.json"
     showMessageTypes = true
 }
 
@@ -106,10 +119,10 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.80'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.2.10'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf('curse.maven:epicfight-405076:4018756')
+    implementation fg.deobf('curse.maven:epicfight-405076:4861783')
     implementation fg.deobf('curse.maven:paragliders-289240:4478246')
 }
 
@@ -124,8 +137,9 @@ jar {
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "epicparagliderssareus",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConnector"          : "tictim.paraglider.MixinConnector",
-                "MixinConnector"          : "net.cravencraft.epicparagliders.MixinConnector"
+                "MixinConfigs"            : "epicparagliders.mixins.json"
+//                "MixinConnector"          : "tictim.paraglider.MixinConnector",
+//                "MixinConnector"          : "net.cravencraft.epicparagliders.MixinConnector"
         ])
     }
 }
