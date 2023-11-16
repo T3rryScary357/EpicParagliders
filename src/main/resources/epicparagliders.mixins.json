@@ -17,6 +17,7 @@
     "epicfight.skills.guard.ParryingSkillMixin",
     "epicfight.skills.identity.MeteorSlamSkillMixin",
     "epicfight.skills.passive.PassiveSkillMixin",
+    "epicfight.skills.passive.EnduranceSkillMixin",
     "epicfight.skills.passive.HyperVitalitySkillMixin",
     "epicfight.skills.passive.StaminaPillagerSkillMixin",
     "epicfight.skills.passive.EmergencyEscapeSkillMixin",

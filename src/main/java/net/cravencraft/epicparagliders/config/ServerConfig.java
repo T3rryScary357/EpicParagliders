@@ -48,6 +48,7 @@ public class ServerConfig {
     private final ForgeConfigSpec.DoubleValue meteorSlamMultiplier;
     private final ForgeConfigSpec.DoubleValue meteorSlamFallDamageMitigator;
     private final ForgeConfigSpec.DoubleValue hyperVitalityMultiplier;
+    private final ForgeConfigSpec.DoubleValue enduranceMultiplier;
 
     /**
      * Status Effects & Weapon Configs
@@ -125,6 +126,7 @@ public class ServerConfig {
     public int baseDemolitionLeapStaminaCost() { return baseDemolitionLeapStaminaCost.get(); }
     public double demolitionLeapStaminaMultiplier() { return demolitionLeapStaminaMultiplier.get(); }
     public double hyperVitalityMultiplier() { return hyperVitalityMultiplier.get(); }
+    public double enduranceMultiplier() { return enduranceMultiplier.get(); }
 
     public List<Integer> depletionEffectList() { return (List<Integer>) depletionEffectList.get(); }
     public List<Integer> depletionEffectStrengthList() { return (List<Integer>) depletionEffectStrengthList.get(); }
@@ -154,6 +156,7 @@ public class ServerConfig {
         baseDemolitionLeapStaminaCost = server.defineInRange("skills.dodge.step_stamina_cost", 18, 0, 100);
         demolitionLeapStaminaMultiplier = server.defineInRange("skills.demolition_leap.demolition_leap_multiplier", 1.0, 0.0, 10.0);
         hyperVitalityMultiplier = server.defineInRange("skills.passive.hyper_vitality_multiplier", 1.2, 0.0, 10.0);
+        enduranceMultiplier = server.defineInRange("skills.passive.hyper_vitality_multiplier", 1.0, 0.0, 10.0);
 
         meteorSlamMultiplier = server.comment("This will be multiplier by the stamina cost of the meteor slam skill\n" +
                         "(which is equal to a basic attack with the given weapon).")
