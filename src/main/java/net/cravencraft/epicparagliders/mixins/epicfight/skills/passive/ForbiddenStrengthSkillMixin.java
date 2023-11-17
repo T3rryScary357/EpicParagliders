@@ -1,7 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
 import net.cravencraft.epicparagliders.config.ConfigManager;
-import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -9,6 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import tictim.paraglider.capabilities.PlayerMovement;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillContainer;
@@ -36,16 +36,15 @@ public abstract class ForbiddenStrengthSkillMixin extends PassiveSkill {
     @Inject(method = "lambda$onInitiate$0", at = @At("HEAD"), remap = false, cancellable = true)
     private static void modifyStaminaSources(SkillContainer container, SkillConsumeEvent event, CallbackInfo ci) {
         if (event.getResourceType() == Skill.Resource.STAMINA) {
-            float staminaConsume = (float) MathUtils.calculateTriangularNumber((int) event.getAmount());
-
-            if (!container.getExecuter().hasStamina(staminaConsume) && !container.getExecuter().getOriginal().isCreative()) {
+            if (PlayerMovement.of(event.getPlayerPatch().getOriginal()).isDepleted() && !container.getExecuter().getOriginal().isCreative()) {
+                float healthConsumed = (float) (event.getAmount() * ConfigManager.SERVER_CONFIG.forbiddenStrengthMultiplier());
                 event.setResourceType(Skill.Resource.HEALTH);
-                event.setAmount((float) (event.getAmount() * ConfigManager.SERVER_CONFIG.forbiddenStrengthMultiplier()));
+                event.setAmount(healthConsumed);
 
                 if (event.shouldConsume()) {
                     Player player = container.getExecuter().getOriginal();
                     player.level.playSound(null, player.getX(), player.getY(), player.getZ(), EpicFightSounds.FORBIDDEN_STRENGTH, player.getSoundSource(), 1.0F, 1.0F);
-                    ((ServerLevel)player.level).sendParticles(ParticleTypes.DAMAGE_INDICATOR, player.getX(), player.getY(0.5D), player.getZ(), (int)staminaConsume, 0.1D, 0.0D, 0.1D, 0.2D);
+                    ((ServerLevel)player.level).sendParticles(ParticleTypes.DAMAGE_INDICATOR, player.getX(), player.getY(0.5D), player.getZ(), (int)healthConsumed, 0.1D, 0.0D, 0.1D, 0.2D);
                 }
             }
         }

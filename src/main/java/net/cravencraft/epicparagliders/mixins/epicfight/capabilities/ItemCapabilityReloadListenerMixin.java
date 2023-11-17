@@ -75,7 +75,8 @@ public abstract class ItemCapabilityReloadListenerMixin extends SimpleJsonResour
     @Inject(method = "deserializeAttributes", at = @At("TAIL"), cancellable = true, remap = false)
     private static void addStaminaAttributeModifier(CompoundTag tag, CallbackInfoReturnable<Map<Attribute, AttributeModifier>> cir) {
         if (tag.contains("stamina_cost")) {
-            modifierMap.put(EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get(), new AttributeModifier(STAMINA_COST_MODIFIER, EpicFightMod.MODID + ":weapon_modifier", tag.getDouble("stamina_cost"), AttributeModifier.Operation.ADDITION));
+            modifierMap.put(EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get(), new AttributeModifier(STAMINA_COST_MODIFIER, EpicFightMod.MODID + ":weapon_modifier",
+                    tag.getDouble("stamina_cost"), AttributeModifier.Operation.ADDITION));
         }
         //TODO: Test this with a modified weapon that doesn't have a type.
         modifierMap.put(EpicParaglidersAttributes.WEAPON_TYPE.get(), attributeModifier);

@@ -14,6 +14,7 @@ public class EpicParaglidersAttributes {
     /**
      * TODO: Attributes for stats
      */
+    public static final RegistryObject<Attribute> DAGGER_STAMINA_REDUCTION = ATTRIBUTES.register("dagger_stamina_reduction", () -> new RangedAttribute("dagger_stamina_reduction", 1.0, 0.0, 10.0));
 
     /**
      * Attributes needed for datapack editing

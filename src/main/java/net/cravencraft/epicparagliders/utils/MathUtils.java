@@ -1,7 +1,6 @@
 package net.cravencraft.epicparagliders.utils;
 
 import net.cravencraft.epicparagliders.config.ConfigManager;
-import net.cravencraft.epicparagliders.config.ServerConfig;
 import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -50,7 +49,7 @@ public class MathUtils {
             configFactor *= ConfigManager.SERVER_CONFIG.axeStaminaMultiplier();
         }
         else if (weaponItem instanceof DaggerItem || weaponTypeOverride == 3.0) {
-            configFactor *= ConfigManager.SERVER_CONFIG.daggerStaminaMultiplier();
+            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.daggerStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.DAGGER_STAMINA_REDUCTION.get()));
         }
         else if (weaponItem instanceof KnuckleItem || weaponTypeOverride == 4.0) {
             configFactor *= ConfigManager.SERVER_CONFIG.knuckleStaminaMultiplier();

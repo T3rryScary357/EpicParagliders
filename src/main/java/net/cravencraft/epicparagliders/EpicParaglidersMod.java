@@ -37,6 +37,10 @@ public class EpicParaglidersMod
 
     @SubscribeEvent
     public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
+        // Attributes for modifying stamina consumption in-game
+        event.add(EntityType.PLAYER, EpicParaglidersAttributes.DAGGER_STAMINA_REDUCTION.get());
+
+        // Attributes needed for datapack editing
         event.add(EntityType.PLAYER, EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get());
         event.add(EntityType.PLAYER, EpicParaglidersAttributes.WEAPON_TYPE.get());
     }

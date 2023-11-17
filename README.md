@@ -18,6 +18,11 @@ Looking for a hosting service? Check out Kinetic Hosting!
 [![CravenCraft.png](src%2Fmain%2Fresources%2Fassets.hostlink%2FCravenCraft.png)](https://billing.kinetichosting.net/aff.php?aff=559)
 Use code **"CravenCraft"** to get your first month **_15%_** off!
 
+## V0.5.1 - Bug Fixes & Attribute Support
+- Fixed a bug with the Stamina Pillager skill consuming a massive amount of stamina
+- Fixed a similar bug with the Technician skill
+- Added attribute support for various weapon types & skills
+
 ## V0.5.0 - The New Epic Fight Version Update
 - Updated to the latest version of the [Epic Fight Mod](https://www.curseforge.com/minecraft/mc-mods/epic-fight-mod/files/4861783)
 - All new skills added
