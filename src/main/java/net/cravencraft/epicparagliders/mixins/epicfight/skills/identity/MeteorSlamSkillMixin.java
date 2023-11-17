@@ -49,18 +49,17 @@ public abstract class MeteorSlamSkillMixin extends Skill {
      * @param event
      * @param ci
      */
-    @Inject(method = "lambda$onInitiate$4", at = @At("HEAD"), remap = false, cancellable = true)
+    @Inject(method = "lambda$onInitiate$4", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;distanceTo(Lnet/minecraft/world/phys/Vec3;)D"), remap = false, cancellable = true)
     private void modifyStaminaSources(SkillContainer container, SkillExecuteEvent event, CallbackInfo ci) {
-        if (container.getExecuter() instanceof ServerPlayerPatch serverPlayerPatch) {
-            PlayerMovement playerMovement = PlayerMovement.of(serverPlayerPatch.getOriginal());
-            if (playerMovement.isDepleted()) {
-                ci.cancel();
-            }
-            else {
-                this.consumption = (float) (MathUtils.getAttackStaminaCost(serverPlayerPatch.getOriginal()) * ConfigManager.SERVER_CONFIG.meteorSlamMultiplier());
-                ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
-                serverPlayerPatch.setStamina(this.consumption);
-            }
+        ServerPlayerPatch serverPlayerPatch = (ServerPlayerPatch) container.getExecuter();
+        PlayerMovement playerMovement = PlayerMovement.of(serverPlayerPatch.getOriginal());
+        if (playerMovement.isDepleted()) {
+            ci.cancel();
+        }
+        else {
+            this.consumption = (float) (MathUtils.getAttackStaminaCost(serverPlayerPatch.getOriginal()) * ConfigManager.SERVER_CONFIG.meteorSlamMultiplier());
+            ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+            serverPlayerPatch.setStamina(this.consumption);
         }
     }
 
