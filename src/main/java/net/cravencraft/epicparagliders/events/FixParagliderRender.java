@@ -11,7 +11,7 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import tictim.paraglider.item.ParagliderItem;
+import tictim.paraglider.contents.item.ParagliderItem;
 
 /**
  * author: Thundertheidiot
@@ -32,7 +32,6 @@ public class FixParagliderRender {
         if (item.isEmpty()) {
             return false;
         }
-
         return ParagliderItem.isItemParagliding(item);
     }
 

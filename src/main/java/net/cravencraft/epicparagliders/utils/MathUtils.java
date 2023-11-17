@@ -46,31 +46,31 @@ public class MathUtils {
         double weaponTypeOverride = player.getAttributeValue(EpicParaglidersAttributes.WEAPON_TYPE.get());
 
         if (weaponItem instanceof AxeItem || weaponTypeOverride == 1.0) {
-            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.axeStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.AXE_STAMINA_REDUCTION.get()));
+            configFactor *= ConfigManager.SERVER_CONFIG.axeStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.AXE_STAMINA_REDUCTION.get());
         }
         else if (weaponItem instanceof DaggerItem || weaponTypeOverride == 3.0) {
-            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.daggerStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.DAGGER_STAMINA_REDUCTION.get()));
+            configFactor *= ConfigManager.SERVER_CONFIG.daggerStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.DAGGER_STAMINA_REDUCTION.get());
         }
         else if (weaponItem instanceof KnuckleItem || weaponTypeOverride == 4.0) {
-            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.knuckleStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.KNUCKLE_STAMINA_REDUCTION.get()));
+            configFactor *= ConfigManager.SERVER_CONFIG.knuckleStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.KNUCKLE_STAMINA_REDUCTION.get());
         }
         else if (weaponItem instanceof GreatswordItem || weaponTypeOverride == 5.0) {
-            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.greatSwordStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.GREATSWORD_STAMINA_REDUCTION.get()));
+            configFactor *= ConfigManager.SERVER_CONFIG.greatSwordStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.GREATSWORD_STAMINA_REDUCTION.get());
         }
         else if (weaponItem instanceof UchigatanaItem || weaponTypeOverride == 6.0) {
-            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.uchigatanaStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.UCHIGATANA_STAMINA_REDUCTION.get()));
+            configFactor *= ConfigManager.SERVER_CONFIG.uchigatanaStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.UCHIGATANA_STAMINA_REDUCTION.get());
         }
         else if (weaponItem instanceof LongswordItem || weaponTypeOverride == 7.0) {
-            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.longSwordMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.LONGSWORD_STAMINA_REDUCTION.get()));
+            configFactor *= ConfigManager.SERVER_CONFIG.longSwordMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.LONGSWORD_STAMINA_REDUCTION.get());
         }
         else if (weaponItem instanceof SpearItem || weaponTypeOverride == 8.0) {
-            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.spearStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.SPEAR_STAMINA_REDUCTION.get()));
+            configFactor *= ConfigManager.SERVER_CONFIG.spearStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.SPEAR_STAMINA_REDUCTION.get());
         }
         else if (weaponItem instanceof SwordItem || weaponTypeOverride == 9.0) {
-            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.swordStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.SWORD_STAMINA_REDUCTION.get()));
+            configFactor *= ConfigManager.SERVER_CONFIG.swordStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.SWORD_STAMINA_REDUCTION.get());
         }
         else if (weaponItem instanceof TachiItem || weaponTypeOverride == 10.0) {
-            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.tachiStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.TACHI_STAMINA_REDUCTION.get()));
+            configFactor *= ConfigManager.SERVER_CONFIG.tachiStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.TACHI_STAMINA_REDUCTION.get());
         }
 
         double totalStaminaDrain;
@@ -83,6 +83,6 @@ public class MathUtils {
             totalStaminaDrain = attackDamageFactor * configFactor;
         }
 
-        return (int) Math.ceil(totalStaminaDrain);
+        return (int) Math.round(totalStaminaDrain);
     }
 }
