@@ -35,7 +35,7 @@ public final class EpicParaglidersEventHandler {
 
             if (playerMovement.isDepleted()) {
                 serverPlayerPatch.playAnimationSynchronized(Animations.BIPED_COMMON_NEUTRALIZED, 0.0F);
-                serverPlayerPatch.playSound(EpicFightSounds.NEUTRALIZE_MOBS, 3.0F, 0.0F, 0.1F);
+                serverPlayerPatch.playSound(EpicFightSounds.NEUTRALIZE_MOBS.get(), 3.0F, 0.0F, 0.1F);
             } else {
                 int armorValue = player.getArmorValue();
 

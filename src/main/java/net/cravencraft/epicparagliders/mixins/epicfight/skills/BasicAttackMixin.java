@@ -15,6 +15,7 @@ import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 @Mixin(BasicAttack.class)
 public abstract class BasicAttackMixin extends Skill {
 
+    //TODO: Major issue with attacking stamina and dodging stamina. Look into later
     public BasicAttackMixin(Builder<? extends Skill> builder) {
         super(builder);
     }

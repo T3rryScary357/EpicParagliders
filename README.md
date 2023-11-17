@@ -23,6 +23,8 @@ Use code **"CravenCraft"** to get your first month **_15%_** off!
 - Fixed a similar bug with the Technician skill
 - Fixed a bug in the Emergency Escape skill that sometimes caused stamina to not be drained
 - Fixed a small bug with basic attacks
+- Fixed some bad math with basic attacks
+- Fixed issue with Meteor slam drain more stamina from basic attacks when learned
 - Added attribute support for various weapon types & skills
 
 ## V0.5.0 - The New Epic Fight Version Update
