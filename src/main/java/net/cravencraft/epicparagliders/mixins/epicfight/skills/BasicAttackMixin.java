@@ -22,9 +22,10 @@ public abstract class BasicAttackMixin extends Skill {
     @Inject(method = "executeOnServer", at = @At("TAIL"), remap = false)
     private void getPlayerPatch(ServerPlayerPatch executer, FriendlyByteBuf args, CallbackInfo ci) {
         PlayerMovement playerMovement = PlayerMovement.of(executer.getOriginal());
+        PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
+        int attackStaminaConsumption = MathUtils.getAttackStaminaCost(executer.getOriginal());
 
-        int specialAttackStaminaConsumption = MathUtils.getAttackStaminaCost(executer.getOriginal());
-        ((PlayerMovementInterface) playerMovement).attackingServerSide(true);
-        executer.setStamina(specialAttackStaminaConsumption);
+        playerMovementInterface.attackingServerSide(true);
+        playerMovementInterface.setActionStaminaCostServerSide(attackStaminaConsumption);
     }
 }

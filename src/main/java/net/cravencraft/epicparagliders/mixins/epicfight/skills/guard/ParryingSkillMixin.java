@@ -1,5 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.guard;
 
+import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.config.ServerConfig;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
@@ -79,7 +80,7 @@ public abstract class ParryingSkillMixin extends GuardSkill {
         int armorValue = playerMovement.player.getArmorValue();
         int currentStamina = playerMovement.getStamina();
 
-        double blockMultiplier = ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier();
+        double blockMultiplier = Math.round(ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier() * playerMovement.player.getAttributeValue(EpicParaglidersAttributes.BLOCK_STAMINA_REDUCTION.get()));
         double parryPenaltyMultiplier = ConfigManager.SERVER_CONFIG.parryPenaltyMultiplier();
         double parryPercentModifier = ConfigManager.SERVER_CONFIG.parryPercentModifier() * 0.01;
 

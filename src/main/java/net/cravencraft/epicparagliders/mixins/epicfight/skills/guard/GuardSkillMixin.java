@@ -1,5 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.guard;
 
+import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.config.ServerConfig;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
@@ -62,10 +63,8 @@ public abstract class GuardSkillMixin extends Skill {
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 0, remap = false)
     private GuardSkill.BlockType blockType(GuardSkill.BlockType blockType) {
         PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
-
         int armorValue = playerMovement.player.getArmorValue();
-
-        double blockMultiplier = ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier();
+        double blockMultiplier = Math.round(ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier() * playerMovement.player.getAttributeValue(EpicParaglidersAttributes.BLOCK_STAMINA_REDUCTION.get()));
 
         float poise;
         float weight = this.playerPatch.getWeight();

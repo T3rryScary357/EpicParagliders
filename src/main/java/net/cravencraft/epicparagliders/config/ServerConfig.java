@@ -191,7 +191,7 @@ public class ServerConfig {
 
         technicianPercentModifier = server.comment("How much stamina reduction will be applied on a successful dodge,\n" +
                                                      "or how much missing stamina will be replenished on a successful dodge.")
-                .defineInRange("skills.technician.technician_percent_modifier", 100, 0, 100);
+                .defineInRange("skills.technician.technician_percent_modifier", 25, 0, 100);
 
         staminaPillagerPercentModifier = server.comment("How much missing stamina will be replenished on killing an enemy.")
                 .defineInRange("skills.stamina_pillager.stamina_pillager_percent_modifier", 25, 0, 100);

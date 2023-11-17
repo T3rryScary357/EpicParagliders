@@ -8,7 +8,7 @@
     "epicfight.capabilities.PlayerPatchMixin",
     "epicfight.capabilities.ServerPlayerPatchMixin",
     "epicfight.capabilities.ItemCapabilityReloadListenerMixin",
-    "epicfight.skills.SkillContainerMixin",
+    "epicfight.skills.SkillMixin",
     "epicfight.skills.BasicAttackMixin",
     "epicfight.skills.AirAttackMixin",
     "epicfight.skills.mover.DemolitionLeapMixin",
