@@ -1,6 +1,5 @@
 package net.cravencraft.epicparagliders.mixins.paragliders.capabilities;
 import net.cravencraft.epicparagliders.config.ConfigManager;
-import net.cravencraft.epicparagliders.config.ServerConfig;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.network.ModNet;
 import net.cravencraft.epicparagliders.network.SyncActionToClientMsg;

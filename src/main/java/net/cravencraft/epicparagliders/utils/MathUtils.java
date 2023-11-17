@@ -70,7 +70,7 @@ public class MathUtils {
             configFactor *= Math.round(ConfigManager.SERVER_CONFIG.swordStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.SWORD_STAMINA_REDUCTION.get()));
         }
         else if (weaponItem instanceof TachiItem || weaponTypeOverride == 10.0) {
-            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.daggerStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.DAGGER_STAMINA_REDUCTION.get()));
+            configFactor *= Math.round(ConfigManager.SERVER_CONFIG.tachiStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.TACHI_STAMINA_REDUCTION.get()));
         }
 
         double totalStaminaDrain;

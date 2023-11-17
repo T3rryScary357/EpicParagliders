@@ -1,9 +1,11 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
+import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tictim.paraglider.capabilities.PlayerMovement;
 import yesman.epicfight.skill.Skill;
@@ -13,6 +15,7 @@ import yesman.epicfight.skill.passive.EmergencyEscapeSkill;
 import yesman.epicfight.skill.passive.PassiveSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.entity.eventlistener.SkillConsumeEvent;
+import yesman.epicfight.world.entity.eventlistener.SkillExecuteEvent;
 
 @Mixin(EmergencyEscapeSkill.class)
 public abstract class EmergencyEscapeSkillMixin extends PassiveSkill {
@@ -21,7 +24,22 @@ public abstract class EmergencyEscapeSkillMixin extends PassiveSkill {
         super(builder);
     }
 
+    @Redirect(at = @At(value = "INVOKE", target = "Lyesman/epicfight/world/entity/eventlistener/SkillExecuteEvent;setStateExecutable(Z)V"), remap = false, method = "lambda$onInitiate$0")
+    private void cancelPlayerAttack(SkillExecuteEvent instance, boolean stateExecutable) {
+        PlayerMovement playerMovement = PlayerMovement.of(instance.getPlayerPatch().getOriginal());
+        PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
+
+        if (instance.getPlayerPatch() instanceof ServerPlayerPatch) {
+            if (playerMovementInterface.isAttackingServerSide()) {
+                playerMovementInterface.attackingServerSide(false);
+            }
+        }
+
+        instance.setStateExecutable(stateExecutable);
+    }
+
     /**
+     *
      * Modifies the Emergency Escape skill by integrating with the Paragliders stamina system,
      * and checking if the actual stamina consumption will be more than the remaining stamina.
      * Pretty much exactly how it works originally, but now it uses the new system.

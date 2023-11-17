@@ -21,6 +21,8 @@ Use code **"CravenCraft"** to get your first month **_15%_** off!
 ## V0.5.1 - Bug Fixes & Attribute Support
 - Fixed a bug with the Stamina Pillager skill consuming a massive amount of stamina
 - Fixed a similar bug with the Technician skill
+- Fixed a bug in the Emergency Escape skill that sometimes caused stamina to not be drained
+- Fixed a small bug with basic attacks
 - Added attribute support for various weapon types & skills
 
 ## V0.5.0 - The New Epic Fight Version Update
