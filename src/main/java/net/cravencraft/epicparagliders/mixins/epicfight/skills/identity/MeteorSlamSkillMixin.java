@@ -35,7 +35,7 @@ public abstract class MeteorSlamSkillMixin extends Skill {
      * @param resource
      * @return
      */
-    @Redirect(at = @At(value = "INVOKE", target = "Lyesman/epicfight/skill/identity/MeteorSlamSkill$Builder;setResource(Lyesman/epicfight/skill/Skill$Resource;)Lyesman/epicfight/skill/identity/MeteorSlamSkill$Builder;"), remap = false, method = "createMeteorSlamBuilder")
+    @Redirect(remap = false, at = @At(value = "INVOKE", target = "Lyesman/epicfight/skill/identity/MeteorSlamSkill$Builder;setResource(Lyesman/epicfight/skill/Skill$Resource;)Lyesman/epicfight/skill/identity/MeteorSlamSkill$Builder;"), method = "createMeteorSlamBuilder")
     private static MeteorSlamSkill.Builder redirectMeteorSlamResource(MeteorSlamSkill.Builder instance, Resource resource) {
         return instance.setResource(Resource.STAMINA);
     }
@@ -49,7 +49,7 @@ public abstract class MeteorSlamSkillMixin extends Skill {
      * @param event
      * @param ci
      */
-    @Inject(method = "lambda$onInitiate$4", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;distanceTo(Lnet/minecraft/world/phys/Vec3;)D"), remap = false, cancellable = true)
+    @Inject(cancellable = true, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;distanceTo(Lnet/minecraft/world/phys/Vec3;)D"), method = "lambda$onInitiate$4")
     private void modifyStaminaSources(SkillContainer container, SkillExecuteEvent event, CallbackInfo ci) {
         ServerPlayerPatch serverPlayerPatch = (ServerPlayerPatch) container.getExecuter();
         PlayerMovement playerMovement = PlayerMovement.of(serverPlayerPatch.getOriginal());
