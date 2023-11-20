@@ -2,6 +2,7 @@ package net.cravencraft.epicparagliders.mixins.epicfight.capabilities;
 
 import com.google.gson.Gson;
 import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
+import net.cravencraft.epicparagliders.capabilities.ItemCapabilityInterface;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -20,7 +21,10 @@ import java.util.Map;
 import java.util.UUID;
 
 @Mixin(ItemCapabilityReloadListener.class)
-public abstract class ItemCapabilityReloadListenerMixin extends SimpleJsonResourceReloadListener {
+public abstract class ItemCapabilityReloadListenerMixin extends SimpleJsonResourceReloadListener implements ItemCapabilityInterface {
+
+    private static double SWORD_STAMINA_MODIFIER;
+
     private static final UUID WEAPON_TYPE_MODIFIER = UUID.fromString("3b7aadbb-8a96-46b9-be4a-35b7d1626a8a");
     private static final UUID STAMINA_COST_MODIFIER = UUID.fromString("45945b75-f098-4127-8002-ef7a73afec69");
     private static Map<Attribute, AttributeModifier> modifierMap;
@@ -61,7 +65,7 @@ public abstract class ItemCapabilityReloadListenerMixin extends SimpleJsonResour
                     attributeModifier = new AttributeModifier(WEAPON_TYPE_MODIFIER, EpicFightMod.MODID + ":weapon_modifier", 8.0, AttributeModifier.Operation.ADDITION);
                     break;
                 case "sword":
-                    attributeModifier = new AttributeModifier(WEAPON_TYPE_MODIFIER, EpicFightMod.MODID + ":weapon_modifier", 9.0, AttributeModifier.Operation.ADDITION);
+                    attributeModifier = new AttributeModifier(WEAPON_TYPE_MODIFIER, EpicFightMod.MODID + ":weapon_modifier", SWORD_STAMINA_MODIFIER, AttributeModifier.Operation.ADDITION);
                     break;
                 case "tachi":
                     attributeModifier = new AttributeModifier(WEAPON_TYPE_MODIFIER, EpicFightMod.MODID + ":weapon_modifier", 10.0, AttributeModifier.Operation.ADDITION);
@@ -89,4 +93,8 @@ public abstract class ItemCapabilityReloadListenerMixin extends SimpleJsonResour
         return modMap;
     }
 
+    @Override
+    public void setSwordStaminaModifier(double swordStaminaModifier) {
+        SWORD_STAMINA_MODIFIER = swordStaminaModifier;
+    }
 }
