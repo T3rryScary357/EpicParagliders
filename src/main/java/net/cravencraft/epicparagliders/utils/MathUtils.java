@@ -1,19 +1,11 @@
 package net.cravencraft.epicparagliders.utils;
 
-import com.google.common.collect.Multimap;
-import net.cravencraft.epicparagliders.EpicParaglidersMod;
-import net.cravencraft.epicparagliders.config.ConfigManager;
-import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.cravencraft.epicparagliders.capabilities.WeaponType;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SwordItem;
-import yesman.epicfight.world.item.*;
+import yesman.epicfight.api.data.reloader.ItemCapabilityReloadListener;
 
 public class MathUtils {
 
@@ -41,107 +33,23 @@ public class MathUtils {
      * @return The amount of stamina that should be drained from the attacking weapon
      */
     public static int getAttackStaminaCost(Player player) {
-        double configFactor = ConfigManager.SERVER_CONFIG.baseMeleeStaminaMultiplier();
         //TODO: Double check duel wielding with this.
         //      Could easily add offhand support too by checking which
         //      hand is swinging the weapon.
-        Item weaponItem = player.getMainHandItem().getItem();
+        CompoundTag weaponTag = ItemCapabilityReloadListener.getWeaponDataStream()
+                .filter(compoundTag -> compoundTag.getInt("id") == Item.getId(player.getMainHandItem().getItem()))
+                .findFirst().get();
 
-        double attackDamageFactor = player.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        double staminaOverride = player.getAttributeValue(EpicParaglidersAttributes.WEAPON_STAMINA_CONSUMPTION.get());
-        double weaponTypeOverride = player.getAttributeValue(EpicParaglidersAttributes.WEAPON_TYPE.get());
-        player.getAttribute(EpicParaglidersAttributes.WEAPON_TYPE.get());
-        player.getAttributes();
-        EpicParaglidersMod.LOGGER.info("WEAPON OVERRIDE VALUE: " + weaponTypeOverride);
+        int weaponStaminaCostOverride = weaponTag
+                .getCompound("attributes")
+                .getCompound("common")
+                .getInt("stamina_cost");
 
-//        EpicParaglidersMod.LOGGER.info("-----------------------------------------------------");
-//        EpicParaglidersMod.LOGGER.info("COMPOUND TAG: " + weaponItem.getDefaultInstance().getTag());
-//        weaponItem.getDefaultInstance().getTags().forEach(itemTagKey -> {
-//            EpicParaglidersMod.LOGGER.info("ITEM TAG KEY: " + itemTagKey.toString());
-//        });
-//        EpicParaglidersMod.LOGGER.info("-----------------------------------------------------");
-//        weaponItem.getDefaultInstance().getTags();
-//        EpicParaglidersMod.LOGGER.info("ATTACK DAMAGE FACTOR: " + attackDamageFactor);
-//        EpicParaglidersMod.LOGGER.info("STAMINA OVERRIDE: " + staminaOverride);
-//        EpicParaglidersMod.LOGGER.info("WEAPON TYPE OVERRIDE: " + weaponTypeOverride);
+        WeaponType weaponType = WeaponType.valueOf(weaponTag.get("type").getAsString().toUpperCase());
 
-        Multimap<Attribute, AttributeModifier> attributeModifiers = weaponItem.getAttributeModifiers(EquipmentSlot.MAINHAND, weaponItem.getDefaultInstance());
-        AttributeMap attributes = player.getAttributes();
-        EpicParaglidersMod.LOGGER.info("ATTRIBUTES: " + attributes);
-//        attributeModifiers.get()
+        double totalStaminaDrain = (weaponStaminaCostOverride > 0) ? weaponStaminaCostOverride : player.getAttributeValue(Attributes.ATTACK_DAMAGE);
 
-       for (Attribute key : attributeModifiers.keys()) {
-           EpicParaglidersMod.LOGGER.info("-------------------------------------------");
-           EpicParaglidersMod.LOGGER.info("ATTRIBUTE KEY VALUE: " + key.getDefaultValue());
-           EpicParaglidersMod.LOGGER.info("ATTRIBUTE KEY ID: " + key.getDescriptionId());
-           EpicParaglidersMod.LOGGER.info("TOTAL ATTRIBUTE KEY: " + key);
-           if (key.getDescriptionId().contains("attack_damage")) {
-               for (AttributeModifier modifier : attributeModifiers.get(key)) {
-                   EpicParaglidersMod.LOGGER.info("----------");
-                   EpicParaglidersMod.LOGGER.info("ATTRIBUTE MODIFIER: " + modifier);
-                   if (modifier.getName().contains("Weapon")) {
-
-                        attackDamageFactor = modifier.getAmount();
-//                       EpicParaglidersMod.LOGGER.info("ATTACK DAMAGE FACTOR NOW: " + attackDamageFactor);
-                   }
-           }
-
-//               EpicParaglidersMod.LOGGER.info("MODIFIER: " + modifier);
-//               EpicParaglidersMod.LOGGER.info("MODIFIER: " + modifier.getName() + " AMOUNT " + modifier.getAmount());
-           }
-
-       }
-        EpicParaglidersMod.LOGGER.info("-------------------------------------------");
-
-        if (weaponItem instanceof SwordItem swordItem) {
-
-            EpicParaglidersMod.LOGGER.info("SWORD ITEM ATTACK DAMAGE: " + swordItem.getDamage());
-        }
-
-        if (weaponItem instanceof AxeItem axeItem) {
-            EpicParaglidersMod.LOGGER.info("AXE ITEM ATTACK DAMAGE: " + axeItem.getAttackDamage());
-        }
-
-        if (weaponItem instanceof AxeItem axeItem) {
-//            EpicParaglidersMod.LOGGER.info("AXE ITEM ATTACK DAMAGE: " + axeItem.getAttackDamage());
-            configFactor *= ConfigManager.SERVER_CONFIG.axeStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.AXE_STAMINA_REDUCTION.get());
-        }
-        else if (weaponItem instanceof DaggerItem || weaponTypeOverride == 3.0) {
-            configFactor *= ConfigManager.SERVER_CONFIG.daggerStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.DAGGER_STAMINA_REDUCTION.get());
-        }
-        else if (weaponItem instanceof KnuckleItem || weaponTypeOverride == 4.0) {
-            configFactor *= ConfigManager.SERVER_CONFIG.knuckleStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.KNUCKLE_STAMINA_REDUCTION.get());
-        }
-        else if (weaponItem instanceof GreatswordItem || weaponTypeOverride == 5.0) {
-            configFactor *= ConfigManager.SERVER_CONFIG.greatSwordStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.GREATSWORD_STAMINA_REDUCTION.get());
-        }
-        else if (weaponItem instanceof UchigatanaItem || weaponTypeOverride == 6.0) {
-            configFactor *= ConfigManager.SERVER_CONFIG.uchigatanaStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.UCHIGATANA_STAMINA_REDUCTION.get());
-        }
-        else if (weaponItem instanceof LongswordItem || weaponTypeOverride == 7.0) {
-            configFactor *= ConfigManager.SERVER_CONFIG.longSwordMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.LONGSWORD_STAMINA_REDUCTION.get());
-        }
-        else if (weaponItem instanceof SpearItem || weaponTypeOverride == 8.0) {
-            configFactor *= ConfigManager.SERVER_CONFIG.spearStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.SPEAR_STAMINA_REDUCTION.get());
-        }
-        else if (weaponItem instanceof SwordItem || weaponTypeOverride == 9.0) {
-            configFactor *= ConfigManager.SERVER_CONFIG.swordStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.SWORD_STAMINA_REDUCTION.get());
-        }
-        else if (weaponItem instanceof TachiItem || weaponTypeOverride == 10.0) {
-            configFactor *= ConfigManager.SERVER_CONFIG.tachiStaminaMultiplier() * player.getAttributeValue(EpicParaglidersAttributes.TACHI_STAMINA_REDUCTION.get());
-        }
-
-        double totalStaminaDrain;
-        // Checks if there is a datapack config set for the given weapon. If so, then
-        // uses the datapack info instead of attack damage. Still implements the weapon type config options.
-        if (staminaOverride > 0) {
-            totalStaminaDrain = staminaOverride * configFactor;
-        }
-        else {
-            totalStaminaDrain = attackDamageFactor * configFactor;
-        }
-        EpicParaglidersMod.LOGGER.info("STAMINA DRAIN AFTER: " + totalStaminaDrain);
-        EpicParaglidersMod.LOGGER.info("-----------------------------------------------------");
+        totalStaminaDrain *= weaponType.getStaminaMultiplier() * weaponType.getStaminaReduction(player);
 
         return (int) Math.round(totalStaminaDrain);
     }

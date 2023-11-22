@@ -13,7 +13,7 @@ public class ServerConfig {
     /**
      * Melee Attacks
      */
-    private final ForgeConfigSpec.DoubleValue baseMeleeStaminaMultiplier;
+    private final ForgeConfigSpec.DoubleValue defaultMeleeStaminaMultiplier;
     private final ForgeConfigSpec.DoubleValue daggerStaminaMultiplier;
     private final ForgeConfigSpec.DoubleValue swordStaminaMultiplier;
     private final ForgeConfigSpec.DoubleValue longSwordStaminaMultiplier;
@@ -57,8 +57,8 @@ public class ServerConfig {
     private final ForgeConfigSpec.ConfigValue<List<? extends Integer>> depletionEffectStrengthList;
     private final ForgeConfigSpec.BooleanValue eldenStaminaSystem;
 
-    public double baseMeleeStaminaMultiplier() {
-        return baseMeleeStaminaMultiplier.get();
+    public double defaultMeleeStaminaMultiplier() {
+        return defaultMeleeStaminaMultiplier.get();
     }
 
     public double daggerStaminaMultiplier() {
@@ -127,7 +127,6 @@ public class ServerConfig {
     public double demolitionLeapStaminaMultiplier() { return demolitionLeapStaminaMultiplier.get(); }
     public double hyperVitalityMultiplier() { return hyperVitalityMultiplier.get(); }
     public double enduranceMultiplier() { return enduranceMultiplier.get(); }
-
     public List<Integer> depletionEffectList() { return (List<Integer>) depletionEffectList.get(); }
     public List<Integer> depletionEffectStrengthList() { return (List<Integer>) depletionEffectStrengthList.get(); }
 
@@ -136,7 +135,7 @@ public class ServerConfig {
     public ServerConfig(ForgeConfigSpec.Builder server) {
         server.push("stamina");
         baseRangedStaminaMultiplier = server.defineInRange("weapons.base_ranged_stamina_multiplier", 1.0, 0.0, 10.0);
-        baseMeleeStaminaMultiplier = server.comment("Base multiplier for all melee based attacks.").defineInRange("weapons.base_melee_stamina_multiplier", 1.0, 0.0, 10.0);
+        defaultMeleeStaminaMultiplier = server.comment("Base multiplier for all melee based attacks.").defineInRange("weapons.base_melee_stamina_multiplier", 1.0, 0.0, 10.0);
         daggerStaminaMultiplier = server.defineInRange("weapons.dagger_stamina_multiplier", 2.5, 0.0, 10.0);
         swordStaminaMultiplier = server.defineInRange("weapons.sword_stamina_multiplier", 2.5, 0.0, 10.0);
         longSwordStaminaMultiplier = server.defineInRange("weapons.longsword_stamina_multiplier", 2.5, 0.0, 10.0);
