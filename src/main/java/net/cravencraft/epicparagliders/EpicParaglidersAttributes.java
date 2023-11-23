@@ -14,6 +14,8 @@ public class EpicParaglidersAttributes {
     /**
      * Weapon Attributes
      */
+    public static final RegistryObject<Attribute> DEFAULT_STAMINA_REDUCTION = ATTRIBUTES.register("default_stamina_reduction", () ->
+            new RangedAttribute("default_stamina_reduction", 1.0, 0.0, 10.0));
     public static final RegistryObject<Attribute> DAGGER_STAMINA_REDUCTION = ATTRIBUTES.register("dagger_stamina_reduction", () ->
             new RangedAttribute("dagger_stamina_reduction", 1.0, 0.0, 10.0));
     public static final RegistryObject<Attribute> SWORD_STAMINA_REDUCTION = ATTRIBUTES.register("sword_stamina_reduction", () ->

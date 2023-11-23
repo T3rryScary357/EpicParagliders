@@ -31,8 +31,8 @@ public class EpicParaglidersMod
         ModNet.init();
 
         // Register ourselves for server and other game events we are interested in
-        MinecraftForge.EVENT_BUS.register(this);
         ConfigManager.registerConfigs();
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
