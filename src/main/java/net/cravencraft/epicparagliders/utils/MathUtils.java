@@ -64,7 +64,6 @@ public class MathUtils {
         }
 
         totalStaminaCost *= weaponType.getStaminaReduction(player);
-
         return (int) Math.round(totalStaminaCost);
     }
 }
