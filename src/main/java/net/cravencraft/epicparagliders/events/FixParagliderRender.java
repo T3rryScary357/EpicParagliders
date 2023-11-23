@@ -32,7 +32,6 @@ public class FixParagliderRender {
         if (item.isEmpty()) {
             return false;
         }
-
         return ParagliderItem.isItemParagliding(item);
     }
 
