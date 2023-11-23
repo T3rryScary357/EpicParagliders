@@ -4,7 +4,8 @@ import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.network.ModNet;
 import net.cravencraft.epicparagliders.network.SyncActionToClientMsg;
 import net.cravencraft.epicparagliders.utils.MathUtils;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -24,6 +25,7 @@ import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 
 import java.util.List;
+import java.util.UUID;
 
 @Mixin(ServerPlayerMovement.class)
 public abstract class ServerPlayerMovementMixin extends PlayerMovement implements PlayerMovementInterface {
@@ -144,7 +146,7 @@ public abstract class ServerPlayerMovementMixin extends PlayerMovement implement
                 }
                 else {
                     if (this.player instanceof ServerPlayer serverPlayer) {
-                        serverPlayer.displayClientMessage(Component.literal("Effect with ID " + effects.get(i) + " does not exist."), true);
+                        serverPlayer.sendMessage(new TextComponent("Effect with ID " + effects.get(i) + " does not exist."), ChatType.GAME_INFO, UUID.randomUUID());
                     }
                 }
 
