@@ -17,6 +17,11 @@ public enum WeaponType {
     TACHI,
     UCHIGATANA;
 
+    /**
+     * Gets the stamina multiplier for a given weapon type.
+     *
+     * @return
+     */
     public double getStaminaMultiplier() {
         ServerConfig serverConfig = ConfigManager.SERVER_CONFIG;
 
@@ -44,6 +49,44 @@ public enum WeaponType {
         }
     }
 
+    /**
+     * Gets the fixed stamina cost for a given weapon type.
+     *
+     * @return
+     */
+    public int getStaminaFixedCost() {
+        ServerConfig serverConfig = ConfigManager.SERVER_CONFIG;
+
+        switch (this) {
+            case AXE:
+                return serverConfig.axeStaminaFixedCost();
+            case DAGGER:
+                return serverConfig.daggerStaminaFixedCost();
+            case SWORD:
+                return serverConfig.swordStaminaFixedCost();
+            case LONGSWORD:
+                return serverConfig.longSwordStaminaFixedCost();
+            case GREATSWORD:
+                return serverConfig.greatSwordStaminaFixedCost();
+            case SPEAR:
+                return serverConfig.spearStaminaFixedCost();
+            case KNUCKLE:
+                return serverConfig.knuckleStaminaFixedCost();
+            case TACHI:
+                return serverConfig.tachiStaminaFixedCost();
+            case UCHIGATANA:
+                return serverConfig.uchigatanaStaminaFixedCost();
+            default:
+                return serverConfig.defaultMeleeStaminaFixedCost();
+        }
+    }
+
+    /**
+     * Gets the attribute for stamina reduction for a specific weapon type.
+     *
+     * @param player
+     * @return
+     */
     public double getStaminaReduction(Player player) {
 
         switch (this) {

@@ -47,10 +47,16 @@ public class MathUtils {
 
         WeaponType weaponType = WeaponType.valueOf(weaponTag.get("type").getAsString().toUpperCase());
 
-        double totalStaminaDrain = (weaponStaminaCostOverride > 0) ? weaponStaminaCostOverride : player.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        double totalStaminaCost;
+        if (weaponStaminaCostOverride > 0) {
+            totalStaminaCost = weaponStaminaCostOverride;
+        }
+        else {
+            totalStaminaCost = (weaponType.getStaminaFixedCost() > 0) ? weaponType.getStaminaFixedCost() : weaponType.getStaminaMultiplier() * player.getAttributeValue(Attributes.ATTACK_DAMAGE);
+        }
 
-        totalStaminaDrain *= weaponType.getStaminaMultiplier() * weaponType.getStaminaReduction(player);
+        totalStaminaCost *= weaponType.getStaminaReduction(player);
 
-        return (int) Math.round(totalStaminaDrain);
+        return (int) Math.round(totalStaminaCost);
     }
 }
