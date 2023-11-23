@@ -19,7 +19,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '0.5.1-1.19.2'
+version = '0.6.0-1.19.2'
 group = 'com.cravencraft.epicparagliders' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'epicparagliders'
 
@@ -124,8 +124,6 @@ dependencies {
 
     implementation fg.deobf("curse.maven:epic-fight-mod-405076:4861788")
     implementation fg.deobf("curse.maven:paragliders-289240:4478230")
-    implementation fg.deobf("curse.maven:architectury-api-419699:4555749")
-    implementation fg.deobf("curse.maven:simply-swords-659887:4553225")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
