@@ -18,6 +18,13 @@ Looking for a hosting service? Check out Kinetic Hosting!
 [![CravenCraft.png](src%2Fmain%2Fresources%2Fassets.hostlink%2FCravenCraft.png)](https://billing.kinetichosting.net/aff.php?aff=559)
 Use code **"CravenCraft"** to get your first month **_15%_** off!
 
+## V0.6.0 - Fixed Stamina Cost Support
+- Added server config option for a fixed stamina cost for weapon types
+- Fixed small bug that increases stamina cost when the attack_damage attribute is increased
+- Rework now will allow for addon support for other types of weapon attacks (not skills yet)
+- More efficient stamina cost calculation
+
+
 ## V0.5.1 - Bug Fixes & Attribute Support
 - Fixed a bug with the Stamina Pillager skill consuming a massive amount of stamina
 - Fixed a similar bug with the Technician skill

@@ -11,9 +11,9 @@ import java.util.List;
 public class ServerConfig {
 
     /**
-     * Melee Attacks
+     * Melee Attack Stamina Multipliers
      */
-    private final ForgeConfigSpec.DoubleValue baseMeleeStaminaMultiplier;
+    private final ForgeConfigSpec.DoubleValue defaultMeleeStaminaMultiplier;
     private final ForgeConfigSpec.DoubleValue daggerStaminaMultiplier;
     private final ForgeConfigSpec.DoubleValue swordStaminaMultiplier;
     private final ForgeConfigSpec.DoubleValue longSwordStaminaMultiplier;
@@ -23,6 +23,20 @@ public class ServerConfig {
     private final ForgeConfigSpec.DoubleValue spearStaminaMultiplier;
     private final ForgeConfigSpec.DoubleValue knuckleStaminaMultiplier;
     private final ForgeConfigSpec.DoubleValue axeStaminaMultiplier;
+
+    /**
+     * Melee Weapon type fixed stamina cost
+     */
+    private final ForgeConfigSpec.IntValue defaultMeleeStaminaFixedCost;
+    private final ForgeConfigSpec.IntValue daggerStaminaFixedCost;
+    private final ForgeConfigSpec.IntValue swordStaminaFixedCost;
+    private final ForgeConfigSpec.IntValue longSwordStaminaFixedCost;
+    private final ForgeConfigSpec.IntValue greatSwordStaminaFixedCost;
+    private final ForgeConfigSpec.IntValue uchigatanaStaminaFixedCost;
+    private final ForgeConfigSpec.IntValue tachiStaminaFixedCost;
+    private final ForgeConfigSpec.IntValue spearStaminaFixedCost;
+    private final ForgeConfigSpec.IntValue knuckleStaminaFixedCost;
+    private final ForgeConfigSpec.IntValue axeStaminaFixedCost;
 
     /**
      * Ranged Attacks
@@ -57,8 +71,12 @@ public class ServerConfig {
     private final ForgeConfigSpec.ConfigValue<List<? extends Integer>> depletionEffectStrengthList;
     private final ForgeConfigSpec.BooleanValue eldenStaminaSystem;
 
-    public double baseMeleeStaminaMultiplier() {
-        return baseMeleeStaminaMultiplier.get();
+
+    /**
+     *  Gets weapon stamina multipliers
+     */
+    public double defaultMeleeStaminaMultiplier() {
+        return defaultMeleeStaminaMultiplier.get();
     }
 
     public double daggerStaminaMultiplier() {
@@ -97,6 +115,49 @@ public class ServerConfig {
         return axeStaminaMultiplier.get();
     }
 
+    /**
+     *  Gets weapon stamina fixed cost
+     */
+    public int defaultMeleeStaminaFixedCost() {
+        return defaultMeleeStaminaFixedCost.get();
+    }
+
+    public int daggerStaminaFixedCost() {
+        return daggerStaminaFixedCost.get();
+    }
+
+    public int swordStaminaFixedCost() {
+        return swordStaminaFixedCost.get();
+    }
+
+    public int longSwordStaminaFixedCost() {
+        return longSwordStaminaFixedCost.get();
+    }
+
+    public int greatSwordStaminaFixedCost() {
+        return greatSwordStaminaFixedCost.get();
+    }
+
+    public int uchigatanaStaminaFixedCost() {
+        return uchigatanaStaminaFixedCost.get();
+    }
+
+    public int tachiStaminaFixedCost() {
+        return tachiStaminaFixedCost.get();
+    }
+
+    public int spearStaminaFixedCost() {
+        return spearStaminaFixedCost.get();
+    }
+
+    public int knuckleStaminaFixedCost() {
+        return knuckleStaminaFixedCost.get();
+    }
+
+    public int axeStaminaFixedCost() {
+        return axeStaminaFixedCost.get();
+    }
+
 	public double baseRangedStaminaMultiplier() {
 		return baseRangedStaminaMultiplier.get();
 	}
@@ -127,7 +188,6 @@ public class ServerConfig {
     public double demolitionLeapStaminaMultiplier() { return demolitionLeapStaminaMultiplier.get(); }
     public double hyperVitalityMultiplier() { return hyperVitalityMultiplier.get(); }
     public double enduranceMultiplier() { return enduranceMultiplier.get(); }
-
     public List<Integer> depletionEffectList() { return (List<Integer>) depletionEffectList.get(); }
     public List<Integer> depletionEffectStrengthList() { return (List<Integer>) depletionEffectStrengthList.get(); }
 
@@ -135,17 +195,39 @@ public class ServerConfig {
 
     public ServerConfig(ForgeConfigSpec.Builder server) {
         server.push("stamina");
-        baseRangedStaminaMultiplier = server.defineInRange("weapons.base_ranged_stamina_multiplier", 1.0, 0.0, 10.0);
-        baseMeleeStaminaMultiplier = server.comment("Base multiplier for all melee based attacks.").defineInRange("weapons.base_melee_stamina_multiplier", 1.0, 0.0, 10.0);
-        daggerStaminaMultiplier = server.defineInRange("weapons.dagger_stamina_multiplier", 2.5, 0.0, 10.0);
-        swordStaminaMultiplier = server.defineInRange("weapons.sword_stamina_multiplier", 2.5, 0.0, 10.0);
-        longSwordStaminaMultiplier = server.defineInRange("weapons.longsword_stamina_multiplier", 2.5, 0.0, 10.0);
-        greatSwordStaminaMultiplier = server.defineInRange("weapons.greatsword_stamina_multiplier", 1.5, 0.0, 10.0);
-        uchigatanaStaminaMultiplier = server.defineInRange("weapons.uchigatana_stamina_multiplier", 2.0, 0.0, 10.0);
-        tachiStaminaMultiplier = server.defineInRange("weapons.tachi_stamina_multiplier", 2.0, 0.0, 10.0);
-        spearStaminaMultiplier = server.defineInRange("weapons.spear_stamina_multiplier", 2.5, 0.0, 10.0);
-        knuckleStaminaMultiplier = server.defineInRange("weapons.knuckle_stamina_multiplier", 2.0, 0.0, 10.0);
-        axeStaminaMultiplier = server.defineInRange("weapons.axe_stamina_multiplier", 2.5, 0.0, 10.0);
+        server.push("weapons");
+
+        server.push("multipliers").comment("Multipliers will be set and multiplied against the base damage of the given weapon\n" +
+                "that is attacking.");
+        baseRangedStaminaMultiplier = server.defineInRange("base_ranged_stamina_multiplier", 1.0, 0.0, 10.0);
+        defaultMeleeStaminaMultiplier = server.comment("Default multiplier for all melee based attacks without a defined weapon type.")
+                .defineInRange("base_melee_stamina_multiplier", 1.0, 0.0, 10.0);
+        daggerStaminaMultiplier = server.defineInRange("dagger_stamina_multiplier", 2.5, 0.0, 10.0);
+        swordStaminaMultiplier = server.defineInRange("sword_stamina_multiplier", 2.5, 0.0, 10.0);
+        longSwordStaminaMultiplier = server.defineInRange("longsword_stamina_multiplier", 2.5, 0.0, 10.0);
+        greatSwordStaminaMultiplier = server.defineInRange("greatsword_stamina_multiplier", 1.5, 0.0, 10.0);
+        uchigatanaStaminaMultiplier = server.defineInRange("uchigatana_stamina_multiplier", 2.0, 0.0, 10.0);
+        tachiStaminaMultiplier = server.defineInRange("tachi_stamina_multiplier", 2.0, 0.0, 10.0);
+        spearStaminaMultiplier = server.defineInRange("spear_stamina_multiplier", 2.5, 0.0, 10.0);
+        knuckleStaminaMultiplier = server.defineInRange("knuckle_stamina_multiplier", 2.0, 0.0, 10.0);
+        axeStaminaMultiplier = server.defineInRange("axe_stamina_multiplier", 2.5, 0.0, 10.0);
+        server.pop(); // Pop multipliers
+
+        server.push("fixed_cost").comment("A fixed cost for all weapons under the given weapon types will be set.\n" +
+                "If any of these values are set to be greater then 0, then they will be used instead of the above multipliers & weapon damage.");
+        defaultMeleeStaminaFixedCost = server.comment("Default multiplier for all melee based attacks without a defined weapon type.")
+                .defineInRange("base_melee_stamina_multiplier", 0, 0, 100);
+        daggerStaminaFixedCost = server.defineInRange("dagger_stamina_multiplier", 0, 0, 100);
+        swordStaminaFixedCost = server.defineInRange("sword_stamina_multiplier", 0, 0, 100);
+        longSwordStaminaFixedCost = server.defineInRange("longsword_stamina_multiplier", 0, 0, 100);
+        greatSwordStaminaFixedCost = server.defineInRange("greatsword_stamina_multiplier", 0, 0, 100);
+        uchigatanaStaminaFixedCost = server.defineInRange("uchigatana_stamina_multiplier", 0, 0, 100);
+        tachiStaminaFixedCost = server.defineInRange("tachi_stamina_multiplier", 0, 0, 100);
+        spearStaminaFixedCost = server.defineInRange("spear_stamina_multiplier", 0, 0, 100);
+        knuckleStaminaFixedCost = server.defineInRange("knuckle_stamina_multiplier", 0, 0, 100);
+        axeStaminaFixedCost = server.defineInRange("axe_stamina_multiplier", 0, 0, 100);
+        server.pop(); // Pop fixed cost
+        server.pop(); // Pop weapons
 
         baseBlockStaminaMultiplier = server.defineInRange("skills.block.block_stamina_multiplier", 7.5, 0.0, 10.0);
 
