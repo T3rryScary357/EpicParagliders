@@ -7,8 +7,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.capabilities.PlayerMovement;
-import tictim.paraglider.capabilities.ServerPlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.movement.PlayerMovement;
+import tictim.paraglider.impl.movement.ServerPlayerMovement;
 import yesman.epicfight.skill.ChargeableSkill;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.mover.DemolitionLeapSkill;
@@ -27,7 +28,7 @@ public abstract class DemolitionLeapMixin extends Skill implements ChargeableSki
         int chargingTicks = caster.getSkillChargingTicks();
 
         if (chargingTicks % 5 == 0 && caster.getAccumulatedChargeAmount() < this.getMaxChargingTicks()) {
-            PlayerMovement playerMovement = PlayerMovement.of(caster.getOriginal());
+            PlayerMovement playerMovement = PlayerMovementProvider.of(caster.getOriginal());
             int totalStaminaConsumption = (int) MathUtils.calculateTriangularNumber(((PlayerMovementInterface) playerMovement).getTotalActionStaminaCost());
 
             if (caster.getStamina() > totalStaminaConsumption) {

@@ -15,7 +15,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.api.stamina.Stamina;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.movement.PlayerMovement;
 import yesman.epicfight.api.client.animation.ClientAnimator;
 import yesman.epicfight.skill.ChargeableSkill;
 import yesman.epicfight.skill.mover.DemolitionLeapSkill;
@@ -37,8 +39,10 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
      */
     @Inject(method = "getMaxStamina", at = @At("RETURN"), cancellable = true, remap = false)
     private void getMaxStamina(CallbackInfoReturnable<Float> cir) {
-        PlayerMovement playerMovement = PlayerMovement.of(this.getOriginal());
-        cir.setReturnValue((float) playerMovement.getMaxStamina());
+
+//        PlayerMovement playerMovement = PlayerMovementProvider.of(this.getOriginal());
+//        Stamina stamina = Stamina.get(this.getOriginal()).maxStamina();
+        cir.setReturnValue((float) Stamina.get(this.getOriginal()).maxStamina());
     }
 
     /**
@@ -49,8 +53,8 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
      */
     @Inject(method = "getStamina", at = @At("HEAD"), cancellable = true, remap = false)
     private void getStamina(CallbackInfoReturnable<Float> cir) {
-        PlayerMovement playerMovement = PlayerMovement.of(this.getOriginal());
-        cir.setReturnValue((float) playerMovement.getStamina());
+//        PlayerMovement playerMovement = PlayerMovement.of(this.getOriginal());
+        cir.setReturnValue((float) Stamina.get(this.getOriginal()).stamina());
     }
 
     /**
@@ -62,7 +66,7 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
      */
     @Inject(method = "setStamina", at = @At("HEAD"), cancellable = true, remap = false)
     private void setStamina(float value, CallbackInfo ci) {
-        PlayerMovement playerMovement = PlayerMovement.of(this.getOriginal());
+        PlayerMovement playerMovement = PlayerMovementProvider.of(this.getOriginal());
 
         // Easy way to ensure only my stamina values are being applied.
         // So I don't have to edit 5+ different methods.
@@ -81,7 +85,7 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
      */
     @Inject(method = "getModifiedStaminaConsume", at = @At("RETURN"), remap = false, cancellable = true)
     private void modifyStaminaConsumption(float amount, CallbackInfoReturnable<Float> cir) {
-        float attenuation = Mth.clamp(this.original.level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
+        float attenuation = (float)Mth.clamp(this.original.level().getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
         float weight = this.getWeight();
         float modifiedConsumption = ((weight / 40.0F - 1.0F) * 0.3F * attenuation + 1.0F) * amount;
 //        this.getOriginal().

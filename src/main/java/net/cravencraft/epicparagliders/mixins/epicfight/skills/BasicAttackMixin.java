@@ -7,7 +7,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.movement.PlayerMovement;
 import yesman.epicfight.skill.BasicAttack;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
@@ -22,7 +23,7 @@ public abstract class BasicAttackMixin extends Skill {
 
     @Inject(method = "executeOnServer", at = @At("TAIL"), remap = false)
     private void getPlayerPatch(ServerPlayerPatch executer, FriendlyByteBuf args, CallbackInfo ci) {
-        PlayerMovement playerMovement = PlayerMovement.of(executer.getOriginal());
+        PlayerMovement playerMovement = PlayerMovementProvider.of(executer.getOriginal());
         PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
         int attackStaminaConsumption = MathUtils.getAttackStaminaCost(executer.getOriginal());
 

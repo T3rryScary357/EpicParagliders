@@ -13,9 +13,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.ModCfg;
-import tictim.paraglider.capabilities.PlayerMovement;
-import tictim.paraglider.capabilities.PlayerState;
+import tictim.paraglider.api.movement.PlayerState;
+import tictim.paraglider.impl.movement.PlayerMovement;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 

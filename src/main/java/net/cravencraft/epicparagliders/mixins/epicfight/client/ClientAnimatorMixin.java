@@ -8,7 +8,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.movement.PlayerMovement;
 import yesman.epicfight.api.animation.Animator;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.LivingMotions;
@@ -28,9 +29,9 @@ public abstract class ClientAnimatorMixin extends Animator {
         if (entitypatch instanceof PlayerPatch playerPatch) {
 
             boolean isExhausted = false;
-            PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
+            PlayerMovement playerMovement = PlayerMovementProvider.of(playerPatch.getOriginal());
 
-            for (MobEffectInstance mobEffectInstance : playerMovement.player.getActiveEffects()) {
+            for (MobEffectInstance mobEffectInstance : playerMovement.player().getActiveEffects()) {
                 if (isExhausted = mobEffectInstance.getEffect().getDescriptionId().contains("exhausted")) {
                     break;
                 }

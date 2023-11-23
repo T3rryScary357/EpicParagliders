@@ -6,11 +6,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.capabilities.ClientPlayerMovement;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.impl.movement.ClientPlayerMovement;
+import tictim.paraglider.impl.movement.RemotePlayerMovement;
 
 @Mixin(ClientPlayerMovement.class)
-public abstract class ClientPlayerMovementMixin extends PlayerMovement implements PlayerMovementInterface {
+public abstract class ClientPlayerMovementMixin extends RemotePlayerMovement implements PlayerMovementInterface {
     private int totalActionStaminaCost;
 
     public ClientPlayerMovementMixin(Player player) {

@@ -2,7 +2,6 @@ package net.cravencraft.epicparagliders.mixins.epicfight.skills.guard;
 
 import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
 import net.cravencraft.epicparagliders.config.ConfigManager;
-import net.cravencraft.epicparagliders.config.ServerConfig;
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.util.Mth;
@@ -11,7 +10,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.movement.PlayerMovement;
 import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.skill.guard.ParryingSkill;
@@ -73,14 +73,14 @@ public abstract class ParryingSkillMixin extends GuardSkill {
      */
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 0, remap = false)
     private GuardSkill.BlockType blockType(GuardSkill.BlockType blockType) {
-        PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
+        PlayerMovement playerMovement = PlayerMovementProvider.of(playerPatch.getOriginal());
         PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
 
         int guardConsumption;
-        int armorValue = playerMovement.player.getArmorValue();
-        int currentStamina = playerMovement.getStamina();
+        int armorValue = playerMovement.player().getArmorValue();
+        int currentStamina = playerMovement.stamina().stamina();
 
-        double blockMultiplier = Math.round(ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier() * playerMovement.player.getAttributeValue(EpicParaglidersAttributes.BLOCK_STAMINA_REDUCTION.get()));
+        double blockMultiplier = Math.round(ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier() * playerMovement.player().getAttributeValue(EpicParaglidersAttributes.BLOCK_STAMINA_REDUCTION.get()));
         double parryPenaltyMultiplier = ConfigManager.SERVER_CONFIG.parryPenaltyMultiplier();
         double parryPercentModifier = ConfigManager.SERVER_CONFIG.parryPercentModifier() * 0.01;
 
@@ -96,7 +96,7 @@ public abstract class ParryingSkillMixin extends GuardSkill {
             poise = 0.0F;
         }
         else {
-            float attenuation = Mth.clamp(this.playerPatch.getOriginal().level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
+            float attenuation = Mth.clamp(this.playerPatch.getOriginal().level().getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
             poise = (0.1F * (weight / 40.0F) * (Math.max(armorValue, 0) * 1.5F) * attenuation);
         }
 
@@ -106,7 +106,7 @@ public abstract class ParryingSkillMixin extends GuardSkill {
                 guardConsumption = (int) (getConsumption() + (impact * blockMultiplier * (1 - parryPercentModifier)));
             }
             else {
-                int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.getMaxStamina() - playerMovement.getStamina()));
+                int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.stamina().maxStamina() - playerMovement.stamina().stamina()));
                 guardConsumption = -(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, parryPercentModifier));
             }
 
@@ -128,7 +128,7 @@ public abstract class ParryingSkillMixin extends GuardSkill {
         playerMovementInterface.setActionStaminaCostServerSide(guardConsumption);
         playerMovementInterface.performingActionServerSide(true);
 
-        if (playerMovement.isDepleted()) {
+        if (playerMovement.stamina().isDepleted()) {
             return GuardSkill.BlockType.GUARD_BREAK;
         }
         else {

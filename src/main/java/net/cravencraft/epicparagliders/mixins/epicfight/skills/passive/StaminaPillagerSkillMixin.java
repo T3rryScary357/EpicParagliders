@@ -7,7 +7,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.movement.PlayerMovement;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.passive.PassiveSkill;
 import yesman.epicfight.skill.passive.StaminaPillagerSkill;
@@ -30,11 +31,11 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
     @Inject(method = "lambda$onInitiate$0", at = @At("HEAD"), remap = false, cancellable = true)
     private void getPlayerPatch(DealtDamageEvent event, CallbackInfo ci) {
         if (!event.getTarget().isAlive()) {
-            PlayerMovement playerMovement = PlayerMovement.of(event.getPlayerPatch().getOriginal());
+            PlayerMovement playerMovement = PlayerMovementProvider.of(event.getPlayerPatch().getOriginal());
             PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
             double staminaPillagerPercentModifier = ConfigManager.SERVER_CONFIG.staminaPillagerPercentModifier() * 0.01;
 
-            int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.getMaxStamina() - playerMovement.getStamina()));
+            int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.stamina().maxStamina() - playerMovement.stamina().stamina()));
             playerMovementInterface.performingActionServerSide(true);
             event.getPlayerPatch().setStamina(-(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, staminaPillagerPercentModifier)));
         }
