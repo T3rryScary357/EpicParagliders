@@ -19,7 +19,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 
-version = '0.6.0-1.19.2'
+version = '0.6.0-1.20.1'
 group = 'com.cravencraft.epicparagliders' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'epicparagliders'
 
@@ -28,8 +28,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: 'official', version: '1.19.2'
-//    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    mappings channel: 'official', version: '1.20.1'
 
     runs {
         client {
@@ -119,11 +118,11 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.3.2'
+    minecraft 'net.minecraftforge:forge:1.20.1-47.2.6'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf("curse.maven:epic-fight-mod-405076:4861788")
-    implementation fg.deobf("curse.maven:paragliders-289240:4478230")
+    implementation fg.deobf("curse.maven:epic-fight-mod-405076:4861795")
+    implementation fg.deobf("curse.maven:paragliders-289240:4729765")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
