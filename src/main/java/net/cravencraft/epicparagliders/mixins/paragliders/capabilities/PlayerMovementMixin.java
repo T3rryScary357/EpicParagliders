@@ -20,6 +20,12 @@ import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
 @Mixin(PlayerMovement.class)
 public abstract class PlayerMovementMixin implements PlayerMovementInterface {
+
+    /**
+     * TODO: Need to move the logic from the 'update' method here into the 'applyMovement'
+     *       method into the ServerPlayerMovementMixin class.
+     */
+
     @Shadow private PlayerState state;
     @Shadow private int recoveryDelay;
     @Shadow private boolean depleted;
