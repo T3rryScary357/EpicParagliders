@@ -11,27 +11,27 @@ import tictim.paraglider.impl.movement.RemotePlayerMovement;
 
 @Mixin(ClientPlayerMovement.class)
 public abstract class ClientPlayerMovementMixin extends RemotePlayerMovement implements PlayerMovementInterface {
-    private int totalActionStaminaCost;
-
+//    private int totalActionStaminaCost;
+//
     public ClientPlayerMovementMixin(Player player) {
         super(player);
     }
-
-    /**
-     * Updates the client side player action stamina whenever it receives data from the server side.
-     */
-    @Inject(method = "update", at = @At(value = "HEAD"), remap=false)
-    public void update(CallbackInfo ci) {
-        this.setTotalActionStaminaCost(this.totalActionStaminaCost);
-    }
-
-    @Override
-    public int getTotalActionStaminaCost() {
-        return this.totalActionStaminaCost;
-    }
-
-    @Override
-    public void setTotalActionStaminaCostClientSide(int totalActionStaminaCost) {
-        this.totalActionStaminaCost = totalActionStaminaCost;
-    }
+//
+//    /**
+//     * Updates the client side player action stamina whenever it receives data from the server side.
+//     */
+//    @Inject(method = "update", at = @At(value = "HEAD"), remap=false)
+//    public void update(CallbackInfo ci) {
+//        this.setTotalActionStaminaCost(this.totalActionStaminaCost);
+//    }
+//
+//    @Override
+//    public int getTotalActionStaminaCost() {
+//        return this.totalActionStaminaCost;
+//    }
+//
+//    @Override
+//    public void setTotalActionStaminaCostClientSide(int totalActionStaminaCost) {
+//        this.totalActionStaminaCost = totalActionStaminaCost;
+//    }
 }

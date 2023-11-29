@@ -24,7 +24,9 @@
     "epicfight.skills.passive.ForbiddenStrengthSkillMixin",
     "epicfight.skills.passive.TechnicianSkillMixin",
     "paragliders.capabilities.ServerPlayerMovementMixin",
-    "paragliders.capabilities.PlayerMovementMixin"
+    "paragliders.capabilities.PlayerMovementMixin",
+    "paragliders.stamina.ServerBotWStaminaMixin",
+    "paragliders.stamina.BotWStaminaMixin"
   ],
   "client": [
     "epicfight.client.BattleModeGuiMixin",

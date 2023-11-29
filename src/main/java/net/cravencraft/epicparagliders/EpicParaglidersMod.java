@@ -26,7 +26,7 @@ public class EpicParaglidersMod
     {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(ExhaustionAnimations::registerAnimations); //TODO: Can I just use @SubscribeEvent in the original method to bypass this?
-        Contents.registerEventHandlers(eventBus);
+//        Contents.registerEventHandlers(eventBus);
         EpicParaglidersAttributes.registerEventHandlers(eventBus);
         ModNet.init();
 
