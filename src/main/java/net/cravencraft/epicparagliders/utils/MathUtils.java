@@ -44,7 +44,7 @@ public class MathUtils {
 
         double weaponAttackDamage = weaponItem.getAttributeModifiers(EquipmentSlot.MAINHAND, weaponItem.getDefaultInstance())
                 .get(Attributes.ATTACK_DAMAGE).stream()
-                .filter(attributeModifier -> attributeModifier.getName().contains("Weapon"))
+                .filter(attributeModifier -> attributeModifier.getName().contains("Weapon") || attributeModifier.getName().contains("Tool"))
                 .findFirst().get().getAmount();
 
         int weaponStaminaCostOverride = weaponTag
