@@ -119,10 +119,10 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.3.2'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.3.5'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf("curse.maven:epic-fight-mod-405076:4861788")
+    implementation fg.deobf("curse.maven:epic-fight-mod-405076:4907594")
     implementation fg.deobf("curse.maven:paragliders-289240:4478230")
 }
 
