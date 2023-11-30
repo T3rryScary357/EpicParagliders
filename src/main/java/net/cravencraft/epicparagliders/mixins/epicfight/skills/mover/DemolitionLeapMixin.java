@@ -1,14 +1,15 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.mover;
 
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.capabilities.PlayerMovement;
-import tictim.paraglider.capabilities.ServerPlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.movement.PlayerMovement;
+import tictim.paraglider.impl.movement.ServerPlayerMovement;
 import yesman.epicfight.skill.ChargeableSkill;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.mover.DemolitionLeapSkill;
@@ -27,12 +28,12 @@ public abstract class DemolitionLeapMixin extends Skill implements ChargeableSki
         int chargingTicks = caster.getSkillChargingTicks();
 
         if (chargingTicks % 5 == 0 && caster.getAccumulatedChargeAmount() < this.getMaxChargingTicks()) {
-            PlayerMovement playerMovement = PlayerMovement.of(caster.getOriginal());
-            int totalStaminaConsumption = (int) MathUtils.calculateTriangularNumber(((PlayerMovementInterface) playerMovement).getTotalActionStaminaCost());
+            PlayerMovement playerMovement = PlayerMovementProvider.of(caster.getOriginal());
+            int totalStaminaConsumption = (int) MathUtils.calculateTriangularNumber(((StaminaOverride) playerMovement.stamina()).getTotalActionStaminaCost());
 
             if (caster.getStamina() > totalStaminaConsumption) {
                 if (playerMovement instanceof ServerPlayerMovement) {
-                    ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+                    ((StaminaOverride) playerMovement.stamina()).performingAction(true);
                     caster.setStamina(this.consumption);
                 }
 

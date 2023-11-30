@@ -3,7 +3,7 @@ package net.cravencraft.epicparagliders.mixins.epicfight.skills;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 
@@ -12,7 +12,7 @@ public abstract class SkillMixin {
 
     @Redirect(at = @At(value = "INVOKE", target = "Lyesman/epicfight/world/capabilities/entitypatch/player/PlayerPatch;hasStamina(F)Z"), remap = false, method = "lambda$static$6")
     private static boolean testRedirect(PlayerPatch playerPatch, float amount) {
-        if (PlayerMovement.of(playerPatch.getOriginal()).isDepleted()) {
+        if (PlayerMovementProvider.of(playerPatch.getOriginal()).stamina().isDepleted()) {
             return false;
         }
         else {

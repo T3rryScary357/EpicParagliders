@@ -1,7 +1,7 @@
 package net.cravencraft.epicparagliders.network;
 
 import net.cravencraft.epicparagliders.EpicParaglidersMod;
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
@@ -9,10 +9,9 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import tictim.paraglider.ModCfg;
 import tictim.paraglider.ParagliderMod;
-import tictim.paraglider.capabilities.ClientPlayerMovement;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.stamina.BotWStamina;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -20,7 +19,7 @@ import java.util.function.Supplier;
 public class ModNet {
     private ModNet() {}
 
-    public static final String NET_VERSION = "1.0";
+    public static final String NET_VERSION = "2.0";
     public static final SimpleChannel NET = NetworkRegistry.newSimpleChannel(new ResourceLocation(EpicParaglidersMod.MOD_ID, "master"), () -> NET_VERSION, NET_VERSION::equals, NET_VERSION::equals);
 
     public static void init() {
@@ -37,11 +36,10 @@ public class ModNet {
             ctx.get().setPacketHandled(true);
             LocalPlayer localPlayer = Minecraft.getInstance().player;
             if (localPlayer == null) return;
-            ClientPlayerMovement clientPlayerMovement = (ClientPlayerMovement) PlayerMovement.of(localPlayer);
-            if (clientPlayerMovement != null) {
-                if (ModCfg.traceMovementPacket()) ParagliderMod.LOGGER.debug("Received {}", msg);
-//                msg.copyTo(clientPlayerMovement); //TODO: Look into later since you have multiple calls here.
-                ((PlayerMovementInterface) clientPlayerMovement).setTotalActionStaminaCostClientSide(msg.totalActionStaminaCost());
+
+            BotWStamina botWStamina = (BotWStamina) PlayerMovementProvider.of(localPlayer).stamina();
+            if (botWStamina != null) {
+                ((StaminaOverride) botWStamina).setTotalActionStaminaCost(msg.totalActionStaminaCost());
             }
             else {
                 ParagliderMod.LOGGER.error("Couldn't handle packet {}, capability not found", msg);

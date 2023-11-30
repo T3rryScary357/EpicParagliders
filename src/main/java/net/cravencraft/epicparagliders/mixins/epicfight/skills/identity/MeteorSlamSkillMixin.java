@@ -1,8 +1,9 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.identity;
 
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.utils.MathUtils;
+import net.minecraft.tags.DamageTypeTags;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -10,7 +11,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.movement.PlayerMovement;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.SkillDataManager;
@@ -52,13 +54,13 @@ public abstract class MeteorSlamSkillMixin extends Skill {
     @Inject(cancellable = true, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;distanceTo(Lnet/minecraft/world/phys/Vec3;)D"), method = "lambda$onInitiate$4")
     private void modifyStaminaSources(SkillContainer container, SkillExecuteEvent event, CallbackInfo ci) {
         ServerPlayerPatch serverPlayerPatch = (ServerPlayerPatch) container.getExecuter();
-        PlayerMovement playerMovement = PlayerMovement.of(serverPlayerPatch.getOriginal());
-        if (playerMovement.isDepleted()) {
+        PlayerMovement playerMovement = PlayerMovementProvider.of(serverPlayerPatch.getOriginal());
+        if (playerMovement.stamina().isDepleted()) {
             ci.cancel();
         }
         else {
             this.consumption = (float) (MathUtils.getAttackStaminaCost(serverPlayerPatch.getOriginal()) * ConfigManager.SERVER_CONFIG.meteorSlamMultiplier());
-            ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+            ((StaminaOverride) playerMovement.stamina()).performingAction(true);
             serverPlayerPatch.setStamina(this.consumption);
         }
     }
@@ -73,7 +75,7 @@ public abstract class MeteorSlamSkillMixin extends Skill {
      */
     @Inject(at = @At("HEAD"), remap = false, cancellable = true, method = "lambda$onInitiate$5")
     private static void modifyFallDamageMitigation(SkillContainer container, HurtEvent.Pre event, CallbackInfo ci) {
-        if (event.getDamageSource().isFall() && container.getDataManager().getDataValue(PROTECT_NEXT_FALL)) {
+        if (event.getDamageSource().is(DamageTypeTags.IS_FALL) && container.getDataManager().getDataValue(PROTECT_NEXT_FALL)) {
             float stamina = container.getExecuter().getStamina();
             float damage = event.getAmount();
             int damageReduction = (int) Math.round(damage - (stamina * ConfigManager.SERVER_CONFIG.meteorSlamFallDamageMitigator()));

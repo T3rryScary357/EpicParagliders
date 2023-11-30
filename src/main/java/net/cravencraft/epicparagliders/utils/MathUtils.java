@@ -42,9 +42,10 @@ public class MathUtils {
                 .filter(compoundTag -> compoundTag.getInt("id") == Item.getId(player.getMainHandItem().getItem()))
                 .findFirst().get();
 
+        //TODO: Fix for 1.18.2 and 1.19.2 (check for tool attack damage too)
         double weaponAttackDamage = weaponItem.getAttributeModifiers(EquipmentSlot.MAINHAND, weaponItem.getDefaultInstance())
                 .get(Attributes.ATTACK_DAMAGE).stream()
-                .filter(attributeModifier -> attributeModifier.getName().contains("Weapon"))
+                .filter(attributeModifier -> attributeModifier.getName().contains("Weapon") || attributeModifier.getName().contains("Tool"))
                 .findFirst().get().getAmount();
 
         int weaponStaminaCostOverride = weaponTag

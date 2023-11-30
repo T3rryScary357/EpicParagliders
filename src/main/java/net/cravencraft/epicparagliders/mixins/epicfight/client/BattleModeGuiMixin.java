@@ -5,8 +5,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,26 +17,31 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.ModCfg;
-import tictim.paraglider.capabilities.ClientPlayerMovement;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.config.Cfg;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.movement.ClientPlayerMovement;
 import yesman.epicfight.api.utils.math.Vec2i;
 import yesman.epicfight.client.ClientEngine;
 import yesman.epicfight.client.gui.BattleModeGui;
 import yesman.epicfight.client.gui.EntityIndicator;
+import yesman.epicfight.client.gui.ModIngameGui;
 import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.config.ConfigurationIngame;
 
 @Mixin(BattleModeGui.class)
-public abstract class BattleModeGuiMixin extends GuiComponent {
+public abstract class BattleModeGuiMixin extends ModIngameGui {
     @Shadow(remap = false) private int sliding;
     @Shadow(remap = false) private boolean slidingToggle;
     @Shadow(remap = false) @Final private ConfigurationIngame config;
 
-    private int maxPossibleStamina = ModCfg.maxStamina();
+    private int maxPossibleStamina = Cfg.get().maxStamina();
     private boolean decreaseOpacity;
     private float modifiedOpacity;
     private float ratio;
+
+    public BattleModeGuiMixin() {
+        super();
+    }
 
 
     /**
@@ -70,67 +76,57 @@ public abstract class BattleModeGuiMixin extends GuiComponent {
     }
 
     /**
-     * Displays ONLY the stamina bar even if the player is not in Battle Mode (only the config is set to display
+     * Displays ONLY the stamina bar even if the player is not in Battle Mode (only if the config is set to display
      * via the InGameStaminaWheelRendererMixin class). Is needed because the player can potentially drain
      * stamina from actions like running and swimming now.
-     *
-     * @param poseStack
-     * @param playerPatch
-     * @param partialTicks
-     * @param ci
      */
     @Inject(at = @At("HEAD"), method = "renderGui", remap = false, cancellable = true)
-    private void testMethod(PoseStack poseStack, LocalPlayerPatch playerPatch, float partialTicks, CallbackInfo ci) {
+    private void testMethod(LocalPlayerPatch playerPatch, GuiGraphics guiGraphics, float partialTicks, CallbackInfo ci) {
         if (!playerPatch.isBattleMode()) {
             if (!playerPatch.getOriginal().isAlive() || playerPatch.getOriginal().getVehicle() != null) {
                 return;
             }
-
-            if (this.sliding > 28) {
-                return;
-            } else if (this.sliding > 0) {
-                if (this.slidingToggle) {
-                    this.sliding -= 2;
-                } else {
-                    this.sliding += 2;
+            if (this.sliding <= 28) {
+                if (this.sliding > 0) {
+                    if (this.slidingToggle) {
+                        this.sliding -= 2;
+                    } else {
+                        this.sliding += 2;
+                    }
                 }
-            }
 
-            Window sr = Minecraft.getInstance().getWindow();
-            int width = sr.getGuiScaledWidth();
-            int height = sr.getGuiScaledHeight();
+                Window sr = Minecraft.getInstance().getWindow();
+                int width = sr.getGuiScaledWidth();
+                int height = sr.getGuiScaledHeight();
+                boolean depthTestEnabled = GL11.glGetBoolean(2929);
+                boolean blendEnabled = GL11.glGetBoolean(3042);
+                if (depthTestEnabled) {
+                    RenderSystem.disableDepthTest();
+                }
 
-            boolean depthTestEnabled = GL11.glGetBoolean(GL11.GL_DEPTH_TEST);
-            boolean blendEnabled = GL11.glGetBoolean(GL11.GL_BLEND);
+                if (!blendEnabled) {
+                    RenderSystem.enableBlend();
+                }
 
-            if (depthTestEnabled) {
-                RenderSystem.disableDepthTest();
-            }
-
-            if (!blendEnabled) {
-                RenderSystem.enableBlend();
-            }
-
-            poseStack.pushPose();
-            poseStack.setIdentity();
-
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, EntityIndicator.BATTLE_ICON);
-
-            float maxStamina = playerPatch.getMaxStamina();
-            float stamina = playerPatch.getStamina();
-
-            if (maxStamina > 0.0F && stamina < maxStamina) {
-                Vec2i pos = this.config.getStaminaPosition(width, height);
-                float prevStamina = playerPatch.getPrevStamina();
-                float ratio = (prevStamina + (stamina - prevStamina) * partialTicks) / maxStamina;
-
+                PoseStack poseStack = guiGraphics.pose();
                 poseStack.pushPose();
-                poseStack.translate(0, this.sliding, 0);
-                this.setModifiedOpacity(1.0F, ratio, 0.25F, 1.0F);
-                GuiComponent.blit(poseStack, pos.x, pos.y, this.getDisplayStamina(118), 4, 2, 38, 237, 9, 255, 255);
-                GuiComponent.blit(poseStack, pos.x, pos.y, this.getDisplayStamina((int) (118*ratio)), 4, 2, 47, (int)(237*ratio), 9, 255, 255);
-                poseStack.popPose();
+                poseStack.setIdentity();
+                RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                float maxStamina = playerPatch.getMaxStamina();
+                float stamina = playerPatch.getStamina();
+                float ratio;
+                if (maxStamina > 0.0F && stamina < maxStamina) {
+                    Vec2i pos = this.config.getStaminaPosition(width, height);
+                    float prevStamina = playerPatch.getPrevStamina();
+                    ratio = (prevStamina + (stamina - prevStamina) * partialTicks) / maxStamina;
+                    poseStack.pushPose();
+                    poseStack.translate(0.0F, (float)this.sliding, 0.0F);
+                    this.setModifiedOpacity(1.0F, ratio, 0.25F, 1.0F);
+                    guiGraphics.blit(EntityIndicator.BATTLE_ICON, pos.x, pos.y, this.getDisplayStamina(118), 4, 2.0F, 38.0F, 237, 9, 255, 255);
+                    guiGraphics.blit(EntityIndicator.BATTLE_ICON, pos.x, pos.y, this.getDisplayStamina((int) (118*ratio)), 4, 2.0F, 47.0F, (int)(237.0F * ratio), 9, 255, 255);
+                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+                    poseStack.popPose();
+                }
             }
             ci.cancel();
         }
@@ -140,18 +136,18 @@ public abstract class BattleModeGuiMixin extends GuiComponent {
      * Adjusts the stamina bar's length to be relative to the max stamina a user has vs. the max
      * stamina possible to achieve.
      */
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiComponent;blit(Lcom/mojang/blaze3d/vertex/PoseStack;IIIIFFIIII)V", ordinal = 0), method = "renderGui")
-    private void modifyStaminaBarSize(PoseStack p_93161_, int p_93162_, int p_93163_, int p_93164_, int p_93165_, float p_93166_, float p_93167_, int p_93168_, int p_93169_, int p_93170_, int p_93171_) {
-        GuiComponent.blit(p_93161_, p_93162_, p_93163_, this.getDisplayStamina(p_93164_), p_93165_, p_93166_, p_93167_, p_93168_, p_93169_, p_93170_, p_93171_);
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/ResourceLocation;IIIIFFIIII)V", ordinal = 0), method = "renderGui")
+    private void modifyStaminaBarSize(GuiGraphics guiGraphics, ResourceLocation p_282034_, int p_283671_, int p_282377_, int p_282058_, int p_281939_, float p_282285_, float p_283199_, int p_282186_, int p_282322_, int p_282481_, int p_281887_) {
+        guiGraphics.blit(p_282034_, p_283671_, p_282377_, this.getDisplayStamina(p_282058_), p_281939_, p_282285_, p_283199_, p_282186_, p_282322_, p_282481_, p_281887_);
     }
 
     /**
      * Adjusts the stamina bar's dynamic length to be relative to the max stamina a user has vs. the max
      * stamina possible to achieve.
      */
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiComponent;blit(Lcom/mojang/blaze3d/vertex/PoseStack;IIIIFFIIII)V", ordinal = 1), method = "renderGui")
-    private void modifyDynamicStaminaBar(PoseStack p_93161_, int p_93162_, int p_93163_, int p_93164_, int p_93165_, float p_93166_, float p_93167_, int p_93168_, int p_93169_, int p_93170_, int p_93171_) {
-        GuiComponent.blit(p_93161_, p_93162_, p_93163_, this.getDisplayStamina(p_93164_), p_93165_, p_93166_, p_93167_, p_93168_, p_93169_, p_93170_, p_93171_);
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;blit(Lnet/minecraft/resources/ResourceLocation;IIIIFFIIII)V", ordinal = 1), method = "renderGui")
+    private void modifyDynamicStaminaBar(GuiGraphics guiGraphics, ResourceLocation p_282034_, int p_283671_, int p_282377_, int p_282058_, int p_281939_, float p_282285_, float p_283199_, int p_282186_, int p_282322_, int p_282481_, int p_281887_) {
+        guiGraphics.blit(p_282034_, p_283671_, p_282377_, this.getDisplayStamina(p_282058_), p_281939_, p_282285_, p_283199_, p_282186_, p_282322_, p_282481_, p_281887_);
     }
 
     /**
@@ -182,9 +178,9 @@ public abstract class BattleModeGuiMixin extends GuiComponent {
      * @param opacity
      */
     private void setModifiedOpacity(float red, float blue, float green, float opacity) {
-        ClientPlayerMovement playerMovement = (ClientPlayerMovement) PlayerMovement.of(Minecraft.getInstance().player);
+        ClientPlayerMovement playerMovement = (ClientPlayerMovement) PlayerMovementProvider.of(Minecraft.getInstance().player);
 
-        if (playerMovement.isDepleted()) {
+        if (playerMovement.stamina().isDepleted()) {
             if (decreaseOpacity) {
                 modifiedOpacity -= 0.05F;
             }

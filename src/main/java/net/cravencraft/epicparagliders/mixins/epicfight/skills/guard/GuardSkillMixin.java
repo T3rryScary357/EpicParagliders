@@ -1,16 +1,16 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.guard;
 
 import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
-import net.cravencraft.epicparagliders.config.ServerConfig;
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.movement.PlayerMovement;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.guard.GuardSkill;
@@ -62,9 +62,9 @@ public abstract class GuardSkillMixin extends Skill {
      */
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 0, remap = false)
     private GuardSkill.BlockType blockType(GuardSkill.BlockType blockType) {
-        PlayerMovement playerMovement = PlayerMovement.of(playerPatch.getOriginal());
-        int armorValue = playerMovement.player.getArmorValue();
-        double blockMultiplier = Math.round(ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier() * playerMovement.player.getAttributeValue(EpicParaglidersAttributes.BLOCK_STAMINA_REDUCTION.get()));
+        PlayerMovement playerMovement = PlayerMovementProvider.of(playerPatch.getOriginal());
+        int armorValue = playerMovement.player().getArmorValue();
+        double blockMultiplier = Math.round(ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier() * playerMovement.player().getAttributeValue(EpicParaglidersAttributes.BLOCK_STAMINA_REDUCTION.get()));
 
         float poise;
         float weight = this.playerPatch.getWeight();
@@ -75,7 +75,7 @@ public abstract class GuardSkillMixin extends Skill {
             poise = 0.0F;
         }
         else {
-            float attenuation = Mth.clamp(this.playerPatch.getOriginal().level.getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
+            float attenuation = Mth.clamp(this.playerPatch.getOriginal().level().getGameRules().getInt(EpicFightGamerules.WEIGHT_PENALTY), 0, 100) / 100.0F;
             poise = (0.1F * (weight / 40.0F) * (Math.max(armorValue, 0) * 1.5F) * attenuation);
         }
 
@@ -83,11 +83,10 @@ public abstract class GuardSkillMixin extends Skill {
         double guardConsumption = getConsumption() + (penalty * blockMultiplier) + (impact * blockMultiplier);
         guardConsumption = (guardConsumption > poise) ? (guardConsumption - poise) : 0;
 
-//        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide((int)guardConsumption);
-        ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+        ((StaminaOverride) playerMovement.stamina()).performingAction(true);
         playerPatch.setStamina((float) guardConsumption);
 
-        if (playerMovement.isDepleted()) {
+        if (playerMovement.stamina().isDepleted()) {
             return GuardSkill.BlockType.GUARD_BREAK;
         }
         else {

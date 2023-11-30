@@ -1,13 +1,13 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills;
 
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
 import yesman.epicfight.skill.AirAttack;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
@@ -21,11 +21,10 @@ public abstract class AirAttackMixin extends Skill {
 
     @Inject(method = "executeOnServer", at = @At("TAIL"), remap = false)
     private void getPlayerPatch(ServerPlayerPatch executer, FriendlyByteBuf args, CallbackInfo ci) {
-        PlayerMovement playerMovement = PlayerMovement.of(executer.getOriginal());
 
-        int specialAttackStaminaConsumption = MathUtils.getAttackStaminaCost(executer.getOriginal());
+        StaminaOverride botwStamina = ((StaminaOverride) PlayerMovementProvider.of(executer.getOriginal()).stamina());
 
-        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide(specialAttackStaminaConsumption + 3);
-        ((PlayerMovementInterface) playerMovement).attackingServerSide(true);
+        botwStamina.attacking(true);
+        botwStamina.setActionStaminaCost(MathUtils.getAttackStaminaCost(executer.getOriginal()) + 3);
     }
 }

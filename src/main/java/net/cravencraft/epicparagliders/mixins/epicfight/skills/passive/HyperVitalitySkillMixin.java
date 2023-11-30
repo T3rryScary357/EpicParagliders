@@ -1,6 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -9,7 +9,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import tictim.paraglider.capabilities.PlayerMovement;
+import tictim.paraglider.forge.capability.PlayerMovementProvider;
+import tictim.paraglider.impl.movement.PlayerMovement;
 import yesman.epicfight.network.EpicFightNetworkManager;
 import yesman.epicfight.network.server.SPSkillExecutionFeedback;
 import yesman.epicfight.skill.Skill;
@@ -41,14 +42,14 @@ public abstract class HyperVitalitySkillMixin extends PassiveSkill {
     private static void getPlayerPatch(SkillContainer container, SkillConsumeEvent event, CallbackInfo ci) {
         if (!container.getExecuter().getSkill(event.getSkill()).isDisabled() && event.getSkill().getCategory() == SkillCategories.WEAPON_INNATE) {
             PlayerPatch<?> playerpatch = event.getPlayerPatch();
-            PlayerMovement playerMovement = PlayerMovement.of(playerpatch.getOriginal());
+            PlayerMovement playerMovement = PlayerMovementProvider.of(playerpatch.getOriginal());
             if (playerpatch.getSkill(SkillSlots.WEAPON_INNATE).getStack() < 1 && container.getStack() > 0 && !((Player)playerpatch.getOriginal()).isCreative()) {
                 float consumption = event.getSkill().getConsumption();
-                if (!playerMovement.isDepleted()) {
+                if (!playerMovement.stamina().isDepleted()) {
                     event.setResourceType(Resource.NONE);
                     container.setMaxResource(consumption * 0.2F);
                     if (event.shouldConsume()) {
-                        ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+                        ((StaminaOverride) playerMovement.stamina()).performingAction(true);
                         container.getExecuter().consumeStamina((float) (MathUtils.getAttackStaminaCost(playerpatch.getOriginal()) * ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier()));
                         container.setMaxDuration(event.getSkill().getMaxDuration());
                         container.activate();
