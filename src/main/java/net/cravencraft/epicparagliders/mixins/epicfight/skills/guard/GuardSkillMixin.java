@@ -1,8 +1,8 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.guard;
 
 import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -83,8 +83,7 @@ public abstract class GuardSkillMixin extends Skill {
         double guardConsumption = getConsumption() + (penalty * blockMultiplier) + (impact * blockMultiplier);
         guardConsumption = (guardConsumption > poise) ? (guardConsumption - poise) : 0;
 
-//        ((PlayerMovementInterface) playerMovement).setActionStaminaCostServerSide((int)guardConsumption);
-        ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+        ((StaminaOverride) playerMovement.stamina()).performingAction(true);
         playerPatch.setStamina((float) guardConsumption);
 
         if (playerMovement.stamina().isDepleted()) {

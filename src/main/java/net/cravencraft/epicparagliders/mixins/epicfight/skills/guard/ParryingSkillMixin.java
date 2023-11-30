@@ -1,8 +1,8 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.guard;
 
 import net.cravencraft.epicparagliders.EpicParaglidersAttributes;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
@@ -59,6 +59,9 @@ public abstract class ParryingSkillMixin extends GuardSkill {
     }
 
     /**
+     * TODO: Bug here that doesn't allow stamina to drain if you successfully parry an attack.
+     *       Also, parrying does not give stamina.
+     *
      * Modifies the 'stamina' variable in the 'guard' method of the ActiveGuardSkill class.
      * Takes in values retrieved from the above methods that simply store the penalty and impact
      * from the same method to factor into this method's new stamina consumption factor.
@@ -74,11 +77,10 @@ public abstract class ParryingSkillMixin extends GuardSkill {
     @ModifyVariable(method = "guard", at = @At(value = "STORE"), ordinal = 0, remap = false)
     private GuardSkill.BlockType blockType(GuardSkill.BlockType blockType) {
         PlayerMovement playerMovement = PlayerMovementProvider.of(playerPatch.getOriginal());
-        PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
+        StaminaOverride botwStamina = ((StaminaOverride) playerMovement.stamina());
 
         int guardConsumption;
         int armorValue = playerMovement.player().getArmorValue();
-        int currentStamina = playerMovement.stamina().stamina();
 
         double blockMultiplier = Math.round(ConfigManager.SERVER_CONFIG.baseBlockStaminaMultiplier() * playerMovement.player().getAttributeValue(EpicParaglidersAttributes.BLOCK_STAMINA_REDUCTION.get()));
         double parryPenaltyMultiplier = ConfigManager.SERVER_CONFIG.parryPenaltyMultiplier();
@@ -106,7 +108,7 @@ public abstract class ParryingSkillMixin extends GuardSkill {
                 guardConsumption = (int) (getConsumption() + (impact * blockMultiplier * (1 - parryPercentModifier)));
             }
             else {
-                int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.stamina().maxStamina() - playerMovement.stamina().stamina()));
+                int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(botwStamina.getTotalActionStaminaCost()) + (playerMovement.stamina().maxStamina() - playerMovement.stamina().stamina()));
                 guardConsumption = -(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, parryPercentModifier));
             }
 
@@ -125,8 +127,8 @@ public abstract class ParryingSkillMixin extends GuardSkill {
             guardConsumption = 0;
         }
 
-        playerMovementInterface.setActionStaminaCostServerSide(guardConsumption);
-        playerMovementInterface.performingActionServerSide(true);
+        botwStamina.setActionStaminaCost(guardConsumption);
+        botwStamina.performingAction(true);
 
         if (playerMovement.stamina().isDepleted()) {
             return GuardSkill.BlockType.GUARD_BREAK;

@@ -1,7 +1,7 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,9 +27,9 @@ public abstract class TechnicianSkillMixin extends PassiveSkill {
     @Redirect(at = @At(value = "INVOKE", target = "Lyesman/epicfight/world/capabilities/entitypatch/player/PlayerPatch;setStamina(F)V"), remap = false, method = "lambda$onInitiate$0")
     private static void modifyConsumedStamina(PlayerPatch playerPatch, float originalValue) {
         PlayerMovement playerMovement = PlayerMovementProvider.of(playerPatch.getOriginal());
-        PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
+        StaminaOverride botwStamina = ((StaminaOverride) playerMovement.stamina());
 
-        int technicianConsumption = playerMovementInterface.getTotalActionStaminaCost();
+        int technicianConsumption = botwStamina.getTotalActionStaminaCost();
         double technicianPercentModifier = ConfigManager.SERVER_CONFIG.technicianPercentModifier() * 0.01;
 
         // If the player is successful with the dodge, use one of these formulas depending on if the technician skill is set to drain stamina in the config.
@@ -37,11 +37,11 @@ public abstract class TechnicianSkillMixin extends PassiveSkill {
             technicianConsumption *= (1 - technicianPercentModifier);
         }
         else {
-            int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.stamina().maxStamina() - playerMovement.stamina().stamina()));
+            int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(botwStamina.getTotalActionStaminaCost()) + (playerMovement.stamina().maxStamina() - playerMovement.stamina().stamina()));
             technicianConsumption = -(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, technicianPercentModifier));
         }
 
-        playerMovementInterface.performingActionServerSide(true);
+        botwStamina.performingAction(true);
         playerPatch.setStamina(technicianConsumption);
     }
 }

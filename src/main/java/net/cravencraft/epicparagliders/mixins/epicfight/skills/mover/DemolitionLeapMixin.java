@@ -1,6 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.mover;
 
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,11 +29,11 @@ public abstract class DemolitionLeapMixin extends Skill implements ChargeableSki
 
         if (chargingTicks % 5 == 0 && caster.getAccumulatedChargeAmount() < this.getMaxChargingTicks()) {
             PlayerMovement playerMovement = PlayerMovementProvider.of(caster.getOriginal());
-            int totalStaminaConsumption = (int) MathUtils.calculateTriangularNumber(((PlayerMovementInterface) playerMovement).getTotalActionStaminaCost());
+            int totalStaminaConsumption = (int) MathUtils.calculateTriangularNumber(((StaminaOverride) playerMovement.stamina()).getTotalActionStaminaCost());
 
             if (caster.getStamina() > totalStaminaConsumption) {
                 if (playerMovement instanceof ServerPlayerMovement) {
-                    ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+                    ((StaminaOverride) playerMovement.stamina()).performingAction(true);
                     caster.setStamina(this.consumption);
                 }
 

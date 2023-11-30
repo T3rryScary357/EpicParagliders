@@ -1,6 +1,7 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.identity;
 
 import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.tags.DamageTypeTags;
@@ -60,7 +61,7 @@ public abstract class MeteorSlamSkillMixin extends Skill {
         }
         else {
             this.consumption = (float) (MathUtils.getAttackStaminaCost(serverPlayerPatch.getOriginal()) * ConfigManager.SERVER_CONFIG.meteorSlamMultiplier());
-            ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+            ((StaminaOverride) playerMovement.stamina()).performingAction(true);
             serverPlayerPatch.setStamina(this.consumption);
         }
     }

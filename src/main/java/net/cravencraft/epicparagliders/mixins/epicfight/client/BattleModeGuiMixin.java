@@ -76,7 +76,7 @@ public abstract class BattleModeGuiMixin extends ModIngameGui {
     }
 
     /**
-     * Displays ONLY the stamina bar even if the player is not in Battle Mode (only the config is set to display
+     * Displays ONLY the stamina bar even if the player is not in Battle Mode (only if the config is set to display
      * via the InGameStaminaWheelRendererMixin class). Is needed because the player can potentially drain
      * stamina from actions like running and swimming now.
      */
@@ -121,10 +121,8 @@ public abstract class BattleModeGuiMixin extends ModIngameGui {
                     ratio = (prevStamina + (stamina - prevStamina) * partialTicks) / maxStamina;
                     poseStack.pushPose();
                     poseStack.translate(0.0F, (float)this.sliding, 0.0F);
-                    RenderSystem.setShaderColor(1.0F, ratio, 0.25F, 1.0F);
-
-//                    GuiComponent.blit(poseStack, pos.x, pos.y, this.getDisplayStamina(118), 4, 2, 38, 237, 9, 255, 255);
-//                    GuiComponent.blit(poseStack, pos.x, pos.y, this.getDisplayStamina((int) (118*ratio)), 4, 2, 47, (int)(237*ratio), 9, 255, 255);
+//                    RenderSystem.setShaderColor(1.0F, ratio, 0.25F, 1.0F);
+                    this.setModifiedOpacity(1.0F, ratio, 0.25F, 1.0F);
                     guiGraphics.blit(EntityIndicator.BATTLE_ICON, pos.x, pos.y, this.getDisplayStamina(118), 4, 2.0F, 38.0F, 237, 9, 255, 255);
                     guiGraphics.blit(EntityIndicator.BATTLE_ICON, pos.x, pos.y, this.getDisplayStamina((int) (118*ratio)), 4, 2.0F, 47.0F, (int)(237.0F * ratio), 9, 255, 255);
                     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

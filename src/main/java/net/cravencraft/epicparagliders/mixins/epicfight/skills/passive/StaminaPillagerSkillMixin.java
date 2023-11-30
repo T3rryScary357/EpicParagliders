@@ -1,7 +1,7 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,11 +32,11 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
     private void getPlayerPatch(DealtDamageEvent event, CallbackInfo ci) {
         if (!event.getTarget().isAlive()) {
             PlayerMovement playerMovement = PlayerMovementProvider.of(event.getPlayerPatch().getOriginal());
-            PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
+            StaminaOverride botwStamina = ((StaminaOverride) playerMovement.stamina());
             double staminaPillagerPercentModifier = ConfigManager.SERVER_CONFIG.staminaPillagerPercentModifier() * 0.01;
 
-            int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(playerMovementInterface.getTotalActionStaminaCost()) + (playerMovement.stamina().maxStamina() - playerMovement.stamina().stamina()));
-            playerMovementInterface.performingActionServerSide(true);
+            int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(botwStamina.getTotalActionStaminaCost()) + (playerMovement.stamina().maxStamina() - playerMovement.stamina().stamina()));
+            botwStamina.performingAction(true);
             event.getPlayerPatch().setStamina(-(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, staminaPillagerPercentModifier)));
         }
         ci.cancel();

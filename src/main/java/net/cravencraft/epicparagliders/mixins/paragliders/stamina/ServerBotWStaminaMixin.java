@@ -1,5 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.paragliders.stamina;
 
+import net.cravencraft.epicparagliders.EpicParaglidersMod;
 import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.network.ModNet;
@@ -103,9 +104,11 @@ public abstract class ServerBotWStaminaMixin extends BotWStamina implements Stam
                 //TODO: Double check regular stamina consumption from attacks. Could need a rework as well, but more than
                 //      likely they are fine.
                 if (this.currentActionStaminaCost < 0) {
+                    EpicParaglidersMod.LOGGER.info("SERVER SIDE RETURN STAMINA: " + this.currentActionStaminaCost);
                     int totalStaminaCostTriangularNumber = (int) MathUtils.calculateTriangularNumber(this.totalActionStaminaCost);
                     int currentStaminaCostTriangularNumber = (int) MathUtils.calculateTriangularNumber(this.currentActionStaminaCost);
                     this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot(totalStaminaCostTriangularNumber + currentStaminaCostTriangularNumber);
+                    EpicParaglidersMod.LOGGER.info("SERVER SIDE RETURN TOTAL STAMINA: " + this.totalActionStaminaCost);
                 }
                 else {
                     this.totalActionStaminaCost = (int) MathUtils.calculateTriangularRoot((MathUtils.calculateTriangularNumber(this.totalActionStaminaCost)

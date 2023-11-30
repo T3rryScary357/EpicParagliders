@@ -1,6 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -49,7 +49,7 @@ public abstract class HyperVitalitySkillMixin extends PassiveSkill {
                     event.setResourceType(Resource.NONE);
                     container.setMaxResource(consumption * 0.2F);
                     if (event.shouldConsume()) {
-                        ((PlayerMovementInterface) playerMovement).performingActionServerSide(true);
+                        ((StaminaOverride) playerMovement.stamina()).performingAction(true);
                         container.getExecuter().consumeStamina((float) (MathUtils.getAttackStaminaCost(playerpatch.getOriginal()) * ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier()));
                         container.setMaxDuration(event.getSkill().getMaxDuration());
                         container.activate();

@@ -1,6 +1,6 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
+import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,12 +27,11 @@ public abstract class EmergencyEscapeSkillMixin extends PassiveSkill {
 
     @Redirect(at = @At(value = "INVOKE", target = "Lyesman/epicfight/world/entity/eventlistener/SkillExecuteEvent;setStateExecutable(Z)V"), remap = false, method = "lambda$onInitiate$0")
     private void cancelPlayerAttack(SkillExecuteEvent instance, boolean stateExecutable) {
-        PlayerMovement playerMovement = PlayerMovementProvider.of(instance.getPlayerPatch().getOriginal());
-        PlayerMovementInterface playerMovementInterface = ((PlayerMovementInterface) playerMovement);
+        StaminaOverride botwStamina = ((StaminaOverride) PlayerMovementProvider.of(instance.getPlayerPatch().getOriginal()).stamina());
 
         if (instance.getPlayerPatch() instanceof ServerPlayerPatch) {
-            if (playerMovementInterface.isAttackingServerSide()) {
-                playerMovementInterface.attackingServerSide(false);
+            if (botwStamina.isAttacking()) {
+                botwStamina.attacking(false);
             }
         }
 
@@ -40,7 +39,6 @@ public abstract class EmergencyEscapeSkillMixin extends PassiveSkill {
     }
 
     /**
-     *
      * Modifies the Emergency Escape skill by integrating with the Paragliders stamina system,
      * and checking if the actual stamina consumption will be more than the remaining stamina.
      * Pretty much exactly how it works originally, but now it uses the new system.

@@ -25,6 +25,8 @@ public abstract class BotWStaminaMixin implements Stamina, Copy, Serde, StaminaO
 
     @Shadow public abstract boolean isDepleted();
 
+    @Shadow public abstract int giveStamina(int amount, boolean simulate);
+
     private int totalActionStaminaCost;
     private int eldenStaminaDelay;
 
@@ -48,7 +50,7 @@ public abstract class BotWStaminaMixin implements Stamina, Copy, Serde, StaminaO
         int recoveryDelay = movement.recoveryDelay();
         int newRecoveryDelay = recoveryDelay;
 
-        if (state.staminaDelta() < 0 || this.totalActionStaminaCost > 0) {
+        if (state.staminaDelta() < 0 || this.totalActionStaminaCost != 0) {
             int staminaDelta;
 
             if (ConfigManager.SERVER_CONFIG.eldenStaminaSystem()) {
@@ -77,7 +79,13 @@ public abstract class BotWStaminaMixin implements Stamina, Copy, Serde, StaminaO
             if (!isDepleted()) {
                 //TODO: This probably needs to be redone with the triangular numbers formula
                 staminaDelta = (state.staminaDelta() < 0) ? staminaDelta - this.totalActionStaminaCost : -this.totalActionStaminaCost;
-                takeStamina(-staminaDelta, false, false);
+                if (staminaDelta > 0) {
+                    giveStamina(staminaDelta, false);
+                }
+                else {
+                    takeStamina(-staminaDelta, false, false);
+                }
+
             }
         }
         else {
@@ -94,9 +102,14 @@ public abstract class BotWStaminaMixin implements Stamina, Copy, Serde, StaminaO
             }
         }
 
+        // Check for draining stamina
         if (this.totalActionStaminaCost > 0) {
             movement.setRecoveryDelay(10);
             this.totalActionStaminaCost--;
+        }
+        // Check for gaining stamina
+        else if(this.totalActionStaminaCost < 0) {
+            this.totalActionStaminaCost++;
         }
 
         //TODO: Maybe there's a reason I put this outside of the else statement
