@@ -265,7 +265,7 @@ public class ServerConfig {
 
         parryPercentModifier = server.comment("How much stamina reduction will be applied on a successful parry,\n" +
                                                 "or how much missing stamina will be replenished on a successful parry.")
-                .defineInRange("skills.parry.parry_percent_modifier", 50, 0, 100);
+                .defineInRange("skills.parry.parry_percent_modifier", 25, 0, 100);
 
         technicianDrain = server.comment("If true, stamina drain will be reduced based on the percentage defined below.\n" +
                                           "If false, missing stamina will be replenished based on the percentage defined below.")
