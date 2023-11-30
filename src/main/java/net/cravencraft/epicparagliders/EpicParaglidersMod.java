@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import tictim.paraglider.contents.Contents;
 
 @Mod(EpicParaglidersMod.MOD_ID)
 @Mod.EventBusSubscriber(modid = EpicParaglidersMod.MOD_ID, bus = Bus.MOD)
@@ -26,7 +25,6 @@ public class EpicParaglidersMod
     {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
         eventBus.addListener(ExhaustionAnimations::registerAnimations); //TODO: Can I just use @SubscribeEvent in the original method to bypass this?
-//        Contents.registerEventHandlers(eventBus);
         EpicParaglidersAttributes.registerEventHandlers(eventBus);
         ModNet.init();
 

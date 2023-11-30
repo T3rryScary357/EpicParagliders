@@ -121,7 +121,6 @@ public abstract class BattleModeGuiMixin extends ModIngameGui {
                     ratio = (prevStamina + (stamina - prevStamina) * partialTicks) / maxStamina;
                     poseStack.pushPose();
                     poseStack.translate(0.0F, (float)this.sliding, 0.0F);
-//                    RenderSystem.setShaderColor(1.0F, ratio, 0.25F, 1.0F);
                     this.setModifiedOpacity(1.0F, ratio, 0.25F, 1.0F);
                     guiGraphics.blit(EntityIndicator.BATTLE_ICON, pos.x, pos.y, this.getDisplayStamina(118), 4, 2.0F, 38.0F, 237, 9, 255, 255);
                     guiGraphics.blit(EntityIndicator.BATTLE_ICON, pos.x, pos.y, this.getDisplayStamina((int) (118*ratio)), 4, 2.0F, 47.0F, (int)(237.0F * ratio), 9, 255, 255);

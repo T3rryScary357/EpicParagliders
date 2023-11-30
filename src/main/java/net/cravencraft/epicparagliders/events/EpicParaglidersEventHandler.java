@@ -3,7 +3,6 @@ package net.cravencraft.epicparagliders.events;
 import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.EpicParaglidersMod;
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraftforge.event.entity.living.ShieldBlockEvent;

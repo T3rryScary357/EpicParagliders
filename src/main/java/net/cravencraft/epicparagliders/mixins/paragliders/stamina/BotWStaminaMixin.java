@@ -112,11 +112,6 @@ public abstract class BotWStaminaMixin implements Stamina, Copy, Serde, StaminaO
             this.totalActionStaminaCost++;
         }
 
-        //TODO: Maybe there's a reason I put this outside of the else statement
-//        if (ConfigManager.SERVER_CONFIG.eldenStaminaSystem() && this.eldenStaminaDelay > 0) {
-//            --this.eldenStaminaDelay;
-//        }
-
         if (movement instanceof ServerPlayerMovement) {
             this.setTotalActionStaminaCostServerSide(this.totalActionStaminaCost);
         }

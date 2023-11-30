@@ -1,6 +1,5 @@
 package net.cravencraft.epicparagliders.mixins.epicfight.skills.identity;
 
-import net.cravencraft.epicparagliders.capabilities.PlayerMovementInterface;
 import net.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import net.cravencraft.epicparagliders.config.ConfigManager;
 import net.cravencraft.epicparagliders.utils.MathUtils;
