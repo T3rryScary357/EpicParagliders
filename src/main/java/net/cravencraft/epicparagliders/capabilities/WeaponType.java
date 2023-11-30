@@ -8,6 +8,9 @@ import net.minecraft.world.entity.player.Player;
 public enum WeaponType {
 
     AXE,
+    HOE,
+    SHOVEL,
+    PICKAXE,
     DAGGER,
     SWORD,
     LONGSWORD,
@@ -27,6 +30,9 @@ public enum WeaponType {
 
         switch (this) {
             case AXE:
+            case HOE:
+            case SHOVEL:
+            case PICKAXE:
                 return serverConfig.axeStaminaMultiplier();
             case DAGGER:
                 return serverConfig.daggerStaminaMultiplier();
@@ -59,6 +65,9 @@ public enum WeaponType {
 
         switch (this) {
             case AXE:
+            case HOE:
+            case SHOVEL:
+            case PICKAXE:
                 return serverConfig.axeStaminaFixedCost();
             case DAGGER:
                 return serverConfig.daggerStaminaFixedCost();
@@ -91,6 +100,9 @@ public enum WeaponType {
 
         switch (this) {
             case AXE:
+            case HOE:
+            case SHOVEL:
+            case PICKAXE:
                 return player.getAttributeValue(EpicParaglidersAttributes.AXE_STAMINA_REDUCTION.get());
             case DAGGER:
                 return player.getAttributeValue(EpicParaglidersAttributes.DAGGER_STAMINA_REDUCTION.get());
