@@ -34,14 +34,14 @@ public abstract class ForbiddenStrengthSkillMixin extends PassiveSkill {
      * @param ci
      */
     @Inject(method = "lambda$onInitiate$0", at = @At("HEAD"), remap = false, cancellable = true)
-    private static void modifyStaminaSources(SkillContainer container, SkillConsumeEvent event, CallbackInfo ci) {
+    private void modifyStaminaSources(SkillContainer container, SkillConsumeEvent event, CallbackInfo ci) {
         if (event.getResourceType() == Skill.Resource.STAMINA) {
             if (PlayerMovementProvider.of(event.getPlayerPatch().getOriginal()).stamina().isDepleted() && !container.getExecuter().getOriginal().isCreative()) {
                 float healthConsumed = (float) (event.getAmount() * ConfigManager.SERVER_CONFIG.forbiddenStrengthMultiplier());
                 event.setResourceType(Skill.Resource.HEALTH);
                 event.setAmount(healthConsumed);
 
-                if (event.shouldConsume()) {
+                if (!container.getExecuter().isLogicalClient() && event.getResourceType().predicate.canExecute(event.getSkill(), container.getExecuter(), healthConsumed)) {
                     Player player = container.getExecuter().getOriginal();
                     player.level().playSound(null, player.getX(), player.getY(), player.getZ(), EpicFightSounds.FORBIDDEN_STRENGTH.get(), player.getSoundSource(), 1.0F, 1.0F);
                     ((ServerLevel)player.level()).sendParticles(ParticleTypes.DAMAGE_INDICATOR, player.getX(), player.getY(0.5D), player.getZ(), (int)healthConsumed, 0.1D, 0.0D, 0.1D, 0.2D);

@@ -3,12 +3,10 @@ package com.cravencraft.epicparagliders.mixins.epicfight.capabilities;
 import com.cravencraft.epicparagliders.EpicParaglidersAttributes;
 import com.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import com.cravencraft.epicparagliders.config.ConfigManager;
-import com.cravencraft.epicparagliders.gameasset.ExhaustionAnimations;
-import com.cravencraft.epicparagliders.gameasset.ExhaustionMotions;
+import com.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,11 +15,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tictim.paraglider.api.stamina.Stamina;
 import tictim.paraglider.forge.capability.PlayerMovementProvider;
-import yesman.epicfight.api.client.animation.ClientAnimator;
+import tictim.paraglider.impl.stamina.BotWStamina;
+import yesman.epicfight.main.EpicFightMod;
 import yesman.epicfight.skill.ChargeableSkill;
+import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.mover.DemolitionLeapSkill;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
+import yesman.epicfight.world.entity.eventlistener.PlayerEventListener;
+import yesman.epicfight.world.entity.eventlistener.SkillConsumeEvent;
 import yesman.epicfight.world.gamerule.EpicFightGamerules;
 
 @Mixin(PlayerPatch.class)
@@ -93,25 +96,20 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    @Inject(method = "initAnimator", at = @At("HEAD"), remap = false)
-    private void addExhaustionAnimations(ClientAnimator clientAnimator, CallbackInfo ci) {
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_IDLE, ExhaustionAnimations.EXHAUSTED_IDLE);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_WALK, ExhaustionAnimations.EXHAUSTED_WALK);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_IDLE_CROSSBOW, ExhaustionAnimations.EXHAUSTED_IDLE_CROSSBOW);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_WALK_CROSSBOW, ExhaustionAnimations.EXHAUSTED_WALK_CROSSBOW);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_IDLE_GREATSWORD, ExhaustionAnimations.EXHAUSTED_IDLE_GREATSWORD);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_WALK_GREATSWORD, ExhaustionAnimations.EXHAUSTED_WALK_GREATSWORD);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_IDLE_TACHI, ExhaustionAnimations.EXHAUSTED_IDLE_TACHI);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_WALK_TACHI, ExhaustionAnimations.EXHAUSTED_WALK_TACHI);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_IDLE_SPEAR, ExhaustionAnimations.EXHAUSTED_IDLE_SPEAR);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_WALK_SPEAR, ExhaustionAnimations.EXHAUSTED_WALK_SPEAR);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_IDLE_LIECHTENAUER, ExhaustionAnimations.EXHAUSTED_IDLE_LIECHTENAUER);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_WALK_LIECHTENAUER, ExhaustionAnimations.EXHAUSTED_WALK_LIECHTENAUER);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_IDLE_SHEATH, ExhaustionAnimations.EXHAUSTED_IDLE_SHEATH);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_WALK_SHEATH, ExhaustionAnimations.EXHAUSTED_WALK_SHEATH);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_IDLE_UNSHEATH, ExhaustionAnimations.EXHAUSTED_IDLE_UNSHEATH);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_WALK_UNSHEATH, ExhaustionAnimations.EXHAUSTED_WALK_UNSHEATH);
-        clientAnimator.addLivingAnimation(ExhaustionMotions.EXHAUSTED_WALK_KATANA, ExhaustionAnimations.EXHAUSTED_WALK_KATANA);
+    // TODO: Might need to mixin to the 'consumeForSkill' stamina methods. They might actually make this process a lot easier.
+    //       Actually, just the final one since the other 2 reference it.
+
+    /**
+     *
+     */
+    @Inject(method = "consumeForSkill(Lyesman/epicfight/skill/Skill;Lyesman/epicfight/skill/Skill$Resource;FZ)Z", at = @At("HEAD"), remap = false)
+    private void modifyConsumedForSkill(Skill skill, Skill.Resource consumeResource, float amount, boolean activateConsumeForce, CallbackInfoReturnable<Boolean> cir) {
+        EpicFightMod.LOGGER.info("CURRENT SKILL: {}", skill);
+        EpicFightMod.LOGGER.info("SKILL RESOURCE: {}", consumeResource);
+
+//        BotWStamina botwStamina = ((BotWStamina) PlayerMovementProvider.of(this.getOriginal()).stamina());
+//
+//        ((StaminaOverride) botwStamina).attacking(true);
+//        ((StaminaOverride) botwStamina).setActionStaminaCost(MathUtils.getAttackStaminaCost(this.getOriginal()));
     }
 }

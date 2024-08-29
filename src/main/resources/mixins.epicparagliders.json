@@ -10,7 +10,7 @@
     "epicfight.capabilities.ServerPlayerPatchMixin",
     "epicfight.skills.AirAttackMixin",
     "epicfight.skills.BasicAttackMixin",
-    "epicfight.skills.SkillMixin",
+    "epicfight.skills.SkillResourceMixin",
     "epicfight.skills.dodge.DodgeSkillMixin",
     "epicfight.skills.guard.GuardSkillMixin",
     "epicfight.skills.guard.ParryingSkillMixin",
@@ -20,7 +20,7 @@
     "epicfight.skills.passive.EnduranceSkillMixin",
     "epicfight.skills.passive.ForbiddenStrengthSkillMixin",
     "epicfight.skills.passive.HyperVitalitySkillMixin",
-    "epicfight.skills.passive.PassiveSkillMixin",
+    "epicfight.skills.SkillMixin",
     "epicfight.skills.passive.StaminaPillagerSkillMixin",
     "epicfight.skills.passive.TechnicianSkillMixin",
     "paragliders.stamina.BotWStaminaMixin",
@@ -29,7 +29,6 @@
   ],
   "client": [
     "epicfight.client.BattleModeGuiMixin",
-    "epicfight.client.ClientAnimatorMixin",
     "epicfight.client.LocalPlayerPatchMixin",
     "paragliders.client.InGameStaminaWheelRendererMixin"
   ],

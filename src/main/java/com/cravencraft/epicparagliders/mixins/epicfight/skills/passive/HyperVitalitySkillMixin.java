@@ -39,18 +39,18 @@ public abstract class HyperVitalitySkillMixin extends PassiveSkill {
      * @param ci
      */
     @Inject(method = "lambda$onInitiate$0", at = @At("HEAD"), remap = false, cancellable = true)
-    private static void getPlayerPatch(SkillContainer container, SkillConsumeEvent event, CallbackInfo ci) {
+    private void getPlayerPatch(SkillContainer container, SkillConsumeEvent event, CallbackInfo ci) {
         if (!container.getExecuter().getSkill(event.getSkill()).isDisabled() && event.getSkill().getCategory() == SkillCategories.WEAPON_INNATE) {
             PlayerPatch<?> playerpatch = event.getPlayerPatch();
             PlayerMovement playerMovement = PlayerMovementProvider.of(playerpatch.getOriginal());
-            if (playerpatch.getSkill(SkillSlots.WEAPON_INNATE).getStack() < 1 && container.getStack() > 0 && !((Player)playerpatch.getOriginal()).isCreative()) {
+            if (playerpatch.getSkill(SkillSlots.WEAPON_INNATE).getStack() < 1 && container.getStack() > 0 && !playerpatch.getOriginal().isCreative()) {
                 float consumption = event.getSkill().getConsumption();
                 if (!playerMovement.stamina().isDepleted()) {
                     event.setResourceType(Resource.NONE);
                     container.setMaxResource(consumption * 0.2F);
-                    if (event.shouldConsume()) {
+                    if (!container.getExecuter().isLogicalClient()) {
                         ((StaminaOverride) playerMovement.stamina()).performingAction(true);
-                        container.getExecuter().consumeStamina((float) (MathUtils.getAttackStaminaCost(playerpatch.getOriginal()) * ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier()));
+//                        container.getExecuter().consumeStamina((float) (MathUtils.getAttackStaminaCost(playerpatch.getOriginal()) * ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier()));
                         container.setMaxDuration(event.getSkill().getMaxDuration());
                         container.activate();
                         EpicFightNetworkManager.sendToPlayer(SPSkillExecutionFeedback.executed(container.getSlotId()), (ServerPlayer)playerpatch.getOriginal());

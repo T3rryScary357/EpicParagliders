@@ -7,6 +7,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import yesman.epicfight.api.data.reloader.ItemCapabilityReloadListener;
+import yesman.epicfight.main.EpicFightMod;
+
+import java.util.Objects;
 
 public class MathUtils {
 
@@ -34,26 +37,38 @@ public class MathUtils {
      * @return The amount of stamina that should be drained from the attacking weapon
      */
     public static int getAttackStaminaCost(Player player) {
+        EpicFightMod.LOGGER.info("INSIDE GET ATTACK STAMINA");
         //TODO: Double check duel wielding with this.
         //      Could easily add offhand support too by checking which
         //      hand is swinging the weapon.
         Item weaponItem = player.getMainHandItem().getItem();
+
+        EpicFightMod.LOGGER.info("weapon item: {}", weaponItem);
         CompoundTag weaponTag = ItemCapabilityReloadListener.getWeaponDataStream()
                 .filter(compoundTag -> compoundTag.getInt("id") == Item.getId(player.getMainHandItem().getItem()))
                 .findFirst().get();
+
+
+        EpicFightMod.LOGGER.info("weapon tag: {}", weaponTag);
 
         //TODO: Fix for 1.18.2 and 1.19.2 (check for tool attack damage too)
         double weaponAttackDamage = weaponItem.getAttributeModifiers(EquipmentSlot.MAINHAND, weaponItem.getDefaultInstance())
                 .get(Attributes.ATTACK_DAMAGE).stream()
                 .filter(attributeModifier -> attributeModifier.getName().contains("Weapon") || attributeModifier.getName().contains("Tool"))
                 .findFirst().get().getAmount();
+        EpicFightMod.LOGGER.info("weapon attack damage: {}", weaponAttackDamage);
 
         int weaponStaminaCostOverride = weaponTag
                 .getCompound("attributes")
                 .getCompound("common")
                 .getInt("stamina_cost");
+        EpicFightMod.LOGGER.info("weapon stamina cost override: {}", weaponStaminaCostOverride);
 
-        WeaponType weaponType = WeaponType.valueOf(weaponTag.get("type").getAsString().toUpperCase());
+        String weaponTypeString = Objects.requireNonNull(weaponTag.get("type")).getAsString().toUpperCase();
+        weaponTypeString = weaponTypeString.substring(weaponTypeString.indexOf(":") + 1);
+        EpicFightMod.LOGGER.info("weapon type as string prior: {}", weaponTypeString);
+        WeaponType weaponType = WeaponType.valueOf(weaponTypeString);
+        EpicFightMod.LOGGER.info("weapon type: {}", weaponType);
 
         double totalStaminaCost;
 
@@ -63,8 +78,11 @@ public class MathUtils {
         else {
             totalStaminaCost = (weaponType.getStaminaFixedCost() > 0) ? weaponType.getStaminaFixedCost() : weaponType.getStaminaMultiplier() * weaponAttackDamage;
         }
+        EpicFightMod.LOGGER.info("total stamina cost before modification: {}", totalStaminaCost);
+
 
         totalStaminaCost *= weaponType.getStaminaReduction(player);
+        EpicFightMod.LOGGER.info("total stamina cost after modification: {}", totalStaminaCost);
 
         return (int) Math.round(totalStaminaCost);
     }

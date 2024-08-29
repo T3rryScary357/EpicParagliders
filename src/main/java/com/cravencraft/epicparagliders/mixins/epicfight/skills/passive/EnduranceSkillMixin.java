@@ -1,7 +1,5 @@
 package com.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
-import com.cravencraft.epicparagliders.config.ConfigManager;
-import com.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -39,18 +37,5 @@ public abstract class EnduranceSkillMixin extends PassiveSkill {
     @Redirect(at = @At(value = "INVOKE", target = "Lyesman/epicfight/world/capabilities/entitypatch/player/ServerPlayerPatch;setStunShield(F)V"), remap = false, method = "executeOnServer")
     private void modifyStunShield(ServerPlayerPatch playerPatch, float staminaConsumed) {
         playerPatch.setStunShield((15.0F / playerPatch.getMaxStamina()) * staminaConsumed);
-    }
-
-    /**
-     * Redirects the consumed stamina for the Endurance skill. Uses the Paragliders
-     * stamina system now along with some extra math to ensure it's fairly balanced.
-     *
-     * @param playerPatch
-     * @param staminaConsumed
-     * @return
-     */
-    @Redirect(at = @At(value = "INVOKE", target = "Lyesman/epicfight/world/capabilities/entitypatch/player/ServerPlayerPatch;consumeStamina(F)Z"), remap = false, method = "executeOnServer")
-    private boolean modifyStaminaConsumed(ServerPlayerPatch playerPatch, float staminaConsumed) {
-        return playerPatch.consumeStamina((float) (MathUtils.calculateTriangularRoot(staminaConsumed) * ConfigManager.SERVER_CONFIG.enduranceMultiplier()));
     }
 }

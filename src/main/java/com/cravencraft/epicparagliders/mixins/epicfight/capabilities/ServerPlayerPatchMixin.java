@@ -2,9 +2,6 @@ package com.cravencraft.epicparagliders.mixins.epicfight.capabilities;
 
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 
@@ -18,9 +15,9 @@ public abstract class ServerPlayerPatchMixin extends PlayerPatch<ServerPlayer> {
      * @param amount
      * @param cir
      */
-    @Inject(method = "consumeStamina", at = @At("HEAD"), remap = false, cancellable = true)
-    private void consumeStamina(float amount, CallbackInfoReturnable<Boolean> cir) {
-        this.setStamina(amount);
-        cir.setReturnValue(true);
-    }
+//    @Inject(method = "consumeStamina", at = @At("HEAD"), remap = false, cancellable = true)
+//    private void consumeStamina(float amount, CallbackInfoReturnable<Boolean> cir) {
+//        this.setStamina(amount);
+//        cir.setReturnValue(true);
+//    }
 }

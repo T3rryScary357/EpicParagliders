@@ -21,7 +21,8 @@ Use code **"CravenCraft"** to get your first month **_15%_** off!
 ## V0.7.0 - Latest Paraglider & Epic Fight Version support
 - Updated the entire package system of the mod.
 - Updated the properties of the mod to be a lot more organized.
-- Updated Paragliders to V20.1.1
+- Updated Paragliders to V20.1.3
+- Updated Epic Fight to V20.9.2
 
 ## V0.6.0 - Fixed Stamina Cost Support
 - Added server config option for a fixed stamina cost for weapon types

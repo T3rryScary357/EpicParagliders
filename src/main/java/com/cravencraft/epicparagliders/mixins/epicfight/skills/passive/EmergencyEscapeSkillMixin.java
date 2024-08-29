@@ -58,7 +58,7 @@ public abstract class EmergencyEscapeSkillMixin extends PassiveSkill {
             }
 
             if (!container.getExecuter().getOriginal().isCreative() && actualConsumption > playerMovement.stamina().stamina() && container.getStack() > 0) {
-                if (event.shouldConsume()) {
+                if (!container.getExecuter().isLogicalClient()) {
                     this.setStackSynchronize((ServerPlayerPatch)container.getExecuter(), container.getStack() - 1);
                 }
 

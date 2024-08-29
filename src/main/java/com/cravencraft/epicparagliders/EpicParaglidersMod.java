@@ -1,7 +1,6 @@
 package com.cravencraft.epicparagliders;
 
 import com.cravencraft.epicparagliders.config.ConfigManager;
-import com.cravencraft.epicparagliders.gameasset.ExhaustionAnimations;
 import com.cravencraft.epicparagliders.network.ModNet;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.common.MinecraftForge;
@@ -24,7 +23,6 @@ public class EpicParaglidersMod
     public EpicParaglidersMod()
     {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        eventBus.addListener(ExhaustionAnimations::registerAnimations); //TODO: Can I just use @SubscribeEvent in the original method to bypass this?
         EpicParaglidersAttributes.registerEventHandlers(eventBus);
         ModNet.init();
 
