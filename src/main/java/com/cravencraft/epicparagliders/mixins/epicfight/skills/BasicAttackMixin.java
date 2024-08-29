@@ -25,10 +25,7 @@ public abstract class BasicAttackMixin extends Skill {
     //       Or set attacking to true?
     @Inject(method = "executeOnServer", at = @At("TAIL"), remap = false)
     private void getPlayerPatch(ServerPlayerPatch executor, FriendlyByteBuf args, CallbackInfo ci) {
-        EpicFightMod.LOGGER.info("BASIC ATTACK STAMINA COST: {}", MathUtils.getAttackStaminaCost(executor.getOriginal()));
         StaminaOverride botwStamina = ((StaminaOverride) PlayerMovementProvider.of(executor.getOriginal()).stamina());
-        EpicFightMod.LOGGER.info("AFTER TRYING TO GET STAMINA: ");
-        EpicFightMod.LOGGER.info("AFTER TRYING TO GET STAMINA: {}", botwStamina.isAttacking());
 
         botwStamina.attacking(true);
         botwStamina.setActionStaminaCost(MathUtils.getAttackStaminaCost(executor.getOriginal()));

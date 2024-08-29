@@ -78,6 +78,8 @@ public abstract class ServerBotWStaminaMixin extends BotWStamina implements Stam
      */
     @Inject(at = @At("HEAD"), remap = false, cancellable = true, method = "update")
     private void updateServerSideMovement(Movement movement, CallbackInfo ci) {
+
+//        EpicParaglidersMod.LOGGER.info("INSIDE SERVER BOTW STAMINA");
         if (movement instanceof ServerPlayerMovement serverPlayerMovement) {
             this.player = serverPlayerMovement.player();
             ServerPlayerPatch serverPlayerPatch = (ServerPlayerPatch) this.player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).orElse(null);
@@ -86,11 +88,16 @@ public abstract class ServerBotWStaminaMixin extends BotWStamina implements Stam
                 serverPlayerPatch.toggleMode();
             }
 
+//            EpicParaglidersMod.LOGGER.info("IS ATTACKING: {} | IS PERFORMING ACTION: {}", this.isAttacking, this.isPerformingAction);
+//            EpicParaglidersMod.LOGGER.info("IS ATTACK ANIMATION: {}", serverPlayerPatch.getEntityState().inaction());
+
             //TODO: Would like to organize these better.
             checkShieldDisable();
             calculateRangeStaminaCost();
 
-            if (isAttacking && serverPlayerPatch.getEntityState().attacking()) {
+            if (isAttacking) {
+
+                EpicParaglidersMod.LOGGER.info("INSIDE SERVER IS ATTACKING BLOCK");
                 this.isAttacking = false;
                 isPerformingAction = true;
 

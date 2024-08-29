@@ -1,5 +1,6 @@
 package com.cravencraft.epicparagliders.mixins.paragliders.stamina;
 
+import com.cravencraft.epicparagliders.EpicParaglidersMod;
 import com.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import com.cravencraft.epicparagliders.config.ConfigManager;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +43,8 @@ public abstract class BotWStaminaMixin implements Stamina, Copy, Serde, StaminaO
 
     @Inject(at = @At("HEAD"), remap = false, cancellable = true, method = "update")
     private void injectEpicFightStaminaValues(@NotNull Movement movement, CallbackInfo ci) {
-
+//        EpicParaglidersMod.LOGGER.info("INSIDE UPDATE STAMINA");
+//        EpicParaglidersMod.LOGGER.info("TOTAL ACTION STAMINA COST: {}", this.totalActionStaminaCost);
         PlayerMovement playerMovement = (PlayerMovement) movement;
         PlayerPatch playerPatch = (PlayerPatch) playerMovement.player().getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).orElse(null);
 
