@@ -1,26 +1,43 @@
-modLoader="javafml"
-loaderVersion="[47,)"
-license="MIT"
-[[mods]]
-modId="epicparagliders"
-version="${file.jarVersion}"
-displayName="Epic Paragliders Mod"
-logoFile="epicparagliders.png"
-credits="Thanks for this example mod goes to Java"
-authors="CravenCraft"
-description='''
-A mod that is meant to be a compat between the Epic Fight mod and the Paragliders mod. It will override the Epic Fight
-stamina system, and use the one from Paragliders instead.
-'''
-[[dependencies.epicparagliders]]
-    modId="forge"
-    mandatory=true
-    versionRange="[47,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.epicparagliders]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.20.1,)"
-    ordering="NONE"
-    side="BOTH"
+modLoader="javafml" #mandatory
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]] #mandatory
+modId="${mod_id}" #mandatory
+version="${mod_version}" #mandatory
+displayName="${mod_name}" #mandatory
+authors="${mod_authors}" #optional
+description='''${mod_description}'''
+
+[[dependencies.${mod_id}]]
+modId="forge" #mandatory
+# Does this dependency have to exist - if not, ordering below must be specified
+mandatory=true #mandatory
+# The version range of the dependency
+versionRange="${forge_version_range}" #mandatory
+ordering="NONE"
+# Side this dependency is applied on - BOTH, CLIENT, or SERVER
+side="BOTH"
+# Here's another dependency
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+mandatory=true
+# This version range declares a minimum of the current minecraft version up to but not including the next major version
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="paraglider"
+mandatory=true
+versionRange="[20.1.1]"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="epicfight"
+mandatory=true
+versionRange="[20.5.17]"
+ordering="AFTER"
+side="BOTH"
