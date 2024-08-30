@@ -237,7 +237,9 @@ public class ServerConfig {
 
         baseDemolitionLeapStaminaCost = server.defineInRange("skills.dodge.step_stamina_cost", 18, 0, 100);
         demolitionLeapStaminaMultiplier = server.defineInRange("skills.demolition_leap.demolition_leap_multiplier", 1.0, 0.0, 10.0);
-        hyperVitalityMultiplier = server.defineInRange("skills.passive.hyper_vitality_multiplier", 1.2, 0.0, 10.0);
+        hyperVitalityMultiplier = server.comment("The Hyper Vitality skill will take the weapon's basic attack stamina cost multiplied by\n" +
+                        "this amount in order to perform the skill.")
+                .defineInRange("skills.passive.hyper_vitality_multiplier", 1.5, 0.0, 10.0);
         enduranceMultiplier = server.defineInRange("skills.passive.hyper_vitality_multiplier", 1.0, 0.0, 10.0);
 
         meteorSlamMultiplier = server.comment("This will be multiplier by the stamina cost of the meteor slam skill\n" +

@@ -1,5 +1,6 @@
 package com.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
+import com.cravencraft.epicparagliders.EpicParaglidersMod;
 import com.cravencraft.epicparagliders.config.ConfigManager;
 import com.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import com.cravencraft.epicparagliders.utils.MathUtils;
@@ -30,7 +31,8 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
      */
     @Inject(method = "lambda$onInitiate$0", at = @At("HEAD"), remap = false, cancellable = true)
     private void getPlayerPatch(DealtDamageEvent.Damage event, CallbackInfo ci) {
-        if (!event.getTarget().isAlive()) {
+        EpicParaglidersMod.LOGGER.info("INSIDE STAMINA PILLAGER MIXIN");
+        if (event.getAttackDamage() > event.getTarget().getHealth()) {
             PlayerMovement playerMovement = PlayerMovementProvider.of(event.getPlayerPatch().getOriginal());
             StaminaOverride botwStamina = ((StaminaOverride) playerMovement.stamina());
             double staminaPillagerPercentModifier = ConfigManager.SERVER_CONFIG.staminaPillagerPercentModifier() * 0.01;

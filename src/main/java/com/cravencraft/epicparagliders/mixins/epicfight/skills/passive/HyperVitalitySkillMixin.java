@@ -1,7 +1,9 @@
 package com.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
+import com.cravencraft.epicparagliders.EpicParaglidersMod;
 import com.cravencraft.epicparagliders.config.ConfigManager;
 import com.cravencraft.epicparagliders.capabilities.StaminaOverride;
+import com.cravencraft.epicparagliders.config.ServerConfig;
 import com.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -48,11 +50,15 @@ public abstract class HyperVitalitySkillMixin extends PassiveSkill {
                 if (!playerMovement.stamina().isDepleted()) {
                     event.setResourceType(Resource.NONE);
                     container.setMaxResource(consumption * 0.2F);
+                    EpicParaglidersMod.LOGGER.info("HYPER VITATLITY BASE WEAPON DAMAGE: {}", MathUtils.getAttackStaminaCost(playerpatch.getOriginal()));
+                    EpicParaglidersMod.LOGGER.info("HYPER VITALITY MULTIPLIER: {}", ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier());
+                    EpicParaglidersMod.LOGGER.info("INSIDE HYPER VITALITY SKILL. CONSUMPTION AMOUNT: {}", (float) (MathUtils.getAttackStaminaCost(playerpatch.getOriginal()) * ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier()));
                     if (!container.getExecuter().isLogicalClient()) {
                         ((StaminaOverride) playerMovement.stamina()).performingAction(true);
 //                        container.getExecuter().consumeStamina((float) (MathUtils.getAttackStaminaCost(playerpatch.getOriginal()) * ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier()));
                         container.setMaxDuration(event.getSkill().getMaxDuration());
                         container.activate();
+                        event.getPlayerPatch().setStamina((float) (MathUtils.getAttackStaminaCost(playerpatch.getOriginal()) * ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier()));
                         EpicFightNetworkManager.sendToPlayer(SPSkillExecutionFeedback.executed(container.getSlotId()), (ServerPlayer)playerpatch.getOriginal());
                     }
                 }

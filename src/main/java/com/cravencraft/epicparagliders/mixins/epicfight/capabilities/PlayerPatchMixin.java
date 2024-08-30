@@ -1,7 +1,6 @@
 package com.cravencraft.epicparagliders.mixins.epicfight.capabilities;
 
 import com.cravencraft.epicparagliders.EpicParaglidersAttributes;
-import com.cravencraft.epicparagliders.EpicParaglidersMod;
 import com.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import com.cravencraft.epicparagliders.config.ConfigManager;
 import net.minecraft.util.Mth;
@@ -10,20 +9,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tictim.paraglider.api.stamina.Stamina;
 import tictim.paraglider.forge.capability.PlayerMovementProvider;
 import yesman.epicfight.main.EpicFightMod;
-import yesman.epicfight.skill.BasicAttack;
 import yesman.epicfight.skill.ChargeableSkill;
-import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.mover.DemolitionLeapSkill;
-import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
-import yesman.epicfight.world.entity.eventlistener.SkillConsumeEvent;
 import yesman.epicfight.world.gamerule.EpicFightGamerules;
 
 @Mixin(PlayerPatch.class)
@@ -94,21 +88,4 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
                     this.getOriginal().getAttributeValue(EpicParaglidersAttributes.DODGE_STAMINA_REDUCTION.get())));
         }
     }
-
-    // TODO: Might need to mixin to the 'consumeForSkill' stamina methods. They might actually make this process a lot easier.
-    //       Actually, just the final one since the other 2 reference it.
-
-    /**
-     *
-     */
-//    @Inject(method = "consumeForSkill(Lyesman/epicfight/skill/Skill;Lyesman/epicfight/skill/Skill$Resource;FZ)Z", at = @At("HEAD"), remap = false)
-//    private void modifyConsumedForSkill(Skill skill, Skill.Resource consumeResource, float amount, boolean activateConsumeForce, CallbackInfoReturnable<Boolean> cir) {
-//        EpicParaglidersMod.LOGGER.info("CURRENT SKILL: {}", skill);
-//        EpicParaglidersMod.LOGGER.info("SKILL RESOURCE: {}", consumeResource);
-//        EpicParaglidersMod.LOGGER.info("SKILL RESOURCE CONSUME AMOUNT: {}", amount);
-//
-//        PlayerPatch playerPatch = (PlayerPatch) this.getOriginal().getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).orElse(null);
-//        SkillConsumeEvent skillConsumeEvent = new SkillConsumeEvent(playerPatch, skill, consumeResource, amount);
-//        EpicParaglidersMod.LOGGER.info("SKILL CONSUME EVENT INFO: {}", skillConsumeEvent);
-//    }
 }
