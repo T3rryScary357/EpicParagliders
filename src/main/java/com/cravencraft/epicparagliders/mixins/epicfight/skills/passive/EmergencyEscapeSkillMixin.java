@@ -1,6 +1,5 @@
 package com.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
-import com.cravencraft.epicparagliders.EpicParaglidersMod;
 import com.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import com.cravencraft.epicparagliders.utils.MathUtils;
 import org.spongepowered.asm.mixin.Mixin;
@@ -56,7 +55,6 @@ public abstract class EmergencyEscapeSkillMixin extends PassiveSkill {
 
             if (!container.getExecuter().getOriginal().isCreative() && playerMovement.stamina().isDepleted() && container.getStack() > 0) {
                 if (!container.getExecuter().isLogicalClient()) {
-                    EpicParaglidersMod.LOGGER.info("PERFORMING EMERGENCY ESCAPE DODGE.");
                     ((StaminaOverride) playerMovement.stamina()).performingAction(true);
                     ((StaminaOverride) playerMovement.stamina()).setActionStaminaCost((int) actualConsumption);
                     this.setStackSynchronize((ServerPlayerPatch)container.getExecuter(), container.getStack() - 1);

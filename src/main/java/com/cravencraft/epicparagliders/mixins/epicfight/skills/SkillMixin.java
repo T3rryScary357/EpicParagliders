@@ -2,19 +2,18 @@ package com.cravencraft.epicparagliders.mixins.epicfight.skills;
 
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import yesman.epicfight.skill.Skill;
-import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 
 import java.util.ArrayList;
 
 @Mixin(Skill.class)
 public abstract class SkillMixin {
+
+    @Shadow protected float consumption;
 
     /**
      * Removes all attribute modifiers that add health or stamina. The Paragliders mod already
@@ -37,10 +36,5 @@ public abstract class SkillMixin {
         }
 
         return listTag;
-    }
-
-    @Inject(at = @At("HEAD"), method = "executeOnServer", remap = false)
-    private void modifyExecuteOnServer(ServerPlayerPatch executor, FriendlyByteBuf args, CallbackInfo ci) {
-        // TODO: Might be able to cancel some skills like the basic attack here.
     }
 }

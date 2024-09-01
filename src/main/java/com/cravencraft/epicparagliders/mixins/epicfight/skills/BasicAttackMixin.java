@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tictim.paraglider.forge.capability.PlayerMovementProvider;
-import yesman.epicfight.main.EpicFightMod;
 import yesman.epicfight.skill.BasicAttack;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
@@ -16,13 +15,10 @@ import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 @Mixin(BasicAttack.class)
 public abstract class BasicAttackMixin extends Skill {
 
-    //TODO: Major issue with attacking stamina and dodging stamina. Look into later
     public BasicAttackMixin(Builder<? extends Skill> builder) {
         super(builder);
     }
 
-    // TODO: Mainly working now. Isn't working for the first swing, but the second. Maybe it has to do with combo count?
-    //       Or set attacking to true?
     @Inject(method = "executeOnServer", at = @At("TAIL"), remap = false)
     private void getPlayerPatch(ServerPlayerPatch executor, FriendlyByteBuf args, CallbackInfo ci) {
         StaminaOverride botwStamina = ((StaminaOverride) PlayerMovementProvider.of(executor.getOriginal()).stamina());

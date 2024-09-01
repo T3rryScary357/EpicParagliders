@@ -54,7 +54,7 @@ public abstract class MeteorSlamSkillMixin extends Skill {
         else {
             this.consumption = (float) (MathUtils.getAttackStaminaCost(serverPlayerPatch.getOriginal()) * ConfigManager.SERVER_CONFIG.meteorSlamMultiplier());
             ((StaminaOverride) playerMovement.stamina()).performingAction(true);
-            serverPlayerPatch.setStamina(this.consumption);
+            ((StaminaOverride) playerMovement.stamina()).setActionStaminaCost((int) this.consumption);
         }
     }
 

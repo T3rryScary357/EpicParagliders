@@ -11,7 +11,7 @@ import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 public abstract class SkillResourceMixin {
 
     @Redirect(at = @At(value = "INVOKE", target = "Lyesman/epicfight/world/capabilities/entitypatch/player/PlayerPatch;hasStamina(F)Z"), remap = false, method = "lambda$static$6")
-    private static boolean testRedirect(PlayerPatch playerPatch, float amount) {
+    private static boolean removeStamina(PlayerPatch playerPatch, float amount) {
         if (PlayerMovementProvider.of(playerPatch.getOriginal()).stamina().isDepleted()) {
             return false;
         }

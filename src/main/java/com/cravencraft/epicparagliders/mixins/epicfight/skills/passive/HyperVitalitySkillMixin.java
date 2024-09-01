@@ -18,7 +18,6 @@ import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.SkillSlots;
 import yesman.epicfight.skill.passive.HyperVitalitySkill;
 import yesman.epicfight.skill.passive.PassiveSkill;
-import yesman.epicfight.skill.weaponinnate.LiechtenauerSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.entity.eventlistener.SkillConsumeEvent;
 
@@ -53,7 +52,7 @@ public abstract class HyperVitalitySkillMixin extends PassiveSkill {
 
                         // Since the liechtenauer skill can be disabled once enabled, this prevents the skill from draining
                         // stamina again to disable it.
-                        if (!container.isActivated() && event.getSkill() instanceof LiechtenauerSkill) {
+                        if (!container.isActivated()) {
                             ((StaminaOverride) playerMovement.stamina()).performingAction(true);
                             ((StaminaOverride) playerMovement.stamina()).setActionStaminaCost((int) (MathUtils.getAttackStaminaCost(playerpatch.getOriginal()) * ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier()));
                             EpicFightNetworkManager.sendToPlayer(SPSkillExecutionFeedback.executed(container.getSlotId()), (ServerPlayer)playerpatch.getOriginal());

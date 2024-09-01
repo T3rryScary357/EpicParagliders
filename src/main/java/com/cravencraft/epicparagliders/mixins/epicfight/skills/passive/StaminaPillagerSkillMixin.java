@@ -1,6 +1,5 @@
 package com.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
-import com.cravencraft.epicparagliders.EpicParaglidersMod;
 import com.cravencraft.epicparagliders.config.ConfigManager;
 import com.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import com.cravencraft.epicparagliders.utils.MathUtils;
@@ -38,7 +37,7 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
 
             int trueTotalMissing = (int) (MathUtils.calculateTriangularNumber(botwStamina.getTotalActionStaminaCost()) + (playerMovement.stamina().maxStamina() - playerMovement.stamina().stamina()));
             botwStamina.performingAction(true);
-            event.getPlayerPatch().setStamina(-(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, staminaPillagerPercentModifier)));
+            botwStamina.setActionStaminaCost(-(int) (MathUtils.calculateModifiedTriangularRoot(trueTotalMissing, staminaPillagerPercentModifier)));
         }
         ci.cancel();
     }
