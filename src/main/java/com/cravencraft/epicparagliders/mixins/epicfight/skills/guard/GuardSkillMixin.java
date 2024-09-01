@@ -36,7 +36,7 @@ public abstract class GuardSkillMixin extends Skill {
     @Inject(method = "guard", at = @At("HEAD"), remap = false)
     private void getPlayerPatch(SkillContainer container, CapabilityItem itemCapability, HurtEvent.Pre event, float knockback, float impact, boolean advanced, CallbackInfo ci) {
         this.playerPatch = event.getPlayerPatch();
-        this.impact = impact;
+        this.impact = Math.min(10, impact);
     }
 
     /**

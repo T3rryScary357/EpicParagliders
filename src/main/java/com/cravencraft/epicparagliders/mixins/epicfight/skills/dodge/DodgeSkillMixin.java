@@ -1,9 +1,7 @@
 package com.cravencraft.epicparagliders.mixins.epicfight.skills.dodge;
 
-import com.cravencraft.epicparagliders.EpicParaglidersMod;
 import com.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import com.cravencraft.epicparagliders.config.ConfigManager;
-import com.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

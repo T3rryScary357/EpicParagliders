@@ -49,24 +49,6 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
     }
 
     /**
-     * Set stamina now sets stamina for the Paragliders stamina system, and only if
-     * the player is performing a skill action or an attack action.
-     *
-     * @param value
-     * @param ci
-     */
-    @Inject(method = "setStamina", at = @At("HEAD"), cancellable = true, remap = false)
-    private void setStamina(float value, CallbackInfo ci) {
-        StaminaOverride botwStamina = ((StaminaOverride) PlayerMovementProvider.of(this.getOriginal()).stamina());
-        // Easy way to ensure only my stamina values are being applied.
-        // So I don't have to edit 5+ different methods.
-        if (botwStamina.isPerformingAction() && !botwStamina.isAttacking()) {
-            botwStamina.setActionStaminaCost((int) value);
-        }
-        ci.cancel();
-    }
-
-    /**
      * Need to modify the stamina consumption math slightly in order to properly work with
      * Paraglider's stamina system & values.
      *

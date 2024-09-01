@@ -1,6 +1,5 @@
 package com.cravencraft.epicparagliders.mixins.paragliders.stamina;
 
-import com.cravencraft.epicparagliders.EpicParaglidersMod;
 import com.cravencraft.epicparagliders.capabilities.StaminaOverride;
 import com.cravencraft.epicparagliders.config.ConfigManager;
 import com.cravencraft.epicparagliders.network.ModNet;
@@ -65,6 +64,7 @@ public abstract class ServerBotWStaminaMixin extends BotWStamina implements Stam
     @Override
     public void setActionStaminaCost(int actionStaminaCost) {
         this.currentActionStaminaCost = actionStaminaCost;
+
     }
 
     /**
@@ -79,7 +79,6 @@ public abstract class ServerBotWStaminaMixin extends BotWStamina implements Stam
     @Inject(at = @At("HEAD"), remap = false, cancellable = true, method = "update")
     private void updateServerSideMovement(Movement movement, CallbackInfo ci) {
 
-//        EpicParaglidersMod.LOGGER.info("INSIDE SERVER BOTW STAMINA");
         if (movement instanceof ServerPlayerMovement serverPlayerMovement) {
             this.player = serverPlayerMovement.player();
             ServerPlayerPatch serverPlayerPatch = (ServerPlayerPatch) this.player.getCapability(EpicFightCapabilities.CAPABILITY_ENTITY).orElse(null);
@@ -88,12 +87,10 @@ public abstract class ServerBotWStaminaMixin extends BotWStamina implements Stam
                 serverPlayerPatch.toggleMode();
             }
 
-//            EpicParaglidersMod.LOGGER.info("IS ATTACKING: {} | IS PERFORMING ACTION: {}", this.isAttacking, this.isPerformingAction);
-//            EpicParaglidersMod.LOGGER.info("IS ATTACK ANIMATION: {}", serverPlayerPatch.getEntityState().inaction());
-
             //TODO: Would like to organize these better.
             checkShieldDisable();
             calculateRangeStaminaCost();
+
 
             if (isAttacking) {
 
@@ -120,7 +117,7 @@ public abstract class ServerBotWStaminaMixin extends BotWStamina implements Stam
                 }
         }
 
-        if(this.isPerformingAction) {
+        if (this.isPerformingAction) {
             serverPlayerMovement.markMovementChanged();
             BotWStamina botwStaminaSystem = (BotWStamina) serverPlayerMovement.stamina();
             ((StaminaOverride) botwStaminaSystem).setTotalActionStaminaCost(this.totalActionStaminaCost);

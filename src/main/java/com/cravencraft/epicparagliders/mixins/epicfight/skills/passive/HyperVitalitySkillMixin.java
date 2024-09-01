@@ -1,12 +1,9 @@
 package com.cravencraft.epicparagliders.mixins.epicfight.skills.passive;
 
-import com.cravencraft.epicparagliders.EpicParaglidersMod;
 import com.cravencraft.epicparagliders.config.ConfigManager;
 import com.cravencraft.epicparagliders.capabilities.StaminaOverride;
-import com.cravencraft.epicparagliders.config.ServerConfig;
 import com.cravencraft.epicparagliders.utils.MathUtils;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -58,11 +55,11 @@ public abstract class HyperVitalitySkillMixin extends PassiveSkill {
                         // stamina again to disable it.
                         if (!container.isActivated() && event.getSkill() instanceof LiechtenauerSkill) {
                             ((StaminaOverride) playerMovement.stamina()).performingAction(true);
-                            event.getPlayerPatch().setStamina((float) (MathUtils.getAttackStaminaCost(playerpatch.getOriginal()) * ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier()));
+                            ((StaminaOverride) playerMovement.stamina()).setActionStaminaCost((int) (MathUtils.getAttackStaminaCost(playerpatch.getOriginal()) * ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier()));
                             EpicFightNetworkManager.sendToPlayer(SPSkillExecutionFeedback.executed(container.getSlotId()), (ServerPlayer)playerpatch.getOriginal());
 
                         }
-//                        container.getExecuter().consumeStamina((float) (MathUtils.getAttackStaminaCost(playerpatch.getOriginal()) * ConfigManager.SERVER_CONFIG.hyperVitalityMultiplier()));
+
                         container.setMaxDuration(event.getSkill().getMaxDuration());
                         container.activate();
                     }
