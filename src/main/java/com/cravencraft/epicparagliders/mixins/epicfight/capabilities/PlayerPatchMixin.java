@@ -58,7 +58,6 @@ public abstract class PlayerPatchMixin<T extends Player> extends LivingEntityPat
     @Inject(method = "setStamina", at = @At("HEAD"), cancellable = true, remap = false)
     private void setStamina(float value, CallbackInfo ci) {
         StaminaOverride botwStamina = ((StaminaOverride) PlayerMovementProvider.of(this.getOriginal()).stamina());
-        EpicFightMod.LOGGER.info("IS PLAYER ATTACKING: {} | IS PLAYER PERFORMING AN ACTION: {}", botwStamina.isAttacking(), botwStamina.isPerformingAction());
         // Easy way to ensure only my stamina values are being applied.
         // So I don't have to edit 5+ different methods.
         if (botwStamina.isPerformingAction() && !botwStamina.isAttacking()) {

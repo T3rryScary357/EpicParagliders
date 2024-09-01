@@ -97,7 +97,6 @@ public abstract class ServerBotWStaminaMixin extends BotWStamina implements Stam
 
             if (isAttacking) {
 
-                EpicParaglidersMod.LOGGER.info("INSIDE SERVER IS ATTACKING BLOCK");
                 this.isAttacking = false;
                 isPerformingAction = true;
 

@@ -31,7 +31,6 @@ public abstract class StaminaPillagerSkillMixin extends PassiveSkill {
      */
     @Inject(method = "lambda$onInitiate$0", at = @At("HEAD"), remap = false, cancellable = true)
     private void getPlayerPatch(DealtDamageEvent.Damage event, CallbackInfo ci) {
-        EpicParaglidersMod.LOGGER.info("INSIDE STAMINA PILLAGER MIXIN");
         if (event.getAttackDamage() > event.getTarget().getHealth()) {
             PlayerMovement playerMovement = PlayerMovementProvider.of(event.getPlayerPatch().getOriginal());
             StaminaOverride botwStamina = ((StaminaOverride) playerMovement.stamina());
