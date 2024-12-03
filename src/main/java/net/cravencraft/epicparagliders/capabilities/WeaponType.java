@@ -18,6 +18,7 @@ public enum WeaponType {
     SPEAR,
     KNUCKLE,
     TACHI,
+    TRIDENT,
     UCHIGATANA;
 
     /**
@@ -48,6 +49,8 @@ public enum WeaponType {
                 return serverConfig.knuckleStaminaMultiplier();
             case TACHI:
                 return serverConfig.tachiStaminaMultiplier();
+            case TRIDENT:
+                return serverConfig.tridentStaminaMultiplier();
             case UCHIGATANA:
                 return serverConfig.uchigatanaStaminaMultiplier();
             default:
@@ -83,6 +86,8 @@ public enum WeaponType {
                 return serverConfig.knuckleStaminaFixedCost();
             case TACHI:
                 return serverConfig.tachiStaminaFixedCost();
+            case TRIDENT:
+                return serverConfig.tridentStaminaFixedCost();
             case UCHIGATANA:
                 return serverConfig.uchigatanaStaminaFixedCost();
             default:
@@ -118,6 +123,8 @@ public enum WeaponType {
                 return player.getAttributeValue(EpicParaglidersAttributes.KNUCKLE_STAMINA_REDUCTION.get());
             case TACHI:
                 return player.getAttributeValue(EpicParaglidersAttributes.TACHI_STAMINA_REDUCTION.get());
+            case TRIDENT:
+                return player.getAttributeValue(EpicParaglidersAttributes.TRIDENT_STAMINA_REDUCTION.get());
             case UCHIGATANA:
                 return player.getAttributeValue(EpicParaglidersAttributes.UCHIGATANA_STAMINA_REDUCTION.get());
             default:
